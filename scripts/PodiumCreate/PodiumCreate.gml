@@ -49,7 +49,7 @@
 /// @param [higherValueIsBetter=true]
 /// @param [refreshPeriod=never]
 
-function PodiumLbCreate(_name, _serviceRef, _higherValueIsBetter = true, _refreshPeriod = PODIUM_REFRESH_NEVER)
+function PodiumCreate(_name, _serviceRef, _higherValueIsBetter = true, _refreshPeriod = PODIUM_REFRESH_NEVER)
 {
     static _system = __PodiumSystem();
     static _leaderboardDict = _system.__leaderboardDict;
@@ -58,7 +58,7 @@ function PodiumLbCreate(_name, _serviceRef, _higherValueIsBetter = true, _refres
     {
         if (PODIUM_RUNNING_FROM_IDE)
         {
-            __PodiumError($"Overwriting leaderboard \"{_name}\" (service reference \"{_serviceRef}\"). Please ensure that `PodiumLbCreate()` is called once and once only per leaderboard name\nIf you are using `game_restart()`, don't");
+            __PodiumError($"Overwriting leaderboard \"{_name}\" (service reference \"{_serviceRef}\"). Please ensure that `PodiumCreate()` is called once and once only per leaderboard name\nIf you are using `game_restart()`, don't");
         }
         
         return;
@@ -66,7 +66,7 @@ function PodiumLbCreate(_name, _serviceRef, _higherValueIsBetter = true, _refres
     
     if (not _system.__runningDefinitions)
     {
-        __PodiumError("`PodiumLbCreate()` must only be called in a `__PodiumDefinitions*` script");
+        __PodiumError("`PodiumCreate()` must only be called in a `__PodiumDefinitions*` script");
     }
     
     if (PODIUM_VERBOSE)

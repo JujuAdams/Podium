@@ -13,9 +13,9 @@
 /// @param leaderboardName
 /// @param [range=top]
 
-function PodiumLbGetScores(_leaderboardName, _range = PODIUM_RANGE_TOP)
+function PodiumGetScores(_leaderboardName, _range = PODIUM_RANGE_TOP)
 {
-    with(PodiumLbFind(_leaderboardName))
+    with(PodiumFind(_leaderboardName))
     {
         return GetScores(_range);
     }

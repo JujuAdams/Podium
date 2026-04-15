@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"PodiumLbGetScores",
+  "%Name":"PodiumPush",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"PodiumLbGetScores",
+  "name":"PodiumPush",
   "parent":{
     "name":"Leaderboards",
     "path":"folders/Podium/Leaderboards.yy",

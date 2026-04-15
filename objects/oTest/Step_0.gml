@@ -9,13 +9,13 @@ if (playFabLoggedIn != _playFabLoggedIn)
     
     if (_playFabLoggedIn)
     {
-        //PodiumLbGetScores("testLeaderboard");
-        //PodiumLbGetScores("testHourlyLeaderboard");
-        //PodiumLbGetScores("testDailyLeaderboard");
+        //PodiumGetScores("testLeaderboard");
+        //PodiumGetScores("testHourlyLeaderboard");
+        //PodiumGetScores("testDailyLeaderboard");
         
-        PodiumLbGetScores("testLeaderboard");
-        PodiumLbGetScores("testLeaderboard", PODIUM_RANGE_FRIENDS);
-        PodiumLbGetScores("testLeaderboard", PODIUM_RANGE_AROUND);
+        PodiumGetScores("testLeaderboard");
+        PodiumGetScores("testLeaderboard", PODIUM_RANGE_FRIENDS);
+        PodiumGetScores("testLeaderboard", PODIUM_RANGE_AROUND);
     }
 }
 

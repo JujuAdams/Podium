@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"PodiumLbFind",
+  "%Name":"PodiumCreate",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"PodiumLbFind",
+  "name":"PodiumCreate",
   "parent":{
     "name":"Leaderboards",
     "path":"folders/Podium/Leaderboards.yy",

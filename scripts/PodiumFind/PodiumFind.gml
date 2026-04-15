@@ -1,6 +1,6 @@
 /// @param leaderboardName
 
-function PodiumLbFind(_leaderboardName)
+function PodiumFind(_leaderboardName)
 {
     static _leaderboardDict = __PodiumSystem().__leaderboardDict;
     

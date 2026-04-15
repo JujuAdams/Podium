@@ -1,8 +1,8 @@
 /// @param leaderboardName
 
-function PodiumLbGetState(_leaderboardName)
+function PodiumGetState(_leaderboardName)
 {
-    with(PodiumLbFind(_leaderboardName))
+    with(PodiumFind(_leaderboardName))
     {
         return __state;
     }

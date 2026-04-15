@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"GDKInitFromConfig",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"GDKInitFromConfig",
+  "parent":{
+    "name":"Podium",
+    "path":"Podium.yyp",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

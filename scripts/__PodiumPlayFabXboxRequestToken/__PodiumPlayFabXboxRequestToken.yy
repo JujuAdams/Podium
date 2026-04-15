@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"__PodiumPlayFabXboxRequestToken",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__PodiumPlayFabXboxRequestToken",
+  "parent":{
+    "name":"PlayFab",
+    "path":"folders/Podium/(System)/PlayFab.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

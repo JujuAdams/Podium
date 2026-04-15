@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"PodiumLbGetScores",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"PodiumLbGetScores",
+  "parent":{
+    "name":"Leaderboards",
+    "path":"folders/Podium/Leaderboards.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

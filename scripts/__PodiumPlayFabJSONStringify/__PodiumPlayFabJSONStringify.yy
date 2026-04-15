@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"__PodiumPlayFabJSONStringify",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__PodiumPlayFabJSONStringify",
+  "parent":{
+    "name":"JSON",
+    "path":"folders/Podium/(System)/PlayFab/JSON.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

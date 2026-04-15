@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"__PodiumEnsureControllerInstance",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__PodiumEnsureControllerInstance",
+  "parent":{
+    "name":"(System)",
+    "path":"folders/Podium/(System).yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

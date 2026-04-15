@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"PodiumLbFind",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"PodiumLbFind",
+  "parent":{
+    "name":"Leaderboards",
+    "path":"folders/Podium/Leaderboards.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

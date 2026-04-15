@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"__PodiumTrace",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__PodiumTrace",
+  "parent":{
+    "name":"Debug",
+    "path":"folders/Podium/(System)/Debug.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

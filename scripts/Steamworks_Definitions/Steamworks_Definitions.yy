@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Steamworks_Definitions",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Steamworks_Definitions",
+  "parent":{
+    "name":"Extensions",
+    "path":"folders/Extensions.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

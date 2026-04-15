@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"PodiumGetPlayFabLoggedIn",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"PodiumGetPlayFabLoggedIn",
+  "parent":{
+    "name":"Podium",
+    "path":"folders/Podium.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

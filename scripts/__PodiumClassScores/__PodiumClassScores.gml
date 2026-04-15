@@ -11,7 +11,7 @@ function __PodiumClassScores(_scoresID, _formattedServiceRef, _range, _refreshPe
     __formattedServiceRef = _formattedServiceRef;
     __range               = _range;
     __refreshPeriod       = _refreshPeriod;
-    __state               = PODIUM_LB_STATE_NO_DATA;
+    __state               = PODIUM_STATE_NO_DATA;
     __lastRequestTime     = -infinity;
     __asyncID             = undefined;
     __data                = [];
@@ -20,7 +20,7 @@ function __PodiumClassScores(_scoresID, _formattedServiceRef, _range, _refreshPe
     
     static __GetScoresContinuous = function()
     {
-        if (not PODIUM_LB_DISRESPECT_RATE_LIMITS)
+        if (not PODIUM_DISRESPECT_RATE_LIMITS)
         {
             if (current_time - __lastRequestTime < 5*60_000) //Every five minutes
             {
@@ -34,7 +34,7 @@ function __PodiumClassScores(_scoresID, _formattedServiceRef, _range, _refreshPe
     
     static __Refresh = function()
     {
-        if (not PODIUM_LB_DISRESPECT_RATE_LIMITS)
+        if (not PODIUM_DISRESPECT_RATE_LIMITS)
         {
             if (current_time - __lastRequestTime < 5_000) //Every five seconds
             {
@@ -54,7 +54,7 @@ function __PodiumClassScores(_scoresID, _formattedServiceRef, _range, _refreshPe
     static __SetErrorState = function()
     {
         array_resize(__data, 0);
-        __state = PODIUM_LB_STATE_ERROR;
+        __state = PODIUM_STATE_ERROR;
     }
     
     static __GetScoresInternal = function(_refresh)
@@ -134,7 +134,7 @@ function __PodiumClassScores(_scoresID, _formattedServiceRef, _range, _refreshPe
                     }
                     else
                     {
-                        __state = PODIUM_LB_STATE_SUCCESS;
+                        __state = PODIUM_STATE_SUCCESS;
                         __data = _json.entries;
                         
                         if (PODIUM_VERBOSE)
@@ -190,7 +190,7 @@ function __PodiumClassScores(_scoresID, _formattedServiceRef, _range, _refreshPe
                     }
                     else
                     {
-                        __state = PODIUM_LB_STATE_SUCCESS;
+                        __state = PODIUM_STATE_SUCCESS;
                     }
                 });
             }
@@ -244,7 +244,7 @@ function __PodiumClassScores(_scoresID, _formattedServiceRef, _range, _refreshPe
                     }
                     else
                     {
-                        __state = PODIUM_LB_STATE_SUCCESS;
+                        __state = PODIUM_STATE_SUCCESS;
                     }
                 });
             }
@@ -336,7 +336,7 @@ function __PodiumClassScores(_scoresID, _formattedServiceRef, _range, _refreshPe
                                 __PodiumTrace($"Leaderboard data \"{__formattedServiceRef}\" parsed successfully");
                             }
                             
-                            __state = PODIUM_LB_STATE_SUCCESS;
+                            __state = PODIUM_STATE_SUCCESS;
                         }
                     }
                     
@@ -350,7 +350,7 @@ function __PodiumClassScores(_scoresID, _formattedServiceRef, _range, _refreshPe
                     }
                     else if (__range == PODIUM_RANGE_AROUND)
                     {
-                        __asyncID = __PodiumPlayFabGetLeaderboardAround(__formattedServiceRef, 1, 10, _callbackFunction);
+                        __asyncID = __PodiumPlayFabGetLeaderboardAround(__formattedServiceRef, 10, _callbackFunction);
                     }
                 }
             }
@@ -397,7 +397,7 @@ function __PodiumClassScores(_scoresID, _formattedServiceRef, _range, _refreshPe
                         }
                         else
                         {
-                            __state = PODIUM_LB_STATE_SUCCESS;
+                            __state = PODIUM_STATE_SUCCESS;
                         }
                     });
                 }
@@ -445,7 +445,7 @@ function __PodiumClassScores(_scoresID, _formattedServiceRef, _range, _refreshPe
                         }
                         else
                         {
-                            __state = PODIUM_LB_STATE_SUCCESS;
+                            __state = PODIUM_STATE_SUCCESS;
                         }
                     });
                 }
@@ -497,7 +497,7 @@ function __PodiumClassScores(_scoresID, _formattedServiceRef, _range, _refreshPe
                         }
                         else
                         {
-                            __state = PODIUM_LB_STATE_SUCCESS;
+                            __state = PODIUM_STATE_SUCCESS;
                         }
                     });
                 }
@@ -511,14 +511,14 @@ function __PodiumClassScores(_scoresID, _formattedServiceRef, _range, _refreshPe
             
             if (__asyncID != undefined)
             {
-                if (__state != PODIUM_LB_STATE_ERROR)
+                if (__state != PODIUM_STATE_ERROR)
                 {
                     if (PODIUM_VERBOSE)
                     {
                         __PodiumTrace($"Started leaderboard fetch for \"{__formattedServiceRef}\" using range `{__range}`");
                     }
                     
-                    __state = PODIUM_LB_STATE_PENDING;
+                    __state = PODIUM_STATE_PENDING;
                 }
             }
         }

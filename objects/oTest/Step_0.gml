@@ -9,9 +9,13 @@ if (playFabLoggedIn != _playFabLoggedIn)
     
     if (_playFabLoggedIn)
     {
+        //PodiumLbGetScores("testLeaderboard");
+        //PodiumLbGetScores("testHourlyLeaderboard");
+        //PodiumLbGetScores("testDailyLeaderboard");
+        
         PodiumLbGetScores("testLeaderboard");
-        PodiumLbGetScores("testHourlyLeaderboard");
-        PodiumLbGetScores("testDailyLeaderboard");
+        PodiumLbGetScores("testLeaderboard", PODIUM_RANGE_FRIENDS);
+        PodiumLbGetScores("testLeaderboard", PODIUM_RANGE_AROUND);
     }
 }
 

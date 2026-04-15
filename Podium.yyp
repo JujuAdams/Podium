@@ -12,6 +12,7 @@
   },
   "defaultScriptType":1,
   "Folders":[
+    {"$GMFolder":"","%Name":"Extensions","folderPath":"folders/Extensions.yy","name":"Extensions","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Podium","folderPath":"folders/Podium.yy","name":"Podium","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"(System)","folderPath":"folders/Podium/(System).yy","name":"(System)","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Debug","folderPath":"folders/Podium/(System)/Debug.yy","name":"Debug","resourceType":"GMFolder","resourceVersion":"2.0",},
@@ -24,7 +25,6 @@
     {"$GMFolder":"","%Name":"PlayStation 5","folderPath":"folders/Podium/PlayStation 5.yy","name":"PlayStation 5","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Switch","folderPath":"folders/Podium/Switch.yy","name":"Switch","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Xbox & Windows GDK","folderPath":"folders/Podium/Xbox & Windows GDK.yy","name":"Xbox & Windows GDK","resourceType":"GMFolder","resourceVersion":"2.0",},
-    {"$GMFolder":"","%Name":"Extensions","folderPath":"folders/Extensions.yy","name":"Extensions","resourceType":"GMFolder","resourceVersion":"2.0",},
   ],
   "ForcedPrefabProjectReferences":[],
   "IncludedFiles":[
@@ -89,6 +89,8 @@
     {"id":{"name":"__PodiumError","path":"scripts/__PodiumError/__PodiumError.yy",},},
     {"id":{"name":"__PodiumPlayFabDebugGetStat","path":"scripts/__PodiumPlayFabDebugGetStat/__PodiumPlayFabDebugGetStat.yy",},},
     {"id":{"name":"__PodiumPlayFabGetLeaderboard","path":"scripts/__PodiumPlayFabGetLeaderboard/__PodiumPlayFabGetLeaderboard.yy",},},
+    {"id":{"name":"__PodiumPlayFabGetLeaderboardAround","path":"scripts/__PodiumPlayFabGetLeaderboardAround/__PodiumPlayFabGetLeaderboardAround.yy",},},
+    {"id":{"name":"__PodiumPlayFabGetLeaderboardFriends","path":"scripts/__PodiumPlayFabGetLeaderboardFriends/__PodiumPlayFabGetLeaderboardFriends.yy",},},
     {"id":{"name":"__PodiumPlayFabJSONParse","path":"scripts/__PodiumPlayFabJSONParse/__PodiumPlayFabJSONParse.yy",},},
     {"id":{"name":"__PodiumPlayFabJSONStringify","path":"scripts/__PodiumPlayFabJSONStringify/__PodiumPlayFabJSONStringify.yy",},},
     {"id":{"name":"__PodiumPlayFabSetDisplayName","path":"scripts/__PodiumPlayFabSetDisplayName/__PodiumPlayFabSetDisplayName.yy",},},

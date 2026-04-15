@@ -32,9 +32,10 @@ function __PodiumSystem()
         __steamAvailable        = false;
         __playServicesAvailable = false;
         
-        __playFabLoggedIn      = false;
-        __playFabSessionTicket = undefined;
-        __playFabEntityToken   = undefined;
+        __playFabLoggedIn              = false;
+        __playFabXboxTokenAndSignature = undefined;
+        __playFabSessionTicket         = undefined;
+        __playFabEntityToken           = undefined;
         
         
         var _fallback = true;

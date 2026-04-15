@@ -7,5 +7,5 @@ function PodiumLbGetState(_leaderboardName)
         return __state;
     }
     
-    return PODIUM_LB_STATE_UNKNOWN;
+    return PODIUM_STATE_UNKNOWN;
 }

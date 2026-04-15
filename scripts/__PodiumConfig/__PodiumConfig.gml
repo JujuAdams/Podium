@@ -8,7 +8,7 @@
 /// services.
 #macro PODIUM_FORCE_LOCAL_DATA  false
 
-#macro PODIUM_LB_DISRESPECT_RATE_LIMITS  false
+#macro PODIUM_DISRESPECT_RATE_LIMITS  false
 
 ///////
 // PlayFab

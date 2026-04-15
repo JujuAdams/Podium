@@ -1,6 +1,6 @@
 /// @param tokenAndSignature
 
-function __PodiumPlayFabXboxLogin(_tokenAndSignature)
+function __PodiumPlayFabXboxLogin()
 {
     static _system = __PodiumSystem();
     static _headerMap = ds_map_create();
@@ -13,19 +13,12 @@ function __PodiumPlayFabXboxLogin(_tokenAndSignature)
     var _bodyString = __PodiumPlayFabJSONStringify({
         TitleId: PODIUM_PLAYFAB_TITLE_ID,
         CreateAccount: true,
-        XboxToken: _tokenAndSignature,
+        XboxToken: _system.__playFabXboxTokenAndSignature,
     });
     
     if (PODIUM_VERBOSE)
     {
-        if (PODIUM_RUNNING_FROM_IDE)
-        {
-            __PodiumTrace($"Requesting PlayFab login using Xbox token \"{_tokenAndSignature}\"");
-        }
-        else
-        {
-            __PodiumTrace($"Requesting PlayFab login using Xbox token");
-        }
+        __PodiumTrace($"Requesting PlayFab login using Xbox token");
     }
     
     var _result = http_request($"https://{PODIUM_PLAYFAB_TITLE_ID}.playfabapi.com/Client/LoginWithXbox", "POST", _headerMap, _bodyString);

@@ -13,6 +13,7 @@ if (async_load[? "event_type"] == "tokenandsignature_result")
             __PodiumTrace("Received Xbox token and signature successfully");
         }
         
-        __PodiumPlayFabXboxLogin(async_load[? "token"]);
+        __PodiumSystem().__playFabXboxTokenAndSignature = async_load[? "token"];
+        __PodiumPlayFabXboxLogin();
     }
 }

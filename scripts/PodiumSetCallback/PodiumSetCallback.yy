@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"PodiumSetCallback",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"PodiumSetCallback",
+  "parent":{
+    "name":"Leaderboards",
+    "path":"folders/Podium/Leaderboards.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

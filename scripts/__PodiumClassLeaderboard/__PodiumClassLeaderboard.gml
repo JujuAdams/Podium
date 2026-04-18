@@ -83,7 +83,7 @@ function __PodiumClassLeaderboard(_name, _serviceRef, _higherValueIsBetter = tru
         }
     }
     
-    static GetScores = function(_range)
+    static GetScores = function(_range, _callback, _callbackMetadata)
     {
         if ((_range != PODIUM_RANGE_TOP) && (_range != PODIUM_RANGE_FRIENDS) && (_range != PODIUM_RANGE_AROUND))
         {
@@ -91,10 +91,10 @@ function __PodiumClassLeaderboard(_name, _serviceRef, _higherValueIsBetter = tru
             return undefined;
         }
         
-        return __EnsureScoresStruct(__GetFormattedServiceRef(), _range).__GetScoresContinuous();
+        return __EnsureScoresStruct(__GetFormattedServiceRef(), _range).__GetScoresContinuous(_callback, _callbackMetadata);
     }
     
-    static Refresh = function(_range)
+    static Refresh = function(_range, _callback, _callbackMetadata)
     {
         if ((_range != PODIUM_RANGE_TOP) && (_range != PODIUM_RANGE_FRIENDS) && (_range != PODIUM_RANGE_AROUND))
         {
@@ -102,12 +102,17 @@ function __PodiumClassLeaderboard(_name, _serviceRef, _higherValueIsBetter = tru
             return undefined;
         }
         
-        return __EnsureScoresStruct(__GetFormattedServiceRef(), _range).__Refresh();
+        return __EnsureScoresStruct(__GetFormattedServiceRef(), _range).__Refresh(_callback, _callbackMetadata);
     }
     
     static GetState = function(_range)
     {
         return __EnsureScoresStruct(__GetFormattedServiceRef(), _range).__state;
+    }
+    
+    static SetCallback = function(_range, _callback, _callbackMetadata)
+    {
+        return __EnsureScoresStruct(__GetFormattedServiceRef(), _range).__SetCallback(_callback, _callbackMetadata);
     }
     
     static __GetFormattedServiceRef = function()
@@ -148,7 +153,7 @@ function __PodiumClassLeaderboard(_name, _serviceRef, _higherValueIsBetter = tru
         var _struct = __scoresDict[$ _scoresID];
         if (not is_struct(_struct))
         {
-            _struct = new __PodiumClassScores(_scoresID, _formattedServiceRef, _range, __refreshPeriod);
+            _struct = new __PodiumClassScores(_scoresID, __name, _formattedServiceRef, _range, __refreshPeriod);
             __scoresDict[$ _scoresID] = _struct;
         }
         

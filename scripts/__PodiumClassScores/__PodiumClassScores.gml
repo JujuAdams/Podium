@@ -1,12 +1,14 @@
 /// @param scoresID
+/// @param leaderboardName
 /// @param formattedServiceRef
 /// @param range
 /// @param refreshPeriod
 
-function __PodiumClassScores(_scoresID, _formattedServiceRef, _range, _refreshPeriod) constructor
+function __PodiumClassScores(_scoresID, _leaderboardName, _formattedServiceRef, _range, _refreshPeriod) constructor
 {
     static _system = __PodiumSystem();
     
+    __leaderboardName     = _leaderboardName;
     __scoresID            = _scoresID;
     __formattedServiceRef = _formattedServiceRef;
     __range               = _range;
@@ -15,6 +17,8 @@ function __PodiumClassScores(_scoresID, _formattedServiceRef, _range, _refreshPe
     __lastRequestTime     = -infinity;
     __asyncID             = undefined;
     __data                = [];
+    __callback            = undefined;
+    __callbackMetadata    = undefined;
     
     
     
@@ -25,6 +29,7 @@ function __PodiumClassScores(_scoresID, _formattedServiceRef, _range, _refreshPe
             if (current_time - __lastRequestTime < 5*60_000) //Every five minutes
             {
                 //Requested too soon, on cooldown
+                __ExecuteCallback(true);
                 return;
             }
         }
@@ -44,11 +49,26 @@ function __PodiumClassScores(_scoresID, _formattedServiceRef, _range, _refreshPe
                 }
                 
                 //Requested too soon, on cooldown
+                __ExecuteCallback(true);
                 return;
             }
         }
         
         return __GetScoresInternal(true);
+    }
+    
+    static __SetCallback = function(_callback, _callbackMetadata)
+    {
+        __callback         = _callback;
+        __callbackMetadata = _callbackMetadata;
+    }
+    
+    static __ExecuteCallback = function(_cached = false)
+    {
+        if (is_callable(__callback))
+        {
+            __callback(__leaderboardName, __range, __data, __state, _cached, __callbackMetadata);
+        }
     }
     
     static __SetErrorState = function()
@@ -142,6 +162,8 @@ function __PodiumClassScores(_scoresID, _formattedServiceRef, _range, _refreshPe
                             __PodiumTrace($"Leaderboard data for \"{__formattedServiceRef}\" using range `{__range}` has {array_length(__data)} entries");
                         }
                     }
+                    
+                    __ExecuteCallback();
                 });
             }
             else if (PODIUM_USING_GAMECENTER)
@@ -192,6 +214,8 @@ function __PodiumClassScores(_scoresID, _formattedServiceRef, _range, _refreshPe
                     {
                         __state = PODIUM_STATE_SUCCESS;
                     }
+                    
+                    __ExecuteCallback();
                 });
             }
             else if (_system.__playServicesAvailable)
@@ -246,6 +270,8 @@ function __PodiumClassScores(_scoresID, _formattedServiceRef, _range, _refreshPe
                     {
                         __state = PODIUM_STATE_SUCCESS;
                     }
+                    
+                    __ExecuteCallback();
                 });
             }
             else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
@@ -338,7 +364,9 @@ function __PodiumClassScores(_scoresID, _formattedServiceRef, _range, _refreshPe
                             
                             __state = PODIUM_STATE_SUCCESS;
                         }
-                    }
+                    
+                        __ExecuteCallback();
+                    };
                     
                     if (__range == PODIUM_RANGE_TOP)
                     {
@@ -399,6 +427,8 @@ function __PodiumClassScores(_scoresID, _formattedServiceRef, _range, _refreshPe
                         {
                             __state = PODIUM_STATE_SUCCESS;
                         }
+                        
+                        __ExecuteCallback();
                     });
                 }
             }
@@ -447,6 +477,8 @@ function __PodiumClassScores(_scoresID, _formattedServiceRef, _range, _refreshPe
                         {
                             __state = PODIUM_STATE_SUCCESS;
                         }
+                        
+                        __ExecuteCallback();
                     });
                 }
             }
@@ -499,6 +531,8 @@ function __PodiumClassScores(_scoresID, _formattedServiceRef, _range, _refreshPe
                         {
                             __state = PODIUM_STATE_SUCCESS;
                         }
+                        
+                        __ExecuteCallback();
                     });
                 }
                 

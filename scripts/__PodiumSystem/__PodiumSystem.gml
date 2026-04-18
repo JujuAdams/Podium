@@ -9,7 +9,7 @@ function __PodiumSystem()
     
     if (PODIUM_RUNNING_FROM_IDE)
     {
-        global.podiumSystem = _system;
+        global.__podiumSystem = _system;
     }
     
     with(_system)
@@ -194,6 +194,13 @@ function __PodiumSystem()
             {
                 __PodiumTrace("Using PlayStation remote service with `__PodiumDefinitionsPlayStation`");
             }
+            
+            if (PODIUM_PSN_LEADERBOARD_SERVICE_LABEL == undefined)
+            {
+                __PodiumError("Please set `PODIUM_PSN_LEADERBOARD_SERVICE_LABEL`");
+            }
+            
+            psn_init_leaderboard(PODIUM_PSN_LEADERBOARD_SERVICE_LABEL);
             
             _fallback = false;
             

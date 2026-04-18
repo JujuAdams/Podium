@@ -10,6 +10,8 @@
 
 #macro PODIUM_DISRESPECT_RATE_LIMITS  false
 
+#macro PODIUM_PSN_LEADERBOARD_SERVICE_LABEL  undefined
+
 ///////
 // PlayFab
 ///////

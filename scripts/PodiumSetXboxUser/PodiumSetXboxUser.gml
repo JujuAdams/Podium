@@ -16,13 +16,18 @@ function PodiumSetXboxUser(_xboxUser)
             __PodiumTrace($"Set Xbox user to {_xboxUser}");
         }
         
-        //FIXME - It's possible for tokens to get confused if you set the Xbox user rapidly
-        if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
+        if (_xboxUser > 0)
         {
-            _system.__playFabLoggedIn = false;
-            
-            if (_xboxUser != 0)
+            if (PODIUM_USING_XBOX_LEADERBOARDS)
             {
+                xboxone_stats_add_user(_xboxUser);
+            }
+            else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
+            {
+                //FIXME - It's possible for tokens to get confused if you set the Xbox user rapidly
+                
+                _system.__playFabLoggedIn = false;
+                
                 __PodiumPlayFabXboxRequestToken();
             }
         }

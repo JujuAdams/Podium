@@ -2,16 +2,19 @@
 /// @param leaderboardName
 /// @param formattedServiceRef
 /// @param range
+/// @param higherValueIsBetter
+/// @param displayType
 /// @param refreshPeriod
 
-function __PodiumClassScores(_scoresID, _leaderboardName, _formattedServiceRef, _range, _refreshPeriod) constructor
+function __PodiumClassScores(_scoresID, _leaderboardName, _formattedServiceRef, _range, _higherValueIsBetter, _displayType, _refreshPeriod) constructor
 {
     static _system = __PodiumSystem();
     
-    __leaderboardName     = _leaderboardName;
     __scoresID            = _scoresID;
     __formattedServiceRef = _formattedServiceRef;
     __range               = _range;
+    __higherValueIsBetter = _higherValueIsBetter;
+    __displayType         = _displayType;
     __refreshPeriod       = _refreshPeriod;
     __state               = PODIUM_STATE_NO_DATA;
     __lastRequestTime     = -infinity;
@@ -19,6 +22,30 @@ function __PodiumClassScores(_scoresID, _leaderboardName, _formattedServiceRef, 
     __data                = [];
     __callback            = undefined;
     __callbackMetadata    = undefined;
+    
+    if (PODIUM_USING_STEAMWORKS)
+    {
+        if (_displayType == PODIUM_DISPLAY_NUMERIC)
+        {
+            var _steamDisplayType = lb_disp_numeric;
+        }
+        else if (_displayType == PODIUM_DISPLAY_TIME_SEC)
+        {
+            var _steamDisplayType = lb_disp_time_sec;
+        }
+        else if (_displayType == PODIUM_DISPLAY_TIME_MS)
+        {
+            var _steamDisplayType = lb_disp_time_ms;
+        }
+        else
+        {
+            __PodiumError($"Leaderboard \"{_formattedServiceRef}\" has unhandled display type `{_displayType}`");
+        }
+        
+        var _sortMethod = _higherValueIsBetter? lb_sort_descending : lb_sort_ascending;
+        
+        steam_create_leaderboard(__formattedServiceRef, _sortMethod, _steamDisplayType);
+    }
     
     
     
@@ -61,6 +88,16 @@ function __PodiumClassScores(_scoresID, _leaderboardName, _formattedServiceRef, 
     {
         __callback         = _callback;
         __callbackMetadata = _callbackMetadata;
+    }
+    
+    static __GetCallback = function()
+    {
+        static _result = {};
+        
+        _result.__callback         = __callback;
+        _result.__callbackMetadata = __callbackMetadata;
+        
+        return _result;
     }
     
     static __ExecuteCallback = function(_cached = false)
@@ -122,30 +159,33 @@ function __PodiumClassScores(_scoresID, _leaderboardName, _formattedServiceRef, 
                     __asyncID = undefined;
                     array_resize(__data, 0);
                     
-                    if (async_load[? "event_type"] != "leaderboard_download")
+                    if (not _aborted)
                     {
-                        __PodiumWarning($"Received unexpected leaderboard event type \"{async_load[? "event_type"]}\", aborting");
-                        _aborted = true;
-                    }
-                    
-                    if (async_load[? "status"] != 0)
-                    {
-                        __PodiumWarning($"Received unexpected leaderboard status `{async_load[? "status"]}`, aborting");
-                        _aborted = true;
-                    }
-                    
-                    var _json = undefined;
-                    try
-                    {
-                        _json = json_parse(async_load[? "entries"]);
-                        if (not is_array(_json.entries)) throw -123;
-                    }
-                    catch(_error)
-                    {
-                        __PodiumWarning($"Failed to parse returned leaderboard data");
+                        if (async_load[? "event_type"] != "leaderboard_download")
+                        {
+                            __PodiumWarning($"Received unexpected leaderboard event type \"{async_load[? "event_type"]}\", aborting");
+                            _aborted = true;
+                        }
                         
-                        _json = undefined;
-                        _aborted = true;
+                        if (async_load[? "status"] != 0)
+                        {
+                            __PodiumWarning($"Received unexpected leaderboard status `{async_load[? "status"]}`, aborting");
+                            _aborted = true;
+                        }
+                        
+                        var _json = undefined;
+                        try
+                        {
+                            _json = json_parse(async_load[? "entries"]);
+                            if (not is_array(_json.entries)) throw -123;
+                        }
+                        catch(_error)
+                        {
+                            __PodiumWarning($"Failed to parse returned leaderboard data");
+                            
+                            _json = undefined;
+                            _aborted = true;
+                        }
                     }
                     
                     if (_aborted)
@@ -204,7 +244,10 @@ function __PodiumClassScores(_scoresID, _leaderboardName, _formattedServiceRef, 
                     __asyncID = undefined;
                     array_resize(__data, 0);
                     
-                    //TODO
+                    if (not _aborted)
+                    {
+                        //TODO
+                    }
                     
                     if (_aborted)
                     {
@@ -260,7 +303,10 @@ function __PodiumClassScores(_scoresID, _leaderboardName, _formattedServiceRef, 
                     __asyncID = undefined;
                     array_resize(__data, 0);
                     
-                    //TODO
+                    if (not _aborted)
+                    {
+                        //TODO
+                    }
                     
                     if (_aborted)
                     {
@@ -417,7 +463,10 @@ function __PodiumClassScores(_scoresID, _leaderboardName, _formattedServiceRef, 
                         __asyncID = undefined;
                         array_resize(__data, 0);
                         
-                        //TODO
+                        if (not _aborted)
+                        {
+                            //TODO
+                        }
                         
                         if (_aborted)
                         {
@@ -444,20 +493,7 @@ function __PodiumClassScores(_scoresID, _leaderboardName, _formattedServiceRef, 
                 }
                 else
                 {
-                    if (__range == PODIUM_RANGE_TOP)
-                    {
-                        __asyncID = psn_get_leaderboard_score(_system.__psGamepad, __formattedServiceRef);
-                    }
-                    else if (__range == PODIUM_RANGE_FRIENDS)
-                    {
-                        __asyncID = psn_get_friends_scores(_system.__psGamepad, __formattedServiceRef, 1, 10);
-                    }
-                    else if (__range == PODIUM_RANGE_AROUND)
-                    {
-                        __asyncID = psn_get_leaderboard_score_range(_system.__psGamepad, __formattedServiceRef, 1, 10);
-                    }
-                    
-                    __PodiumRegisterSteamAsyncID(__asyncID, function(_aborted)
+                    var _func = function(_aborted)
                     {
                         if (PODIUM_VERBOSE)
                         {
@@ -467,7 +503,20 @@ function __PodiumClassScores(_scoresID, _leaderboardName, _formattedServiceRef, 
                         __asyncID = undefined;
                         array_resize(__data, 0);
                         
-                        //TODO
+                        if (not _aborted)
+                        {
+                            var _entryNumber = async_load[? "numentries"];
+                            var _i = 1; //1-indexed
+                            repeat(_entryNumber)
+                            {
+                                var _rank     = async_load[? $"rank{_i}"];
+                                var _playerID = async_load[? $"playerid{_i}"]; //Called "player ID" but actually seems to be a name?
+                                var _score    = async_load[? $"scorevalue{_i}"];
+                                
+                                array_push(__data, new __PodiumClassRanking(_playerID, _score, _rank));
+                                ++_i;
+                            }
+                        }
                         
                         if (_aborted)
                         {
@@ -479,7 +528,22 @@ function __PodiumClassScores(_scoresID, _leaderboardName, _formattedServiceRef, 
                         }
                         
                         __ExecuteCallback();
-                    });
+                    };
+                    
+                    if (__range == PODIUM_RANGE_TOP)
+                    {
+                        psn_get_leaderboard_score_range(_system.__psGamepad, __formattedServiceRef, 1, 10);
+                        __PodiumRegisterPSLeaderboardScoreRange(__formattedServiceRef, _func);
+                    }
+                    else if (__range == PODIUM_RANGE_FRIENDS)
+                    {
+                        psn_get_friends_scores(_system.__psGamepad, __formattedServiceRef, 1, 10);
+                        __PodiumRegisterPSLeaderboardFriends(__formattedServiceRef, _func);
+                    }
+                    else if (__range == PODIUM_RANGE_AROUND)
+                    {
+                        //TODO
+                    }
                 }
             }
             else if (PODIUM_ON_SWITCH)
@@ -494,8 +558,6 @@ function __PodiumClassScores(_scoresID, _leaderboardName, _formattedServiceRef, 
                 }
                 else
                 {
-                    //TODO - A lot of work to do here
-                    
                     if ((__range == PODIUM_RANGE_TOP) || (__range == PODIUM_RANGE_FRIENDS))
                     {
                         __asyncID = switch_npln_leaderboard_get_scores_range(_system.__switchNPLNUserHandle,
@@ -511,7 +573,7 @@ function __PodiumClassScores(_scoresID, _leaderboardName, _formattedServiceRef, 
                                                                             10);
                     }
                     
-                    __PodiumRegisterSteamAsyncID(__asyncID, function(_aborted)
+                    __PodiumRegisterSocialAsyncID(__asyncID, function(_aborted)
                     {
                         if (PODIUM_VERBOSE)
                         {
@@ -521,7 +583,24 @@ function __PodiumClassScores(_scoresID, _leaderboardName, _formattedServiceRef, 
                         __asyncID = undefined;
                         array_resize(__data, 0);
                         
-                        //TODO
+                        if (not _aborted)
+                        {
+                            if (not async_load[? "success"])
+                            {
+                                _aborted = true;
+                            }
+                            else
+                            {
+                                var _scoresArray = async_load[? "scores"];
+                                var _i = 0;
+                                repeat(array_length(_scoresArray))
+                                {
+                                    var _scoreStruct = _scoresArray[_i];
+                                    array_push(__data, new __PodiumClassRanking(_scoreStruct.user_name, _scoreStruct.score, _scoreStruct.rank));
+                                    ++_i;
+                                }
+                            }
+                        }
                         
                         if (_aborted)
                         {

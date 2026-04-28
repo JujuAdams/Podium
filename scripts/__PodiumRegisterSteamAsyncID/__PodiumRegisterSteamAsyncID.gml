@@ -1,9 +1,9 @@
 /// @param asyncID
 /// @param callbackFunction
 
-function __PodiumRegisterSystemAsyncID(_asyncID, _callbackFunction)
+function __PodiumRegisterSteamAsyncID(_asyncID, _callbackFunction)
 {
-    static _asyncIDMap = __PodiumSystem().__systemAsyncIDMap;
+    static _asyncIDMap = __PodiumSystem().__steamAsyncIDMap;
     
     if (_asyncID == undefined)
     {

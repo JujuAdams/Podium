@@ -17,3 +17,16 @@ if (async_load[? "event_type"] == "tokenandsignature_result")
         __PodiumPlayFabXboxLogin();
     }
 }
+else
+{
+    var _id = async_load[? "id"];
+    
+    var _asyncIDMap = __PodiumSystem().__systemAsyncIDMap;
+    if (ds_map_exists(_asyncIDMap, _id))
+    {
+        var _callback = _asyncIDMap[? _id];
+        ds_map_delete(_asyncIDMap, _id);
+        
+        _callback(false);
+    }
+}

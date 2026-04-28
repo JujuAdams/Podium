@@ -1,9 +1,10 @@
 /// @param name
 /// @param serviceRef
 /// @param [higherValueIsBetter=true]
+/// @param [displayType=numeric]
 /// @param [refreshPeriod=never]
 
-function __PodiumClassLeaderboard(_name, _serviceRef, _higherValueIsBetter = true, _refreshPeriod = PODIUM_REFRESH_NEVER) constructor
+function __PodiumClassLeaderboard(_name, _serviceRef, _higherValueIsBetter = true, _displayType = PODIUM_DISPLAY_NUMERIC, _refreshPeriod = PODIUM_REFRESH_NEVER) constructor
 {
     static _system = __PodiumSystem();
     
@@ -11,7 +12,14 @@ function __PodiumClassLeaderboard(_name, _serviceRef, _higherValueIsBetter = tru
     __serviceRef          = _serviceRef;
     __refreshPeriod       = _refreshPeriod;
     __higherValueIsBetter = _higherValueIsBetter;
+    __displayType         = _displayType;
     __scoresDict          = {};
+    
+    if (PODIUM_USING_STEAMWORKS)
+    {
+        //Trigger an early ensure to create leaderboards. This helps us find errors early
+        __EnsureScoresStruct(__GetFormattedServiceRef(), _refreshPeriod);
+    }
     
     
     
@@ -83,7 +91,7 @@ function __PodiumClassLeaderboard(_name, _serviceRef, _higherValueIsBetter = tru
         }
     }
     
-    static GetScores = function(_range, _callback, _callbackMetadata)
+    static GetScores = function(_range)
     {
         if ((_range != PODIUM_RANGE_TOP) && (_range != PODIUM_RANGE_FRIENDS) && (_range != PODIUM_RANGE_AROUND))
         {
@@ -91,10 +99,10 @@ function __PodiumClassLeaderboard(_name, _serviceRef, _higherValueIsBetter = tru
             return undefined;
         }
         
-        return __EnsureScoresStruct(__GetFormattedServiceRef(), _range).__GetScoresContinuous(_callback, _callbackMetadata);
+        return __EnsureScoresStruct(__GetFormattedServiceRef(), _range).__GetScoresContinuous();
     }
     
-    static Refresh = function(_range, _callback, _callbackMetadata)
+    static Refresh = function(_range)
     {
         if ((_range != PODIUM_RANGE_TOP) && (_range != PODIUM_RANGE_FRIENDS) && (_range != PODIUM_RANGE_AROUND))
         {
@@ -102,7 +110,7 @@ function __PodiumClassLeaderboard(_name, _serviceRef, _higherValueIsBetter = tru
             return undefined;
         }
         
-        return __EnsureScoresStruct(__GetFormattedServiceRef(), _range).__Refresh(_callback, _callbackMetadata);
+        return __EnsureScoresStruct(__GetFormattedServiceRef(), _range).__Refresh();
     }
     
     static GetState = function(_range)
@@ -113,6 +121,11 @@ function __PodiumClassLeaderboard(_name, _serviceRef, _higherValueIsBetter = tru
     static SetCallback = function(_range, _callback, _callbackMetadata)
     {
         return __EnsureScoresStruct(__GetFormattedServiceRef(), _range).__SetCallback(_callback, _callbackMetadata);
+    }
+    
+    static GetCallback = function(_range)
+    {
+        return __EnsureScoresStruct(__GetFormattedServiceRef(), _range).__GetCallback();
     }
     
     static __GetFormattedServiceRef = function()
@@ -153,7 +166,7 @@ function __PodiumClassLeaderboard(_name, _serviceRef, _higherValueIsBetter = tru
         var _struct = __scoresDict[$ _scoresID];
         if (not is_struct(_struct))
         {
-            _struct = new __PodiumClassScores(_scoresID, __name, _formattedServiceRef, _range, __refreshPeriod);
+            _struct = new __PodiumClassScores(_scoresID, __name, _formattedServiceRef, _range, __higherValueIsBetter, __displayType, __refreshPeriod);
             __scoresDict[$ _scoresID] = _struct;
         }
         

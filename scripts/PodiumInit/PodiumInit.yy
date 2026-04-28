@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"PodiumInit",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"PodiumInit",
+  "parent":{
+    "name":"Podium",
+    "path":"folders/Podium.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

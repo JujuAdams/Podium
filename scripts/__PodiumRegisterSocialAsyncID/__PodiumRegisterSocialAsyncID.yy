@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"__PodiumRegisterSocialAsyncID",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__PodiumRegisterSocialAsyncID",
+  "parent":{
+    "name":"(System)",
+    "path":"folders/Podium/(System).yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

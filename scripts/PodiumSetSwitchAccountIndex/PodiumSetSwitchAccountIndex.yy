@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"PodiumSetSwitchNPLNUserHandle",
+  "%Name":"PodiumSetSwitchAccountIndex",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"PodiumSetSwitchNPLNUserHandle",
+  "name":"PodiumSetSwitchAccountIndex",
   "parent":{
     "name":"Switch",
     "path":"folders/Podium/Switch.yy",

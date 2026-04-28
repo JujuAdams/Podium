@@ -38,8 +38,8 @@
 /// N.B. Podium does not call `steam_update()` for you when using Steam. You must call this function
 ///      yourself.
 /// 
-/// N.B. Podium does not call `psn_tick()` or `psn_init_leaderboard()` for you when running on
-///      PlayStation. You must call these functions yourself.
+/// N.B. Podium does not call `psn_tick()` for you when running on PlayStation. You must call this
+///      function yourself.
 /// 
 /// N.B. Podium does not call `gdk_init()`, `gdk_update()`, or `gdk_quit()` for you when running on
 ///      Xbox. You must call these functions yourself.
@@ -47,9 +47,10 @@
 /// @param name
 /// @param serviceRef
 /// @param [higherValueIsBetter=true]
+/// @param [displayType=numeric]
 /// @param [refreshPeriod=never]
 
-function PodiumCreate(_name, _serviceRef, _higherValueIsBetter = true, _refreshPeriod = PODIUM_REFRESH_NEVER)
+function PodiumCreate(_name, _serviceRef, _higherValueIsBetter = true, _displayType = PODIUM_DISPLAY_NUMERIC, _refreshPeriod = PODIUM_REFRESH_NEVER)
 {
     static _system = __PodiumSystem();
     static _leaderboardDict = _system.__leaderboardDict;
@@ -58,7 +59,7 @@ function PodiumCreate(_name, _serviceRef, _higherValueIsBetter = true, _refreshP
     {
         if (PODIUM_RUNNING_FROM_IDE)
         {
-            __PodiumError($"Overwriting leaderboard \"{_name}\" (service reference \"{_serviceRef}\"). Please ensure that `PodiumCreate()` is called once and once only per leaderboard name\nIf you are using `game_restart()`, don't");
+            __PodiumError($"Overwriting leaderboard \"{_name}\" (service reference \"{_serviceRef}\"). Please ensure that `PodiumCreate()` is called once and once only per leaderboard name");
         }
         
         return;
@@ -71,12 +72,12 @@ function PodiumCreate(_name, _serviceRef, _higherValueIsBetter = true, _refreshP
     
     if (PODIUM_VERBOSE)
     {
-        __PodiumTrace($"Defining leaderboard \"{_name}\" for service reference `{_serviceRef}`, higherValueIsBetter = {_higherValueIsBetter? "true" : "false"}, refreshPeriod = {_refreshPeriod}");
+        __PodiumTrace($"Defining leaderboard \"{_name}\" for service reference `{_serviceRef}`, higherValueIsBetter = {_higherValueIsBetter? "true" : "false"}, displayType = {_displayType}, refreshPeriod = {_refreshPeriod}");
     }
     
     //TODO - Add error checking for service reference inputs
     
-    var _struct = new __PodiumClassLeaderboard(_name, _serviceRef, _higherValueIsBetter, _refreshPeriod);
+    var _struct = new __PodiumClassLeaderboard(_name, _serviceRef, _higherValueIsBetter, _displayType, _refreshPeriod);
     _leaderboardDict[$ _name] = _struct;
     
     return _struct;

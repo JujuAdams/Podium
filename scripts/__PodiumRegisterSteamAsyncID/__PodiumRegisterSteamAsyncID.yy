@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"__PodiumRegisterSteamAsyncID",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__PodiumRegisterSteamAsyncID",
+  "parent":{
+    "name":"(System)",
+    "path":"folders/Podium/(System).yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

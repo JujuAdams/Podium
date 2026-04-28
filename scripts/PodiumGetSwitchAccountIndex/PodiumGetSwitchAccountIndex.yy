@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"PodiumGetSwitchAccountIndex",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"PodiumGetSwitchAccountIndex",
+  "parent":{
+    "name":"Switch",
+    "path":"folders/Podium/Switch.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

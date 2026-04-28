@@ -21,6 +21,7 @@
 
 // Nintendo Switch tenant ID. Please remember to remove the environment identifier at the end e.g.
 // if the tenant ID is `"t-01234567-xyz"` then use `"t-01234567"`.
+#macro PODIUM_SWITCH_NPLN_TENANT  ""
 
 ///////
 // PlayFab

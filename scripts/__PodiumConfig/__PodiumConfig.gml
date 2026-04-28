@@ -1,6 +1,8 @@
 /// Whether to report lots of information messages to the console. This can be helpful to diagnose
 /// problems. You will likely want to set this macro to `false` for production builds.
-#macro PODIUM_VERBOSE  false
+#macro PODIUM_VERBOSE  true
+
+#macro PODIUM_VERBOSE_ASYNC  true
 
 #macro PODIUM_WARNINGS_HAVE_CALLSTACKS  true
 
@@ -8,11 +10,17 @@
 /// services.
 #macro PODIUM_FORCE_LOCAL_DATA  false
 
+// Dangerous! Only set this to `true` if you need it
 #macro PODIUM_DISRESPECT_RATE_LIMITS  false
+
+///////
+// Platform-specific
+///////
 
 #macro PODIUM_PSN_LEADERBOARD_SERVICE_LABEL  undefined
 
-#macro PODIUM_SWITCH_NPLN_TENANT  ""
+// Nintendo Switch tenant ID. Please remember to remove the environment identifier at the end e.g.
+// if the tenant ID is `"t-01234567-xyz"` then use `"t-01234567"`.
 
 ///////
 // PlayFab

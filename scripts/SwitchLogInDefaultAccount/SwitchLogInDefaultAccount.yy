@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"SwitchLogInDefaultAccount",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"SwitchLogInDefaultAccount",
+  "parent":{
+    "name":"Podium",
+    "path":"Podium.yyp",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

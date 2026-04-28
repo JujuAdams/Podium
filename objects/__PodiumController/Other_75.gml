@@ -1,3 +1,8 @@
+if (PODIUM_VERBOSE_ASYNC)
+{
+    show_debug_message($"System:\n{json_encode(async_load, true)}");
+}
+
 //FIXME - It's possible for tokens to get confused if you set the Xbox user rapidly
 if (async_load[? "event_type"] == "tokenandsignature_result")
 {

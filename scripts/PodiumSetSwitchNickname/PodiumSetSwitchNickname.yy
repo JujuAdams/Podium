@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"PodiumInit",
+  "%Name":"PodiumSetSwitchNickname",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"PodiumInit",
+  "name":"PodiumSetSwitchNickname",
   "parent":{
-    "name":"Podium",
-    "path":"folders/Podium.yy",
+    "name":"Switch",
+    "path":"folders/Podium/Switch.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

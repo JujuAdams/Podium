@@ -80,6 +80,10 @@ function __PodiumClassLeaderboard(_name, _serviceRef, _higherValueIsBetter = tru
             {
                 __PodiumSoftError("Switch NPLN user handle not set or invalid. Please set the NPLN user handle with `PodiumSetSwitchNPLNUserHandle()` before pushing leaderboard scores");
             }
+            else if (_system.__switchNPLNUserHandle == 0)
+            {
+                __PodiumWarning("Switch NPLN user handle is null, not submitting score");
+            }
             else
             {
                 switch_npln_leaderboard_set_score(_system.__switchNPLNUserHandle, __serviceRef.categoryTypeName, __serviceRef.categoryID, _value);

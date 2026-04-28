@@ -1,3 +1,8 @@
+if (PODIUM_VERBOSE_ASYNC)
+{
+    show_debug_message($"Steam:\n{json_encode(async_load, true)}");
+}
+
 var _id = async_load[? "id"];
 
 var _asyncIDMap = __PodiumSystem().__steamAsyncIDMap;

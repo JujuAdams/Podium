@@ -1,3 +1,8 @@
+if (PODIUM_VERBOSE_ASYNC)
+{
+    show_debug_message($"Social:\n{json_encode(async_load, true)}");
+}
+
 var _id = async_load[? "id"];
 if (_id == PSN_LEADERBOARD_SCORE_RANGE_MSG)
 {

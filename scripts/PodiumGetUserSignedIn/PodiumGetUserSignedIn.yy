@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"PodiumPush",
+  "%Name":"PodiumGetUserSignedIn",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"PodiumPush",
+  "name":"PodiumGetUserSignedIn",
   "parent":{
-    "name":"Leaderboards",
-    "path":"folders/Podium/Leaderboards.yy",
+    "name":"Podium",
+    "path":"folders/Podium.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

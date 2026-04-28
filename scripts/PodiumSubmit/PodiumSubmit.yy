@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"PodiumGetSwitchAccountIndex",
+  "%Name":"PodiumSubmit",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"PodiumGetSwitchAccountIndex",
+  "name":"PodiumSubmit",
   "parent":{
-    "name":"Switch",
-    "path":"folders/Podium/Switch.yy",
+    "name":"Leaderboards",
+    "path":"folders/Podium/Leaderboards.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

@@ -552,9 +552,13 @@ function __PodiumClassScores(_scoresID, _leaderboardName, _formattedServiceRef, 
                 // Switch
                 ///////
                 
-                if (_system.__switchNPLNUserHandle < 0)
+                if (_system.__switchNPLNUserHandle == undefined)
                 {
                     __PodiumSoftError("Switch NPLN user handle not set or invalid. Please set the gamepad with `PodiumSetSwitchNPLNUserHandle()` before fetching leaderboard scores");
+                }
+                else if (_system.__switchNPLNUserHandle == 0)
+                {
+                    __PodiumWarning("Switch NPLN user handle is null, not getting scores");
                 }
                 else
                 {
@@ -562,14 +566,14 @@ function __PodiumClassScores(_scoresID, _leaderboardName, _formattedServiceRef, 
                     {
                         __asyncID = switch_npln_leaderboard_get_scores_range(_system.__switchNPLNUserHandle,
                                                                              __formattedServiceRef.categoryTypeName, __formattedServiceRef.categoryID,
-                                                                             0, //TODO - How do we calculate the season index?
+                                                                             __PODIUM_SWITCH_CURRENT_SEASON,
                                                                              0, 10);
                     }
                     else if (__range == PODIUM_RANGE_AROUND)
                     {
                         __asyncID = switch_npln_leaderboard_get_scores_near(_system.__switchNPLNUserHandle,
                                                                              __formattedServiceRef.categoryTypeName, __formattedServiceRef.categoryID,
-                                                                            0, //TODO - How do we calculate the season index?
+                                                                            __PODIUM_SWITCH_CURRENT_SEASON,
                                                                             10);
                     }
                     

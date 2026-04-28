@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"PodiumSetSwitchNPLNUserHandle",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"PodiumSetSwitchNPLNUserHandle",
+  "parent":{
+    "name":"Switch",
+    "path":"folders/Podium/Switch.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

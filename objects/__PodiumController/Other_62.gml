@@ -1,3 +1,8 @@
+if (PODIUM_VERBOSE_ASYNC)
+{
+    __PodiumTrace($"HTTP:\n{json_encode(async_load, true)}");
+}
+
 if (async_load[? "status"] == 0)
 {
     var _asyncIDMap = __PodiumSystem().__httpAsyncIDMap;

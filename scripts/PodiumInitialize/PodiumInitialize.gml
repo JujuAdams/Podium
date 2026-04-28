@@ -1,10 +1,10 @@
-function PodiumInit()
+function PodiumInitialize()
 {
     with(__PodiumSystem())
     {
         if (__initialized)
         {
-            __PodiumSoftError("Podium has already been initialized. Please only call `PodiumInit()` once");
+            __PodiumSoftError("Podium has already been initialized. Please only call `PodiumInitialize()` once");
             return;
         }
         

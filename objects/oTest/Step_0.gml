@@ -2,20 +2,19 @@ gdk_update();
 psn_tick();
 steam_update();
 
-var _playFabLoggedIn = PODIUM_USING_PLAYFAB_LEADERBOARDS && PodiumGetUserSignedIn();
-if (playFabLoggedIn != _playFabLoggedIn)
+var _signedIn = PodiumGetUserSignedIn();
+if (signedIn != _signedIn)
 {
-    playFabLoggedIn = _playFabLoggedIn;
-    
-    if (_playFabLoggedIn)
+    signedIn = _signedIn;
+    if (_signedIn)
     {
-        //PodiumGetScores("testLeaderboard");
-        //PodiumGetScores("testHourlyLeaderboard");
-        //PodiumGetScores("testDailyLeaderboard");
+        PodiumSubmit("all time score",   111);
+        PodiumSubmit("all time score",   112);
+        PodiumSubmit("all time score",   113);
+        //PodiumSubmit("best time",        222);
+        //PodiumSubmit("daily challenge",  555);
         
-        PodiumGetScores("testLeaderboard");
-        PodiumGetScores("testLeaderboard", PODIUM_RANGE_FRIENDS);
-        PodiumGetScores("testLeaderboard", PODIUM_RANGE_AROUND);
+        PodiumGetScores("all time score");
     }
 }
 

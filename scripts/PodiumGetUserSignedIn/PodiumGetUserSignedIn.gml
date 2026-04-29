@@ -12,7 +12,14 @@ function PodiumGetUserSignedIn()
     }
     else if (PODIUM_USING_XBOX_LEADERBOARDS)
     {
-        return ((_system.__xboxUser != 0) && xboxone_user_is_signed_in(_system.__xboxUser));
+        if (PODIUM_ON_XBOX_SERIES)
+        {
+            return ((_system.__xboxUser != 0) && xboxone_user_is_signed_in(_system.__xboxUser));
+        }
+        else if (PODIUM_ON_WINDOWS)
+        {
+            return (_system.__xboxUser != 0);
+        }
     }
     else if (PODIUM_ON_PS5)
     {

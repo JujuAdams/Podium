@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"PodiumSetSwitchNickname",
   "parent":{
-    "name":"Switch",
-    "path":"folders/Podium/Switch.yy",
+    "name":"Platform-specific",
+    "path":"folders/Podium/Platform-specific.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

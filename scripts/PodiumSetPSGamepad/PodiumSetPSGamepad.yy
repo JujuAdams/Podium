@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"PodiumSetPSGamepad",
   "parent":{
-    "name":"PlayStation 5",
-    "path":"folders/Podium/PlayStation 5.yy",
+    "name":"Platform-specific",
+    "path":"folders/Podium/Platform-specific.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

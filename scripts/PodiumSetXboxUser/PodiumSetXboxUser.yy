@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"PodiumSetXboxUser",
   "parent":{
-    "name":"Xbox & Windows GDK",
-    "path":"folders/Podium/Xbox & Windows GDK.yy",
+    "name":"Platform-specific",
+    "path":"folders/Podium/Platform-specific.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

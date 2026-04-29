@@ -44,7 +44,7 @@ function PodiumGetScores(_leaderboardName, _range = PODIUM_RANGE_TOP, _priority 
     }
     else
     {
-        var _struct = new __PodiumClassGetScores(_leaderboardName, _range);
+        var _struct = new __PodiumClassGetScores(_leaderboardStruct, _range);
         
         if (_priority == PODIUM_PRIORITY_HIGH)
         {

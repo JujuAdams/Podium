@@ -1,6 +1,12 @@
+/// N.B. You must not call `PodiumCreateGeneral()` in this function. Instead, you must call
+///      `PodiumCreateForSteam()` to create leaderboards for use with Podium.
+/// 
+/// N.B. Podium does not call `steam_update()` for you when using Steam. You must call this function
+///      yourself.
+
 function __PodiumDefinitionsSteam()
 {
-    PodiumCreate("all time score", "testBestScore");
-    PodiumCreate("best time", "testBestTime", false);
-    PodiumCreate("daily challenge", "testDaily", true, PODIUM_REFRESH_DAILY);
+    PodiumCreateForSteam("all time score",  "testBestScore", true,  lb_disp_numeric);
+    PodiumCreateForSteam("best time",       "testBestTime",  false, lb_disp_numeric);
+    PodiumCreateForSteam("daily challenge", "testDaily",     true,  lb_disp_numeric, PODIUM_REFRESH_DAILY);
 }

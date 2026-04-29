@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"PodiumCreate",
+  "%Name":"PodiumCreateGeneral",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"PodiumCreate",
+  "name":"PodiumCreateGeneral",
   "parent":{
-    "name":"Leaderboards",
-    "path":"folders/Podium/Leaderboards.yy",
+    "name":"Initialization",
+    "path":"folders/Podium/Initialization.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

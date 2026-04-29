@@ -1,21 +1,19 @@
-/// @param leaderboardName
+/// @param leaderboard
 /// @param range
 
-function __PodiumClassGetScores(_leaderboardName, _range) : __PodiumClassCommonOp() constructor
+function __PodiumClassGetScores(_leaderboard, _range) : __PodiumClassCommonOp() constructor
 {
     __opType = __PODIUM_OP_GET_SCORES;
     
     if (PODIUM_VERBOSE)
     {
-        __PodiumTrace($"Created GET_SCORES operation {string(ptr(self))}: \"{_leaderboardName}\", range = {_range}");
+        __PodiumTrace($"Created GET_SCORES operation {string(ptr(self))}: \"{_leaderboard.__serviceData.__ref}\", range = {_range}");
     }
     
-    __leaderboardName = _leaderboardName;
-    __range           = _range;
+    __leaderboard = _leaderboard;
+    __range       = _range;
     
-    __formattedServiceRef = __PodiumLeaderboardGetFormattedServiceRef(__leaderboardName);
-    
-    
+    __formattedServiceData = _leaderboard.__GetFormattedServiceData();
     
     
     
@@ -36,6 +34,8 @@ function __PodiumClassGetScores(_leaderboardName, _range) : __PodiumClassCommonO
         
         array_push(_activityArray, self);
         
+        __formattedServiceData = __leaderboard.__GetFormattedServiceData();
+        
         if (_system.__local)
         {
             //TODO
@@ -50,15 +50,15 @@ function __PodiumClassGetScores(_leaderboardName, _range) : __PodiumClassCommonO
                 
                 if (__range == PODIUM_RANGE_TOP)
                 {
-                    __asyncID = steam_download_scores(__formattedServiceRef, 1, 10);
+                    __asyncID = steam_download_scores(__formattedServiceData, 1, 10);
                 }
                 else if (__range == PODIUM_RANGE_FRIENDS)
                 {
-                    __asyncID = steam_download_friends_scores(__formattedServiceRef);
+                    __asyncID = steam_download_friends_scores(__formattedServiceData);
                 }
                 else if (__range == PODIUM_RANGE_AROUND)
                 {
-                    __asyncID = steam_download_scores_around_user(__formattedServiceRef, -5, 5);
+                    __asyncID = steam_download_scores_around_user(__formattedServiceData, -5, 5);
                 }
             }
             else if (PODIUM_ON_SWITCH)
@@ -67,25 +67,23 @@ function __PodiumClassGetScores(_leaderboardName, _range) : __PodiumClassCommonO
                 // Switch
                 ///////
                 
-                var _serviceRef = __PodiumLeaderboardFind(__leaderboardName).__serviceRef;
-                
                 if (__range == PODIUM_RANGE_TOP)
                 {
                     __asyncID = switch_npln_leaderboard_get_scores_range(_system.__switchNPLNUserHandle,
-                                                                         _serviceRef.categoryTypeName, _serviceRef.categoryID,
+                                                                         __formattedServiceData.__categoryTypeName, __formattedServiceData.__categoryID,
                                                                          __PODIUM_SWITCH_CURRENT_SEASON,
                                                                          0, 10);
                 }
                 else if (__range == PODIUM_RANGE_FRIENDS)
                 {
                     __asyncID = switch_npln_leaderboard_get_scores_of_friends(_system.__switchNPLNUserHandle, true,
-                                                                              _serviceRef.categoryTypeName, _serviceRef.categoryID,
+                                                                              __formattedServiceData.__categoryTypeName, __formattedServiceData.__categoryID,
                                                                               __PODIUM_SWITCH_CURRENT_SEASON);
                 }
                 else if (__range == PODIUM_RANGE_AROUND)
                 {
                     __asyncID = switch_npln_leaderboard_get_scores_near(_system.__switchNPLNUserHandle,
-                                                                        _serviceRef.categoryTypeName, _serviceRef.categoryID,
+                                                                        __formattedServiceData.__categoryTypeName, __formattedServiceData.__categoryID,
                                                                         __PODIUM_SWITCH_CURRENT_SEASON,
                                                                         10);
                 }
@@ -100,7 +98,7 @@ function __PodiumClassGetScores(_leaderboardName, _range) : __PodiumClassCommonO
                     }
                     else if (_resultJSON[$ "status"] != "OK")
                     {
-                        __PodiumWarning($"Leaderboard data \"{__formattedServiceRef}\" returned as not \"OK\"");
+                        __PodiumWarning($"Leaderboard data \"{__formattedServiceData.__leaderboardName}\" returned as not \"OK\"");
                         __Complete(PODIUM_STATE_ERROR, undefined);
                     }
                     else
@@ -111,15 +109,15 @@ function __PodiumClassGetScores(_leaderboardName, _range) : __PodiumClassCommonO
                 
                 if (__range == PODIUM_RANGE_TOP)
                 {
-                    __asyncID = __PodiumPlayFabGetLeaderboard(__formattedServiceRef, 1, 10, _callbackFunction);
+                    __asyncID = __PodiumPlayFabGetLeaderboard(__formattedServiceData.__leaderboardName, 1, 10, _callbackFunction);
                 }
                 else if (__range == PODIUM_RANGE_FRIENDS)
                 {
-                    __asyncID = __PodiumPlayFabGetLeaderboardFriends(__formattedServiceRef, 1, 10, _callbackFunction);
+                    __asyncID = __PodiumPlayFabGetLeaderboardFriends(__formattedServiceData.__leaderboardName, 1, 10, _callbackFunction);
                 }
                 else if (__range == PODIUM_RANGE_AROUND)
                 {
-                    __asyncID = __PodiumPlayFabGetLeaderboardAround(__formattedServiceRef, 10, _callbackFunction);
+                    __asyncID = __PodiumPlayFabGetLeaderboardAround(__formattedServiceData.__leaderboardName, 10, _callbackFunction);
                 }
             }
         }
@@ -133,8 +131,6 @@ function __PodiumClassGetScores(_leaderboardName, _range) : __PodiumClassCommonO
             __Complete(PODIUM_STATE_ERROR, undefined);
         }
     }
-    
-    
     
     
     
@@ -159,10 +155,10 @@ function __PodiumClassGetScores(_leaderboardName, _range) : __PodiumClassCommonO
         var _index = array_get_index(_pendingArray, self);
         if (_index >= 0) array_delete(_pendingArray, _index, 1);
         
-        var _scoresStruct = __PodiumScoresFind(__leaderboardName, __range);
+        var _scoresStruct = __leaderboard.__EnsureScoresStruct(__range);
         if (_scoresStruct == undefined)
         {
-            __PodiumSoftError($"Scores struct not found for leaderboard \"{__formattedServiceRef}\"");
+            __PodiumSoftError($"Scores struct not found for leaderboard \"{__formattedServiceData}\"");
         }
         else
         {
@@ -189,7 +185,7 @@ function __PodiumClassGetScores(_leaderboardName, _range) : __PodiumClassCommonO
                 }
                 catch(_error)
                 {
-                    __PodiumWarning($"Failed to parse returned leaderboard data for \"{__formattedServiceRef}\"");
+                    __PodiumWarning($"Failed to parse returned leaderboard data for \"{__formattedServiceData}\"");
                     
                     _json = undefined;
                     __status = PODIUM_STATE_ERROR;
@@ -238,7 +234,7 @@ function __PodiumClassGetScores(_leaderboardName, _range) : __PodiumClassCommonO
                         show_debug_message(_error);
                     }
                     
-                    __PodiumWarning($"Failed to find expected data in returned leaderboard data \"{__formattedServiceRef}\"");
+                    __PodiumWarning($"Failed to find expected data in returned leaderboard data \"{__formattedServiceData.__leaderboardName}\"");
                     __status = PODIUM_STATE_ERROR;
                 }
                 
@@ -261,7 +257,7 @@ function __PodiumClassGetScores(_leaderboardName, _range) : __PodiumClassCommonO
                             show_debug_message(_error);
                         }
                         
-                        __PodiumWarning($"Leaderboard data \"{__formattedServiceRef}\" failed to parse");
+                        __PodiumWarning($"Leaderboard data \"{__formattedServiceData.__leaderboardName}\" failed to parse");
                         __status = PODIUM_STATE_ERROR;
                     }
                     

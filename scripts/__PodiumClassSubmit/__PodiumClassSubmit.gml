@@ -1,17 +1,17 @@
-/// @param leaderboardName
+/// @param formattedServiceData
 /// @param value
 
-function __PodiumClassSubmit(_leaderboardName, _value) : __PodiumClassCommonOp() constructor
+function __PodiumClassSubmit(_formattedServiceData, _value) : __PodiumClassCommonOp() constructor
 {
     __opType = __PODIUM_OP_SUBMIT;
     
     if (PODIUM_VERBOSE)
     {
-        __PodiumTrace($"Created SUBMIT operation {string(ptr(self))}: ({_value} -> \"{_leaderboardName}\")");
+        __PodiumTrace($"Created SUBMIT operation {string(ptr(self))}: ({_value} -> \"{_formattedServiceData}\")");
     }
     
-    __leaderboardName = _leaderboardName;
-    __value           = _value;
+    __formattedServiceData = _formattedServiceData;
+    __value = _value;
     
     
     
@@ -36,73 +36,75 @@ function __PodiumClassSubmit(_leaderboardName, _value) : __PodiumClassCommonOp()
         {
             //TODO
         }
-        else if (_system.__steamAvailable)
-        {
-            __asyncID = steam_upload_score(__PodiumLeaderboardGetFormattedServiceRef(__leaderboardName), __value);
-        }
-        else if (PODIUM_USING_GAMECENTER)
-        {
-            GameCenter_Leaderboard_Submit(__PodiumLeaderboardGetFormattedServiceRef(__leaderboardName), __value, 0);
-        }
-        else if (_system.__playServicesAvailable)
-        {
-            GooglePlayServices_Leaderboard_SubmitScore(__PodiumLeaderboardGetFormattedServiceRef(__leaderboardName), __value, "");
-        }
-        else if (PODIUM_ON_PS5)
-        {
-            if (_system.__psGamepad < 0)
-            {
-                __PodiumSoftError("PlayStation gamepad not set or invalid. Please set the gamepad with `PodiumSetPSGamepad()` before pushing leaderboard scores");
-            }
-            else
-            {
-                psn_post_leaderboard_score(_system.__psGamepad, __PodiumLeaderboardGetFormattedServiceRef(__leaderboardName), __value);
-            }
-        }
-        else if (PODIUM_USING_XBOX_LEADERBOARDS)
-        {
-            if (_system.__xboxUser < 0)
-            {
-                __PodiumSoftError("Xbox user not set or invalid. Please set the gamepad with `PodiumSetXboxUser()` before pushing leaderboard scores");
-            }
-            else
-            {
-                xboxone_stats_set_stat_int(_system.__xboxUser, __PodiumLeaderboardGetFormattedServiceRef(__leaderboardName), __value);
-            }
-        }
-        else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
-        {
-            if (_system.__xboxUser < 0)
-            {
-                __PodiumSoftError("Xbox user not set or invalid. Please set the gamepad with `PodiumSetXboxUser()` before pushing leaderboard scores");
-            }
-            else
-            {
-                __asyncID = __PodiumPlayFabSetStat(__PodiumLeaderboardGetFormattedServiceRef(__leaderboardName), __value, function(_resultJSON)
-                {
-                    __Complete((_resultJSON == undefined)? PODIUM_STATE_ERROR : PODIUM_STATE_SUCCESS, _resultJSON);
-                });
-            }
-        }
-        else if (PODIUM_ON_SWITCH)
-        {
-            if (_system.__switchNPLNUserHandle == undefined)
-            {
-                __PodiumSoftError("Switch NPLN user handle not set or invalid. Please set the NPLN user handle with `PodiumSetSwitchNPLNUserHandle()` before pushing leaderboard scores");
-            }
-            else if (_system.__switchNPLNUserHandle == 0)
-            {
-                __PodiumWarning("Switch NPLN user handle is null, not submitting score");
-            }
-            else
-            {
-                var _serviceRef = __PodiumLeaderboardFind(__leaderboardName).__serviceRef;
-                __asyncID = switch_npln_leaderboard_set_score(_system.__switchNPLNUserHandle, _serviceRef.categoryTypeName, _serviceRef.categoryID, __value);
-            }
-        }
         else
         {
-            __PodiumSoftError($"Unhandled OS {os_type}. Please report this error");
+            if (_system.__steamAvailable)
+            {
+                __asyncID = steam_upload_score(__formattedServiceData, __value);
+            }
+            else if (PODIUM_USING_GAMECENTER)
+            {
+                GameCenter_Leaderboard_Submit(__formattedServiceData.__ref, __value, 0);
+            }
+            else if (_system.__playServicesAvailable)
+            {
+                GooglePlayServices_Leaderboard_SubmitScore(__formattedServiceData.__ref, __value, "");
+            }
+            else if (PODIUM_ON_PS5)
+            {
+                if (_system.__psGamepad < 0)
+                {
+                    __PodiumSoftError("PlayStation gamepad not set or invalid. Please set the gamepad with `PodiumSetPSGamepad()` before pushing leaderboard scores");
+                }
+                else
+                {
+                    psn_post_leaderboard_score(_system.__psGamepad, __formattedServiceData.__ref, __value);
+                }
+            }
+            else if (PODIUM_USING_XBOX_LEADERBOARDS)
+            {
+                if (_system.__xboxUser < 0)
+                {
+                    __PodiumSoftError("Xbox user not set or invalid. Please set the gamepad with `PodiumSetXboxUser()` before pushing leaderboard scores");
+                }
+                else
+                {
+                    xboxone_stats_set_stat_int(_system.__xboxUser, __formattedServiceData.__ref, __value);
+                }
+            }
+            else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
+            {
+                if (_system.__xboxUser < 0)
+                {
+                    __PodiumSoftError("Xbox user not set or invalid. Please set the gamepad with `PodiumSetXboxUser()` before pushing leaderboard scores");
+                }
+                else
+                {
+                    __asyncID = __PodiumPlayFabSetStat(__formattedServiceData.__statisticName, __value, function(_resultJSON)
+                    {
+                        __Complete((_resultJSON == undefined)? PODIUM_STATE_ERROR : PODIUM_STATE_SUCCESS, _resultJSON);
+                    });
+                }
+            }
+            else if (PODIUM_ON_SWITCH)
+            {
+                if (_system.__switchNPLNUserHandle == undefined)
+                {
+                    __PodiumSoftError("Switch NPLN user handle not set or invalid. Please set the NPLN user handle with `PodiumSetSwitchNPLNUserHandle()` before pushing leaderboard scores");
+                }
+                else if (_system.__switchNPLNUserHandle == 0)
+                {
+                    __PodiumWarning("Switch NPLN user handle is null, not submitting score");
+                }
+                else
+                {
+                    __asyncID = switch_npln_leaderboard_set_score(_system.__switchNPLNUserHandle, __formattedServiceData.__categoryTypeName, __formattedServiceData.__categoryID, __value);
+                }
+            }
+            else
+            {
+                __PodiumSoftError($"Unhandled OS {os_type}. Please report this error");
+            }
         }
         
         if ((__asyncID != undefined) && (__asyncID >= 0))

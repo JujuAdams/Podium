@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"PodiumInitialize",
+  "%Name":"PodiumCreateForPlayFab",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"PodiumInitialize",
+  "name":"PodiumCreateForPlayFab",
   "parent":{
     "name":"Initialization",
     "path":"folders/Podium/Initialization.yy",

@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"PodiumInitialize",
+  "%Name":"PodiumCreateForSwitch",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"PodiumInitialize",
+  "name":"PodiumCreateForSwitch",
   "parent":{
     "name":"Initialization",
     "path":"folders/Podium/Initialization.yy",

@@ -1,6 +1,9 @@
+/// N.B. You must not call `PodiumCreateGeneral()` in this function. Instead, you must call
+///      `PodiumCreateForLocal()` to create leaderboards for use with Podium.
+
 function __PodiumDefinitionsLocal()
 {
-    PodiumCreate("all time score", "all time score");
-    PodiumCreate("best time", "best time", false);
-    PodiumCreate("daily challenge", "daily", true, PODIUM_REFRESH_DAILY);
+    PodiumCreateForLocal("all time score",  true);
+    PodiumCreateForLocal("best time",       false);
+    PodiumCreateForLocal("daily challenge", true);
 }

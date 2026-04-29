@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"PodiumInitialize",
+  "%Name":"PodiumCreateForLocal",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"PodiumInitialize",
+  "name":"PodiumCreateForLocal",
   "parent":{
     "name":"Initialization",
     "path":"folders/Podium/Initialization.yy",

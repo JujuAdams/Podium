@@ -7,4 +7,8 @@ function __PodiumClassRanking(_displayName, _value, _rank) constructor
     name  = _displayName;
     value = _value;
     rank  = _rank;
+    
+    ////////////////////////////////////////////
+    // DO NOT ADD METHODS TO THIS CONSTRUCTOR //
+    ////////////////////////////////////////////
 }

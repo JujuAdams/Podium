@@ -19,27 +19,11 @@ function PodiumGetScores(_leaderboardName, _range = PODIUM_RANGE_TOP, _priority 
     static _system = __PodiumSystem();
     static _queuedArray = _system.__queuedArray;
     
-    //if (SPARKLE_ON_GDK)
-    //{
-    //    if (_system.__xboxUser == 0)
-    //    {
-    //        __SparkleError($"Xbox user is invalid ({_system.__xboxUser})");
-    //    }
-    //}
-    //
-    ////For some reason, the Windows GDK extension doesn't allow you to check if a user is signed in 
-    //if (SPARKLE_ON_XBOX)
-    //{
-    //    if (not xboxone_user_is_signed_in(_system.__xboxUser))
-    //    {
-    //        __SparkleTrace($"Warning! Xbox user {_system.__xboxUser} is not signed in");
-    //    }
-    //}
-    //
-    //if (SPARKLE_ON_PS_ANY && (__psGamepadIndex < 0))
-    //{
-    //    __SparkleError($"Gamepad index is invalid ({__psGamepadIndex})");
-    //}
+    if (not PodiumGetUserSignedIn())
+    {
+        __PodiumSoftError($"User not signed in:\n- On Switch, call `PodiumSetSwitchNPLNUserHandle()`\n- On PlayStation 5, call `PodiumSetPSGamepad()`\n- On Xbox, call `PodiumSetXboxUser()`");
+        return undefined;
+    }
     
     if ((_range != PODIUM_RANGE_TOP) && (_range != PODIUM_RANGE_FRIENDS) && (_range != PODIUM_RANGE_AROUND))
     {

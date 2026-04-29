@@ -3,39 +3,54 @@ if (PODIUM_VERBOSE_ASYNC)
     show_debug_message($"Social:\n{json_encode(async_load, true)}");
 }
 
-var _id = async_load[? "id"];
-if (_id == PSN_LEADERBOARD_SCORE_RANGE_MSG)
+with(__PodiumSystem())
 {
-    var _leaderboardID = async_load[? "leaderboardid"]; //The actual ID we want to check against
-    var _asyncIDMap = __PodiumSystem().__psLeaderboardScoreRangeMap;
-    if (ds_map_exists(_asyncIDMap, _leaderboardID))
+    if (PODIUM_ON_PS5 && (async_load[? "id"] == PSN_LEADERBOARD_SCORE_RANGE_MSG))
     {
-        var _callback = _asyncIDMap[? _leaderboardID];
-        ds_map_delete(_asyncIDMap, _leaderboardID);
+        var _leaderboardID = async_load[? "leaderboardid"]; //The actual ID we want to check against
         
-        _callback(false);
+        if (ds_map_exists(__psLeaderboardScoreRangeMap, _leaderboardID))
+        {
+            var _callback = __psLeaderboardScoreRangeMap[? _leaderboardID];
+            ds_map_delete(__psLeaderboardScoreRangeMap, _leaderboardID);
+        
+            _callback(false);
+        }
     }
-}
-else if (_id == PSN_LEADERBOARD_FRIENDS_SCORES_MSG)
-{
-    var _leaderboardID = async_load[? "leaderboardid"]; //The actual ID we want to check against
-    var _asyncIDMap = __PodiumSystem().__psLeaderboardFriendsMap;
-    if (ds_map_exists(_asyncIDMap, _leaderboardID))
+    else if (PODIUM_ON_PS5 && (async_load[? "id"] == PSN_LEADERBOARD_FRIENDS_SCORES_MSG))
     {
-        var _callback = _asyncIDMap[? _leaderboardID];
-        ds_map_delete(_asyncIDMap, _leaderboardID);
+        var _leaderboardID = async_load[? "leaderboardid"]; //The actual ID we want to check against
         
-        _callback(false);
+        if (ds_map_exists(__psLeaderboardScoreRangeMap, _leaderboardID))
+        {
+            var _callback = __psLeaderboardScoreRangeMap[? _leaderboardID];
+            ds_map_delete(__psLeaderboardScoreRangeMap, _leaderboardID);
+        
+            _callback(false);
+        }
     }
-}
-else
-{
-    var _asyncIDMap = __PodiumSystem().__socialAsyncIDMap;
-    if (ds_map_exists(_asyncIDMap, _id))
+    else
     {
-        var _callback = _asyncIDMap[? _id];
-        ds_map_delete(_asyncIDMap, _id);
-        
-        _callback(false);
+        for(var _i = 0; _i < array_length(__pendingArray); _i++) //Length of the array can change
+        {
+            var _opStruct = __pendingArray[_i];
+            
+            if (PODIUM_ON_SWITCH)
+            {
+                if (async_load[? "id"] == _opStruct.__asyncID)
+                {
+                    _opStruct.__Complete(async_load[? "success"]? PODIUM_STATE_SUCCESS : PODIUM_STATE_ERROR);
+                }
+            }
+        }
     }
+    
+    //var _asyncIDMap = __PodiumSystem().__socialAsyncIDMap;
+    //if (ds_map_exists(_asyncIDMap, _id))
+    //{
+    //    var _callback = _asyncIDMap[? _id];
+    //    ds_map_delete(_asyncIDMap, _id);
+    //    
+    //    _callback(false);
+    //}
 }

@@ -1,6 +1,6 @@
 #macro __PODIUM_SWITCH_CURRENT_SEASON  (-2147483648)
 
-#macro PODIUM_MIN_DELAY  500 //ms between requests
+#macro PODIUM_MIN_DELAY  0 //ms between requests
 #macro PODIUM_MAX_FREQUENCY  25  //per minute
 #macro __PODIUM_MAX_SIMULTANEOUS_OPERATIONS  1
 
@@ -50,7 +50,6 @@ function __PodiumSystem()
         __playFabEntityToken           = undefined;
         
         __leaderboardDict            = {};
-        __systemAsyncIDMap           = ds_map_create();
         __httpAsyncIDMap             = ds_map_create();
         __socialAsyncIDMap           = ds_map_create();
         __psLeaderboardScoreRangeMap = ds_map_create();

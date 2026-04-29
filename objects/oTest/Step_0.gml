@@ -2,7 +2,7 @@ gdk_update();
 psn_tick();
 steam_update();
 
-var _playFabLoggedIn = PodiumGetPlayFabLoggedIn();
+var _playFabLoggedIn = PODIUM_USING_PLAYFAB_LEADERBOARDS && PodiumGetUserSignedIn();
 if (playFabLoggedIn != _playFabLoggedIn)
 {
     playFabLoggedIn = _playFabLoggedIn;

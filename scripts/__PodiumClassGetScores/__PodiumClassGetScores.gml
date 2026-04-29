@@ -59,19 +59,44 @@ function __PodiumClassGetScores(_leaderboardName, _range) : __PodiumClassCommonO
                     __asyncID = steam_download_scores_around_user(__PodiumLeaderboardGetFormattedServiceRef(__leaderboardName), -5, 5);
                 }
             }
+            else if (PODIUM_ON_SWITCH)
+            {
+                ///////
+                // Switch
+                ///////
+                
+                var _serviceRef = __PodiumLeaderboardFind(__leaderboardName).__serviceRef;
+                
+                if (__range == PODIUM_RANGE_TOP)
+                {
+                    __asyncID = switch_npln_leaderboard_get_scores_range(_system.__switchNPLNUserHandle,
+                                                                         _serviceRef.categoryTypeName, _serviceRef.categoryID,
+                                                                         __PODIUM_SWITCH_CURRENT_SEASON,
+                                                                         0, 10);
+                }
+                else if (__range == PODIUM_RANGE_FRIENDS)
+                {
+                    __asyncID = switch_npln_leaderboard_get_scores_of_friends(_system.__switchNPLNUserHandle, true,
+                                                                              _serviceRef.categoryTypeName, _serviceRef.categoryID,
+                                                                              __PODIUM_SWITCH_CURRENT_SEASON);
+                }
+                else if (__range == PODIUM_RANGE_AROUND)
+                {
+                    __asyncID = switch_npln_leaderboard_get_scores_near(_system.__switchNPLNUserHandle,
+                                                                        _serviceRef.categoryTypeName, _serviceRef.categoryID,
+                                                                        __PODIUM_SWITCH_CURRENT_SEASON,
+                                                                        10);
+                }
+            }
         }
         
-        if (__asyncID != undefined)
+        if ((__asyncID != undefined) && (__asyncID >= 0))
         {
             array_push(_pendingArray, self);
         }
-        else if (__asyncID < 0)
-        {
-            __Complete(false);
-        }
         else
         {
-            __Complete(undefined);
+            __Complete(PODIUM_STATE_ERROR);
         }
     }
     
@@ -111,6 +136,10 @@ function __PodiumClassGetScores(_leaderboardName, _range) : __PodiumClassCommonO
             
             if (_system.__steamAvailable)
             {
+                ///////
+                // Steam
+                ///////
+                
                 if (PODIUM_VERBOSE)
                 {
                     __PodiumTrace($"Using Steamworks parser");
@@ -129,7 +158,27 @@ function __PodiumClassGetScores(_leaderboardName, _range) : __PodiumClassCommonO
                     __PodiumWarning($"Failed to parse returned leaderboard data for \"{__PodiumLeaderboardGetFormattedServiceRef(__leaderboardName)}\"");
                     
                     _json = undefined;
-                    __status = false;
+                    __status = PODIUM_STATE_ERROR;
+                }
+            }
+            else if (PODIUM_ON_SWITCH)
+            {
+                ///////
+                // Switch
+                ///////
+                
+                if (PODIUM_VERBOSE)
+                {
+                    __PodiumTrace($"Using Switch parser");
+                }
+                
+                var _scoresArray = async_load[? "scores"];
+                var _i = 0;
+                repeat(array_length(_scoresArray))
+                {
+                    var _scoreStruct = _scoresArray[_i];
+                    array_push(_data, new __PodiumClassRanking(_scoreStruct.user_name, _scoreStruct.score, _scoreStruct.rank));
+                    ++_i;
                 }
             }
             

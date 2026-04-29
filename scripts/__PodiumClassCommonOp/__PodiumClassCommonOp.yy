@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"__PodiumClassRanking",
+  "%Name":"__PodiumClassCommonOp",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"__PodiumClassRanking",
+  "name":"__PodiumClassCommonOp",
   "parent":{
     "name":"Classes",
     "path":"folders/Podium/(System)/Classes.yy",

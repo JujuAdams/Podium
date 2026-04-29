@@ -5,12 +5,6 @@ gamepad = -1;
 if (PODIUM_ON_SWITCH)
 {
     SwitchLogInDefaultAccount();
-    
-    PodiumSubmit("all time score",   112);
-    PodiumSubmit("best time",        223);
-    PodiumSubmit("daily challenge",  556);
-    
-    PodiumGetScores("daily challenge");
 }
 else if (PODIUM_ON_XBOX_SERIES)
 {
@@ -20,5 +14,13 @@ else if (PODIUM_ON_XBOX_SERIES)
         PodiumSetXboxUser(_activatingUser);
     }
 }
+
+PodiumSubmit("all time score",   111);
+PodiumSubmit("all time score",   112);
+PodiumSubmit("all time score",   113);
+//PodiumSubmit("best time",        222);
+//PodiumSubmit("daily challenge",  555);
+
+PodiumGetScores("all time score");
 
 playFabLoggedIn = false;

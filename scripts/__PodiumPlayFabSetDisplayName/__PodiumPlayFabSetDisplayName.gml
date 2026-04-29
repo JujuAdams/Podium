@@ -10,8 +10,6 @@ function __PodiumPlayFabSetDisplayName(_name)
         __PodiumWarning("Cannot set display name, not logged into PlayFab");
     }
     
-    __PodiumEnsureControllerInstance();
-    
     _headerMap[? "Content-Type"   ] = "application/json";
     _headerMap[? "X-Authorization"] = _system.__playFabSessionTicket;
       

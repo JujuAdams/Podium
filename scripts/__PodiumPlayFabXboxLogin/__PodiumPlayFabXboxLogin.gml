@@ -5,8 +5,6 @@ function __PodiumPlayFabXboxLogin()
     static _system = __PodiumSystem();
     static _headerMap = ds_map_create();
     
-    __PodiumEnsureControllerInstance();
-    
     _headerMap[? "Content-Type"   ] = "application/json";
     _headerMap[? "X-Authorization"] = _system.__playFabSessionTicket;
       

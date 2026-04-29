@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"__PodiumClassScores",
   "parent":{
-    "name":"(System)",
-    "path":"folders/Podium/(System).yy",
+    "name":"Classes",
+    "path":"folders/Podium/(System)/Classes.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

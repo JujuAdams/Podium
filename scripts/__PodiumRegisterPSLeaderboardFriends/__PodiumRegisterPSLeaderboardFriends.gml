@@ -17,8 +17,6 @@ function __PodiumRegisterPSLeaderboardFriends(_leaderboardID, _callbackFunction)
         return;
     }
     
-    __PodiumEnsureControllerInstance();
-    
     if (ds_map_exists(_asyncIDMap, _callbackFunction))
     {
         __PodiumWarning($"Redefining score range leaderboard ID {_leaderboardID}");

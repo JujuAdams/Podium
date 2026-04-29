@@ -2,8 +2,6 @@ function __PodiumPlayFabXboxRequestToken()
 {
     static _system = __PodiumSystem();
     
-    __PodiumEnsureControllerInstance();
-    
     with(_system)
     {
         if (PODIUM_USING_WINDOWS_GDK)

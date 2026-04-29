@@ -12,8 +12,6 @@ function __PodiumPlayFabGetLeaderboardAround(_leaderboardName, _count, _callback
         __PodiumWarning("Cannot get leaderboard, not logged into PlayFab");
     }
     
-    __PodiumEnsureControllerInstance();
-    
     _headerMap[? "Content-Type" ] = "application/json";
     _headerMap[? "X-EntityToken"] = _system.__playFabEntityToken;
     

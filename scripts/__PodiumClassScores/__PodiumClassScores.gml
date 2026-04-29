@@ -16,12 +16,10 @@ function __PodiumClassScores(_scoresID, _leaderboardName, _formattedServiceRef, 
     __higherValueIsBetter = _higherValueIsBetter;
     __displayType         = _displayType;
     __refreshPeriod       = _refreshPeriod;
-    __state               = PODIUM_STATE_NO_DATA;
-    __lastRequestTime     = -infinity;
-    __asyncID             = undefined;
-    __data                = [];
-    __callback            = undefined;
-    __callbackMetadata    = undefined;
+    
+    __state            = PODIUM_STATE_NO_DATA;
+    __lastReceivedTime = -infinity;
+    __data             = [];
     
     if (PODIUM_USING_STEAMWORKS)
     {
@@ -49,70 +47,41 @@ function __PodiumClassScores(_scoresID, _leaderboardName, _formattedServiceRef, 
     
     
     
-    static __GetScoresContinuous = function()
+    static __ClearCache = function()
     {
-        if (not PODIUM_DISRESPECT_RATE_LIMITS)
-        {
-            if (current_time - __lastRequestTime < 5*60_000) //Every five minutes
-            {
-                //Requested too soon, on cooldown
-                __ExecuteCallback(true);
-                return;
-            }
-        }
-        
-        return __GetScoresInternal(false);
-    }
-    
-    static __Refresh = function()
-    {
-        if (not PODIUM_DISRESPECT_RATE_LIMITS)
-        {
-            if (current_time - __lastRequestTime < 5_000) //Every five seconds
-            {
-                if (PODIUM_VERBOSE)
-                {
-                    __PodiumTrace($"Cannot refresh, service ref \"{__formattedServiceRef}\" on cooldown ({5_000 - (current_time - __lastRequestTime)}ms left)");
-                }
-                
-                //Requested too soon, on cooldown
-                __ExecuteCallback(true);
-                return;
-            }
-        }
-        
-        return __GetScoresInternal(true);
-    }
-    
-    static __SetCallback = function(_callback, _callbackMetadata)
-    {
-        __callback         = _callback;
-        __callbackMetadata = _callbackMetadata;
-    }
-    
-    static __GetCallback = function()
-    {
-        static _result = {};
-        
-        _result.__callback         = __callback;
-        _result.__callbackMetadata = __callbackMetadata;
-        
-        return _result;
-    }
-    
-    static __ExecuteCallback = function(_cached = false)
-    {
-        if (is_callable(__callback))
-        {
-            __callback(__leaderboardName, __range, __data, __state, _cached, __callbackMetadata);
-        }
-    }
-    
-    static __SetErrorState = function()
-    {
+        __state = PODIUM_STATE_NO_DATA;
         array_resize(__data, 0);
-        __state = PODIUM_STATE_ERROR;
+        __lastReceivedTime = -infinity;
     }
+    
+    static __GetCached = function()
+    {
+        return (current_time - __lastReceivedTime < 5*60_000); //Every five minutes
+    }
+    
+    static __GetData = function()
+    {
+        return __data;
+    }
+    
+    static __ReceiveData = function(_data)
+    {
+        __data = _data;
+        __lastReceivedTime = current_time;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     static __GetScoresInternal = function(_refresh)
     {
@@ -135,76 +104,6 @@ function __PodiumClassScores(_scoresID, _leaderboardName, _formattedServiceRef, 
                 ///////
                 // Steam
                 ///////
-                
-                if (__range == PODIUM_RANGE_TOP)
-                {
-                    __asyncID = steam_download_scores(__formattedServiceRef, 1, 10);
-                }
-                else if (__range == PODIUM_RANGE_FRIENDS)
-                {
-                    __asyncID = steam_download_friends_scores(__formattedServiceRef);
-                }
-                else if (__range == PODIUM_RANGE_AROUND)
-                {
-                    __asyncID = steam_download_scores_around_user(__formattedServiceRef, -5, 5);
-                }
-                
-                __PodiumRegisterSteamAsyncID(__asyncID, function(_aborted)
-                {
-                    if (PODIUM_VERBOSE)
-                    {
-                        __PodiumTrace($"Received leaderboard data for \"{__formattedServiceRef}\" using range `{__range}`");
-                    }
-                    
-                    __asyncID = undefined;
-                    array_resize(__data, 0);
-                    
-                    if (not _aborted)
-                    {
-                        if (async_load[? "event_type"] != "leaderboard_download")
-                        {
-                            __PodiumWarning($"Received unexpected leaderboard event type \"{async_load[? "event_type"]}\", aborting");
-                            _aborted = true;
-                        }
-                        
-                        if (async_load[? "status"] != 0)
-                        {
-                            __PodiumWarning($"Received unexpected leaderboard status `{async_load[? "status"]}`, aborting");
-                            _aborted = true;
-                        }
-                        
-                        var _json = undefined;
-                        try
-                        {
-                            _json = json_parse(async_load[? "entries"]);
-                            if (not is_array(_json.entries)) throw -123;
-                        }
-                        catch(_error)
-                        {
-                            __PodiumWarning($"Failed to parse returned leaderboard data");
-                            
-                            _json = undefined;
-                            _aborted = true;
-                        }
-                    }
-                    
-                    if (_aborted)
-                    {
-                        __SetErrorState();
-                    }
-                    else
-                    {
-                        __state = PODIUM_STATE_SUCCESS;
-                        __data = _json.entries;
-                        
-                        if (PODIUM_VERBOSE)
-                        {
-                            __PodiumTrace($"Leaderboard data for \"{__formattedServiceRef}\" using range `{__range}` has {array_length(__data)} entries");
-                        }
-                    }
-                    
-                    __ExecuteCallback();
-                });
             }
             else if (PODIUM_USING_GAMECENTER)
             {
@@ -234,7 +133,7 @@ function __PodiumClassScores(_scoresID, _leaderboardName, _formattedServiceRef, 
                     __asyncID = GameCenter_Leaderboard_LoadFriendsOnly(__formattedServiceRef, _timeScope, 1, 10);
                 }
                 
-                __PodiumRegisterSteamAsyncID(__asyncID, function(_aborted)
+                __PodiumRegisterSocialAsyncID(__asyncID, function(_aborted)
                 {
                     if (PODIUM_VERBOSE)
                     {
@@ -293,7 +192,7 @@ function __PodiumClassScores(_scoresID, _leaderboardName, _formattedServiceRef, 
                     __asyncID = GooglePlayServices_Leaderboard_LoadPlayerCenteredScores(__formattedServiceRef, _timeScope, Leaderboard_COLLECTION_PUBLIC, 10, _refresh);
                 }
                 
-                __PodiumRegisterSteamAsyncID(__asyncID, function(_aborted)
+                __PodiumRegisterSocialAsyncID(__asyncID, function(_aborted)
                 {
                     if (PODIUM_VERBOSE)
                     {
@@ -453,7 +352,7 @@ function __PodiumClassScores(_scoresID, _leaderboardName, _formattedServiceRef, 
                         __asyncID = xboxone_stats_get_leaderboard(_system.__xboxUser, __formattedServiceRef, 10, 0, true, not __leaderboard.__higherValueIsBetter);
                     }
                     
-                    __PodiumRegisterSteamAsyncID(__asyncID, function(_aborted)
+                    __PodiumRegisterSocialAsyncID(__asyncID, function(_aborted)
                     {
                         if (PODIUM_VERBOSE)
                         {

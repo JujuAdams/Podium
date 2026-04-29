@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"__PodiumRegisterSteamAsyncID",
+  "%Name":"__PodiumLeaderboardGetFormattedServiceRef",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"__PodiumRegisterSteamAsyncID",
+  "name":"__PodiumLeaderboardGetFormattedServiceRef",
   "parent":{
     "name":"(System)",
     "path":"folders/Podium/(System).yy",

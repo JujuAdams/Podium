@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"PodiumGetCallback",
+  "%Name":"__PodiumClassSubmit",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"PodiumGetCallback",
+  "name":"__PodiumClassSubmit",
   "parent":{
-    "name":"Leaderboards",
-    "path":"folders/Podium/Leaderboards.yy",
+    "name":"Classes",
+    "path":"folders/Podium/(System)/Classes.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

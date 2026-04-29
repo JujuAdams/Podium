@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"PodiumRefresh",
+  "%Name":"__PodiumLeaderboardFind",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"PodiumRefresh",
+  "name":"__PodiumLeaderboardFind",
   "parent":{
-    "name":"Leaderboards",
-    "path":"folders/Podium/Leaderboards.yy",
+    "name":"(System)",
+    "path":"folders/Podium/(System).yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"PodiumSetCallback",
+  "%Name":"PodiumGetBusy",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"PodiumSetCallback",
+  "name":"PodiumGetBusy",
   "parent":{
-    "name":"Leaderboards",
-    "path":"folders/Podium/Leaderboards.yy",
+    "name":"Podium",
+    "path":"folders/Podium.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

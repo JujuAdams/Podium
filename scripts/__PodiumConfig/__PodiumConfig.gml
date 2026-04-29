@@ -10,9 +10,6 @@
 /// services.
 #macro PODIUM_FORCE_LOCAL_DATA  false
 
-// Dangerous! Only set this to `true` if you need it
-#macro PODIUM_DISRESPECT_RATE_LIMITS  false
-
 ///////
 // Platform-specific
 ///////

@@ -1,6 +1,6 @@
 function __PodiumDefinitionsSteam()
 {
-    PodiumCreate("all time score", "all time score");
-    PodiumCreate("best time", "best time", false);
-    PodiumCreate("daily challenge", "daily", true, PODIUM_REFRESH_DAILY);
+    PodiumCreate("all time score", "testBestScore");
+    PodiumCreate("best time", "testBestTime", false);
+    PodiumCreate("daily challenge", "testDaily", true, PODIUM_REFRESH_DAILY);
 }

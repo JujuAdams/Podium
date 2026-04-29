@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"PodiumFind",
+  "%Name":"PodiumGetCached",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"PodiumFind",
+  "name":"PodiumGetCached",
   "parent":{
     "name":"Leaderboards",
     "path":"folders/Podium/Leaderboards.yy",

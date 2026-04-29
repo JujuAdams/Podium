@@ -12,8 +12,6 @@ function __PodiumPlayFabSetStat(_statisticName, _value, _callback = undefined)
         __PodiumWarning("Cannot set statistic, not logged into PlayFab");
     }
     
-    __PodiumEnsureControllerInstance();
-    
     _headerMap[? "Content-Type" ] = "application/json";
     _headerMap[? "X-EntityToken"] = _system.__playFabEntityToken;
       

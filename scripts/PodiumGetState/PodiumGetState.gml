@@ -3,10 +3,6 @@
 
 function PodiumGetState(_leaderboardName, _range = PODIUM_RANGE_TOP)
 {
-    with(PodiumFind(_leaderboardName))
-    {
-        return GetState(_range);
-    }
-    
-    return PODIUM_STATE_UNKNOWN;
+    var _scoresStruct = __PodiumScoresFind(_leaderboardName, _range);
+    return is_struct(_scoresStruct)? _scoresStruct.__GetState() : PODIUM_STATE_UNKNOWN;
 }

@@ -17,8 +17,6 @@ function __PodiumRegisterSocialAsyncID(_asyncID, _callbackFunction)
         return;
     }
     
-    __PodiumEnsureControllerInstance();
-    
     if (ds_map_exists(_asyncIDMap, _callbackFunction))
     {
         __PodiumWarning($"Redefining async ID {_asyncID}");

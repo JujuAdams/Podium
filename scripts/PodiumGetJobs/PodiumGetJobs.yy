@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"__PodiumClassRanking",
+  "%Name":"PodiumGetJobs",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"__PodiumClassRanking",
+  "name":"PodiumGetJobs",
   "parent":{
-    "name":"Classes",
-    "path":"folders/Podium/(System)/Classes.yy",
+    "name":"Podium",
+    "path":"folders/Podium.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

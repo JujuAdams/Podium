@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"__PodiumEnsureControllerInstance",
+  "%Name":"__PodiumScoresFind",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"__PodiumEnsureControllerInstance",
+  "name":"__PodiumScoresFind",
   "parent":{
     "name":"(System)",
     "path":"folders/Podium/(System).yy",

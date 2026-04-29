@@ -40,3 +40,19 @@
 #macro PODIUM_STATE_NO_DATA     0
 #macro PODIUM_STATE_PENDING     1
 #macro PODIUM_STATE_SUCCESS     2
+
+///////
+// Priority
+///////
+
+// The operation will be added to the back of the queue and will be dispatched when prior
+// operations have completed.
+#macro PODIUM_PRIORITY_NORMAL  0
+
+// The operation will be added to the front of the queue and will be dispatched at the nearest
+// opportunity ahead of enqueued operations. The operation will typically be dispatched at the
+// start of the next step.
+#macro PODIUM_PRIORITY_HIGH  1
+
+// The operation will be dispatched immediately, ignoring any rate limits or ordering.
+#macro PODIUM_PRIORITY_IMMEDIATE  2

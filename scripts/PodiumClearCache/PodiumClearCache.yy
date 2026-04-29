@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"__PodiumClassRanking",
+  "%Name":"PodiumClearCache",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"__PodiumClassRanking",
+  "name":"PodiumClearCache",
   "parent":{
-    "name":"Classes",
-    "path":"folders/Podium/(System)/Classes.yy",
+    "name":"Leaderboards",
+    "path":"folders/Podium/Leaderboards.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

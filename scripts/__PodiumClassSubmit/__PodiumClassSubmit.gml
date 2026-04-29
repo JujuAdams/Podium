@@ -102,17 +102,13 @@ function __PodiumClassSubmit(_leaderboardName, _value) : __PodiumClassCommonOp()
             __PodiumSoftError($"Unhandled OS {os_type}. Please report this error");
         }
         
-        if (__asyncID != undefined)
+        if ((__asyncID != undefined) && (__asyncID >= 0))
         {
             array_push(_pendingArray, self);
         }
-        else if (__asyncID < 0)
-        {
-            __Complete(false);
-        }
         else
         {
-            __Complete(undefined);
+            __Complete(PODIUM_STATE_ERROR);
         }
     }
     

@@ -58,7 +58,6 @@ function __PodiumSystem()
         time_source_start(time_source_create(time_source_global, 1, time_source_units_frames, function()
         {
             static _createdInstance = false;
-    
             if (not _createdInstance)
             {
                 _createdInstance = true;

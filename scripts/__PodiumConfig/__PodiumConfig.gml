@@ -10,15 +10,7 @@
 /// services.
 #macro PODIUM_FORCE_LOCAL_DATA  false
 
-///////
-// Platform-specific
-///////
-
 #macro PODIUM_PSN_LEADERBOARD_SERVICE_LABEL  undefined
-
-// Nintendo Switch tenant ID. Please remember to remove the environment identifier at the end e.g.
-// if the tenant ID is `"t-01234567-xyz"` then use `"t-01234567"`.
-#macro PODIUM_SWITCH_NPLN_TENANT  ""
 
 ///////
 // PlayFab

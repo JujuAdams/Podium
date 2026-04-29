@@ -16,14 +16,14 @@ with(__PodiumSystem())
             {
                 if ((_opStruct.__opType == __PODIUM_OP_SUBMIT) && (async_load[? "post_id"] == _opStruct.__asyncID))
                 {
-                    _opStruct.__Complete(async_load[? "success"]? PODIUM_STATE_SUCCESS : PODIUM_STATE_ERROR);
+                    _opStruct.__Complete(async_load[? "success"]? PODIUM_STATE_SUCCESS : PODIUM_STATE_ERROR, undefined);
                 }
             }
             else if (_eventType == "leaderboard_download")
             {
                 if ((_opStruct.__opType == __PODIUM_OP_GET_SCORES) && (async_load[? "id"] == _opStruct.__asyncID))
                 {
-                    _opStruct.__Complete((async_load[? "status"] == 0)? PODIUM_STATE_SUCCESS : PODIUM_STATE_ERROR);
+                    _opStruct.__Complete((async_load[? "status"] == 0)? PODIUM_STATE_SUCCESS : PODIUM_STATE_ERROR, undefined);
                 }
             }
         }

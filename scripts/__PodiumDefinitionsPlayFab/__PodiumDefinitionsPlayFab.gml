@@ -1,6 +1,6 @@
 function __PodiumDefinitionsPlayFab()
 {
-    PodiumCreate("testLeaderboard",       "testLeaderboard");
-    PodiumCreate("testHourlyLeaderboard", "testHourlyLeaderboard", true);
-    PodiumCreate("testDailyLeaderboard",  "testDailyLeaderboard", true, PODIUM_REFRESH_DAILY);
+    PodiumCreate("all time score",  "testDescending");
+    PodiumCreate("best time",       "testAscending", false);
+    PodiumCreate("daily challenge", "testDaily", true, PODIUM_REFRESH_DAILY);
 }

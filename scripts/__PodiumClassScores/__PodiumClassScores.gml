@@ -99,13 +99,7 @@ function __PodiumClassScores(_scoresID, _leaderboardName, _formattedServiceRef, 
         }
         else
         {
-            if (_system.__steamAvailable)
-            {
-                ///////
-                // Steam
-                ///////
-            }
-            else if (PODIUM_USING_GAMECENTER)
+            if (PODIUM_USING_GAMECENTER)
             {
                 ///////
                 // GameCenter
@@ -218,114 +212,6 @@ function __PodiumClassScores(_scoresID, _leaderboardName, _formattedServiceRef, 
                     
                     __ExecuteCallback();
                 });
-            }
-            else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
-            {
-                ///////
-                // PlayFab
-                ///////
-                
-                if (_system.__xboxUser < 0)
-                {
-                    __PodiumSoftError("Xbox user not set or invalid. Please set the Xbox user with `PodiumSetXboxUser()` before fetching leaderboard scores");
-                }
-                else if (not _system.__playFabLoggedIn)
-                {
-                    __PodiumWarning("Cannot get leaderboard, PlayFab login pending or failed");
-                }
-                else
-                {
-                    var _callbackFunction = function(_leaderboardData)
-                    {
-                        if (PODIUM_VERBOSE)
-                        {
-                            __PodiumTrace($"Received leaderboard data for \"{__formattedServiceRef}\" using range `{__range}`");
-                        }
-                        
-                        __asyncID = undefined;
-                        array_resize(__data, 0);
-                        
-                        if (_leaderboardData == undefined)
-                        {
-                            __SetErrorState();
-                        }
-                        else
-                        {
-                            try
-                            {
-                                var _dataStatus    = _leaderboardData.status;
-                                var _rankingsArray = _leaderboardData.data.Rankings;
-                            }
-                            catch(_error)
-                            {
-                                if (PODIUM_VERBOSE)
-                                {
-                                    show_debug_message(json_stringify(_leaderboardData, true));
-                                    show_debug_message(_error);
-                                }
-                                
-                                __PodiumWarning($"Failed to find expected data in returned leaderboard data \"{__formattedServiceRef}\"");
-                                
-                                __SetErrorState();
-                                return;
-                            }
-                            
-                            if (_dataStatus != "OK")
-                            {
-                                __PodiumWarning($"Leaderboard data \"{__formattedServiceRef}\" returned as not \"OK\"");
-                                
-                                __SetErrorState();
-                                return;
-                            }
-                            
-                            try
-                            {
-                                var _i = 0;
-                                repeat(array_length(_rankingsArray))
-                                {
-                                    var _ranking = _rankingsArray[_i];
-                                    array_push(__data, new __PodiumClassRanking(_ranking.DisplayName, _ranking.Scores[0], _ranking.Rank));
-                                    ++_i;
-                                }
-                            }
-                            catch(_error)
-                            {
-                                if (PODIUM_VERBOSE)
-                                {
-                                    show_debug_message(_error);
-                                }
-                                
-                                __PodiumWarning($"Leaderboard data \"{__formattedServiceRef}\" failed to parse");
-                                
-                                __SetErrorState();
-                                return;
-                            }
-                            
-                            if (PODIUM_VERBOSE)
-                            {
-                                show_debug_message(json_stringify(__data, true));
-                                __PodiumTrace($"Leaderboard data \"{__formattedServiceRef}\" parsed successfully");
-                            }
-                            
-                            __state = PODIUM_STATE_SUCCESS;
-                        }
-                    
-                        __ExecuteCallback();
-                    };
-                    
-                    if (__range == PODIUM_RANGE_TOP)
-                    {
-                        __asyncID = __PodiumPlayFabGetLeaderboard(__formattedServiceRef, 1, 10, _callbackFunction);
-                    }
-                    else if (__range == PODIUM_RANGE_FRIENDS)
-                    {
-                        __asyncID = __PodiumPlayFabGetLeaderboardFriends(__formattedServiceRef, 1, 10, _callbackFunction);
-                    }
-                    else if (__range == PODIUM_RANGE_AROUND)
-                    {
-                        __asyncID = __PodiumPlayFabGetLeaderboardAround(__formattedServiceRef, 10, _callbackFunction);
-                    }
-                }
             }
             else if (PODIUM_USING_GDK)
             {
@@ -444,12 +330,6 @@ function __PodiumClassScores(_scoresID, _leaderboardName, _formattedServiceRef, 
                         //TODO
                     }
                 }
-            }
-            else if (PODIUM_ON_SWITCH)
-            {
-                ///////
-                // Switch
-                ///////
             }
             else
             {

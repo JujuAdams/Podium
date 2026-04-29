@@ -1,6 +1,6 @@
 #macro __PODIUM_SWITCH_CURRENT_SEASON  (-2147483648)
 
-#macro PODIUM_MIN_DELAY  0 //ms between requests
+#macro PODIUM_MIN_DELAY  100 //ms between requests
 #macro PODIUM_MAX_FREQUENCY  25  //per minute
 #macro __PODIUM_MAX_SIMULTANEOUS_OPERATIONS  1
 

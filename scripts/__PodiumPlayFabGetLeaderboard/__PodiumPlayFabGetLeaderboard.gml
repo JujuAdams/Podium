@@ -54,6 +54,11 @@ function __PodiumPlayFabGetLeaderboard(_leaderboardName, _startPosition, _count,
             {
                 show_debug_message("Result JSON = \n" + json_stringify(_resultJSON, true));
             }
+            
+            if (is_callable(__callback))
+            {
+                __callback(undefined);
+            }
         }
         else
         {

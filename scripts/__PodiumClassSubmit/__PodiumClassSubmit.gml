@@ -78,7 +78,10 @@ function __PodiumClassSubmit(_leaderboardName, _value) : __PodiumClassCommonOp()
             }
             else
             {
-                __PodiumPlayFabSetStat(__PodiumLeaderboardGetFormattedServiceRef(__leaderboardName), __value);
+                __asyncID = __PodiumPlayFabSetStat(__PodiumLeaderboardGetFormattedServiceRef(__leaderboardName), __value, function(_resultJSON)
+                {
+                    __Complete((_resultJSON == undefined)? PODIUM_STATE_ERROR : PODIUM_STATE_SUCCESS, _resultJSON);
+                });
             }
         }
         else if (PODIUM_ON_SWITCH)
@@ -108,11 +111,11 @@ function __PodiumClassSubmit(_leaderboardName, _value) : __PodiumClassCommonOp()
         }
         else
         {
-            __Complete(PODIUM_STATE_ERROR);
+            __Complete(PODIUM_STATE_ERROR, undefined);
         }
     }
     
-    static __Complete = function(_status)
+    static __Complete = function(_status, _playFabData)
     {
         if (__completed) return;
         

@@ -13,6 +13,8 @@ function __PodiumClassGetScores(_leaderboardName, _range) : __PodiumClassCommonO
     __leaderboardName = _leaderboardName;
     __range           = _range;
     
+    __formattedServiceRef = __PodiumLeaderboardGetFormattedServiceRef(__leaderboardName);
+    
     
     
     
@@ -48,15 +50,15 @@ function __PodiumClassGetScores(_leaderboardName, _range) : __PodiumClassCommonO
                 
                 if (__range == PODIUM_RANGE_TOP)
                 {
-                    __asyncID = steam_download_scores(__PodiumLeaderboardGetFormattedServiceRef(__leaderboardName), 1, 10);
+                    __asyncID = steam_download_scores(__formattedServiceRef, 1, 10);
                 }
                 else if (__range == PODIUM_RANGE_FRIENDS)
                 {
-                    __asyncID = steam_download_friends_scores(__PodiumLeaderboardGetFormattedServiceRef(__leaderboardName));
+                    __asyncID = steam_download_friends_scores(__formattedServiceRef);
                 }
                 else if (__range == PODIUM_RANGE_AROUND)
                 {
-                    __asyncID = steam_download_scores_around_user(__PodiumLeaderboardGetFormattedServiceRef(__leaderboardName), -5, 5);
+                    __asyncID = steam_download_scores_around_user(__formattedServiceRef, -5, 5);
                 }
             }
             else if (PODIUM_ON_SWITCH)
@@ -88,6 +90,38 @@ function __PodiumClassGetScores(_leaderboardName, _range) : __PodiumClassCommonO
                                                                         10);
                 }
             }
+            else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
+            {
+                var _callbackFunction = function(_resultJSON)
+                {
+                    if (_resultJSON == undefined)
+                    {
+                        __Complete(PODIUM_STATE_ERROR, undefined);
+                    }
+                    else if (_resultJSON[$ "status"] != "OK")
+                    {
+                        __PodiumWarning($"Leaderboard data \"{__formattedServiceRef}\" returned as not \"OK\"");
+                        __Complete(PODIUM_STATE_ERROR, undefined);
+                    }
+                    else
+                    {
+                        __Complete(PODIUM_STATE_SUCCESS, _resultJSON);
+                    }
+                };
+                
+                if (__range == PODIUM_RANGE_TOP)
+                {
+                    __asyncID = __PodiumPlayFabGetLeaderboard(__formattedServiceRef, 1, 10, _callbackFunction);
+                }
+                else if (__range == PODIUM_RANGE_FRIENDS)
+                {
+                    __asyncID = __PodiumPlayFabGetLeaderboardFriends(__formattedServiceRef, 1, 10, _callbackFunction);
+                }
+                else if (__range == PODIUM_RANGE_AROUND)
+                {
+                    __asyncID = __PodiumPlayFabGetLeaderboardAround(__formattedServiceRef, 10, _callbackFunction);
+                }
+            }
         }
         
         if ((__asyncID != undefined) && (__asyncID >= 0))
@@ -96,7 +130,7 @@ function __PodiumClassGetScores(_leaderboardName, _range) : __PodiumClassCommonO
         }
         else
         {
-            __Complete(PODIUM_STATE_ERROR);
+            __Complete(PODIUM_STATE_ERROR, undefined);
         }
     }
     
@@ -104,7 +138,7 @@ function __PodiumClassGetScores(_leaderboardName, _range) : __PodiumClassCommonO
     
     
     
-    static __Complete = function(_status)
+    static __Complete = function(_status, _playFabData)
     {
         if (__completed) return;
         
@@ -128,7 +162,7 @@ function __PodiumClassGetScores(_leaderboardName, _range) : __PodiumClassCommonO
         var _scoresStruct = __PodiumScoresFind(__leaderboardName, __range);
         if (_scoresStruct == undefined)
         {
-            __PodiumSoftError($"Scores struct not found for leaderboard \"{__PodiumLeaderboardGetFormattedServiceRef(__leaderboardName)}\"");
+            __PodiumSoftError($"Scores struct not found for leaderboard \"{__formattedServiceRef}\"");
         }
         else
         {
@@ -155,7 +189,7 @@ function __PodiumClassGetScores(_leaderboardName, _range) : __PodiumClassCommonO
                 }
                 catch(_error)
                 {
-                    __PodiumWarning($"Failed to parse returned leaderboard data for \"{__PodiumLeaderboardGetFormattedServiceRef(__leaderboardName)}\"");
+                    __PodiumWarning($"Failed to parse returned leaderboard data for \"{__formattedServiceRef}\"");
                     
                     _json = undefined;
                     __status = PODIUM_STATE_ERROR;
@@ -179,6 +213,62 @@ function __PodiumClassGetScores(_leaderboardName, _range) : __PodiumClassCommonO
                     var _scoreStruct = _scoresArray[_i];
                     array_push(_data, new __PodiumClassRanking(_scoreStruct.user_name, _scoreStruct.score, _scoreStruct.rank));
                     ++_i;
+                }
+            }
+            else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
+            {
+                ///////
+                // PlayFab
+                ///////
+                
+                if (PODIUM_VERBOSE)
+                {
+                    __PodiumTrace($"Using PlayFab parser");
+                }
+                
+                try
+                {
+                    var _rankingsArray = _playFabData.data.Rankings;
+                }
+                catch(_error)
+                {
+                    if (PODIUM_VERBOSE)
+                    {
+                        show_debug_message(json_stringify(_playFabData, true));
+                        show_debug_message(_error);
+                    }
+                    
+                    __PodiumWarning($"Failed to find expected data in returned leaderboard data \"{__formattedServiceRef}\"");
+                    __status = PODIUM_STATE_ERROR;
+                }
+                
+                if (__status == PODIUM_STATE_SUCCESS)
+                {
+                    try
+                    {
+                        var _i = 0;
+                        repeat(array_length(_rankingsArray))
+                        {
+                            var _ranking = _rankingsArray[_i];
+                            array_push(_data, new __PodiumClassRanking(_ranking.DisplayName, _ranking.Scores[0], _ranking.Rank));
+                            ++_i;
+                        }
+                    }
+                    catch(_error)
+                    {
+                        if (PODIUM_VERBOSE)
+                        {
+                            show_debug_message(_error);
+                        }
+                        
+                        __PodiumWarning($"Leaderboard data \"{__formattedServiceRef}\" failed to parse");
+                        __status = PODIUM_STATE_ERROR;
+                    }
+                    
+                    if (PODIUM_VERBOSE)
+                    {
+                        show_debug_message(json_stringify(_data, true));
+                    }
                 }
             }
             

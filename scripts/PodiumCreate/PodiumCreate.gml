@@ -13,7 +13,10 @@
 /// PlayStation:
 ///   `serviceRef` is an integer that is the index of the leaderboard, as set in the backend.
 /// 
-/// Xbox / Windows GDK:
+/// Xbox / Windows GDK (PlayFab):
+///   `serviceRef` is a string that is the leaderboard identifier, as set in the backend.
+/// 
+/// Xbox / Windows GDK (native):
 ///   `serviceRef` is a string that is the stat identifier, as set in the backend.
 /// 
 /// Switch:

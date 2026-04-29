@@ -10,8 +10,7 @@ function __PodiumClassLeaderboard(_serviceData) constructor
     
     if (PODIUM_USING_STEAMWORKS)
     {
-        var _ref = __GetFormattedServiceData();
-        steam_create_leaderboard(_ref, __serviceData.__sortMethod, __serviceData.__displayType);
+        steam_create_leaderboard(__GetFormattedServiceData().__formattedRef, __serviceData.__sortMethod, __serviceData.__displayType);
     }
     
     
@@ -28,9 +27,10 @@ function __PodiumClassLeaderboard(_serviceData) constructor
     
     static __GetFormattedServiceData = function()
     {
+        var _serviceDataFormatted = __serviceData.__ref;
+        
         if (_system.__steamAvailable)
         {
-            var _serviceDataFormatted = __serviceData.__ref;
             
             var _refreshPeriod = __serviceData.__refreshPeriod;
             if (_refreshPeriod != PODIUM_REFRESH_NEVER)
@@ -52,17 +52,16 @@ function __PodiumClassLeaderboard(_serviceData) constructor
                 }
             }
             
-            return _serviceDataFormatted;
         }
-        else
-        {
-            return __serviceData;
-        }
+        
+        __serviceData.__formattedRef = _serviceDataFormatted;
+        
+        return __serviceData;
     }
     
     static __EnsureScoresStruct = function(_range)
     {
-        var _scoresID = $"{__serviceData.__ref}_range{_range}";
+        var _scoresID = $"{__GetFormattedServiceData().__formattedRef}_range{_range}";
         
         var _struct = __scoresDict[$ _scoresID];
         if (not is_struct(_struct))

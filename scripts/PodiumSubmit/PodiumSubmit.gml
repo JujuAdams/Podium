@@ -16,7 +16,7 @@ function PodiumSubmit(_leaderboardName, _value, _priority = PODIUM_PRIORITY_NORM
     var _leaderboardStruct = __PodiumLeaderboardFind(_leaderboardName);
     if (is_struct(_leaderboardStruct))
     {
-        var _struct = new __PodiumClassSubmit(_leaderboardStruct.__GetFormattedServiceData(), _value);
+        var _struct = new __PodiumClassSubmit(variable_clone(_leaderboardStruct.__GetFormattedServiceData()), _value);
         
         if (_priority == PODIUM_PRIORITY_HIGH)
         {

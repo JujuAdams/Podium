@@ -50,15 +50,15 @@ function __PodiumClassGetScores(_leaderboard, _range) : __PodiumClassCommonOp() 
                 
                 if (__range == PODIUM_RANGE_TOP)
                 {
-                    __asyncID = steam_download_scores(__formattedServiceData, 1, 10);
+                    __asyncID = steam_download_scores(__formattedServiceData.__formattedRef, 1, 10);
                 }
                 else if (__range == PODIUM_RANGE_FRIENDS)
                 {
-                    __asyncID = steam_download_friends_scores(__formattedServiceData);
+                    __asyncID = steam_download_friends_scores(__formattedServiceData.__formattedRef);
                 }
                 else if (__range == PODIUM_RANGE_AROUND)
                 {
-                    __asyncID = steam_download_scores_around_user(__formattedServiceData, -5, 5);
+                    __asyncID = steam_download_scores_around_user(__formattedServiceData.__formattedRef, -5, 5);
                 }
             }
             else if (PODIUM_ON_SWITCH)

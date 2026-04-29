@@ -12,5 +12,5 @@ function __PodiumScoresFind(_leaderboardName, _range)
     var _struct = __PodiumLeaderboardFind(_leaderboardName);
     if (not is_struct(_struct)) return undefined;
     
-    return _struct.__EnsureScoresStruct(_struct.__GetFormattedServiceData(), _range);
+    return _struct.__EnsureScoresStruct(_range);
 }

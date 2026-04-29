@@ -39,6 +39,7 @@ function PodiumCreateForSteam(_name, _serviceRef, _sortMethod, _displayType, _re
     
     _leaderboardDict[$ _name] = new __PodiumClassLeaderboard({
         __ref:           _serviceRef,
+        __formattedRef:  undefined,
         __sortMethod:    _sortMethod,
         __displayType:   _displayType,
         __refreshPeriod: _refreshPeriod,

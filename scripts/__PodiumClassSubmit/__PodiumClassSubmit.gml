@@ -40,7 +40,7 @@ function __PodiumClassSubmit(_formattedServiceData, _value) : __PodiumClassCommo
         {
             if (_system.__steamAvailable)
             {
-                __asyncID = steam_upload_score(__formattedServiceData, __value);
+                __asyncID = steam_upload_score(__formattedServiceData.__formattedRef, __value);
             }
             else if (PODIUM_USING_GAMECENTER)
             {

@@ -46,17 +46,27 @@ function PodiumGetScores(_leaderboardName, _range = PODIUM_RANGE_TOP, _priority 
     {
         var _struct = new __PodiumClassGetScores(_leaderboardStruct, _range);
         
-        if (_priority == PODIUM_PRIORITY_HIGH)
+        if (not __PodiumGetUniqueOperation(_struct))
         {
-            array_insert(_queuedArray, _struct, 0);
-        }
-        else if (_priority == PODIUM_PRIORITY_IMMEDIATE)
-        {
-            _struct.__Dispatch();
+            if (PODIUM_VERBOSE)
+            {
+                __PodiumTrace($"Discarding GET_SCORES operation {string(ptr(self))} as an identical operation is queued or pending");
+            }
         }
         else
         {
-            array_push(_queuedArray, _struct);
+            if (_priority == PODIUM_PRIORITY_HIGH)
+            {
+                array_insert(_queuedArray, _struct, 0);
+            }
+            else if (_priority == PODIUM_PRIORITY_IMMEDIATE)
+            {
+                _struct.__Dispatch();
+            }
+            else
+            {
+                array_push(_queuedArray, _struct);
+            }
         }
         
         return undefined;

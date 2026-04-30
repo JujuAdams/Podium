@@ -15,6 +15,13 @@ function __PodiumClassSubmit(_formattedServiceData, _value) : __PodiumClassCommo
     
     
     
+    static __OperationEqual = function(_other)
+    {
+        return (is_instanceof(_other, __PodiumClassSubmit)
+             && (__value == _other.__value)
+             && __PodiumServiceDataEqual(__formattedServiceData, _other.__formattedServiceData));
+    }
+    
     static __Dispatch = function()
     {
         if (__dispatched) return;

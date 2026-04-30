@@ -17,6 +17,14 @@ function __PodiumClassGetScores(_leaderboard, _range) : __PodiumClassCommonOp() 
     
     
     
+    static __OperationEqual = function(_other)
+    {
+        return (is_instanceof(_other, __PodiumClassGetScores)
+             && (__leaderboard == _other.__leaderboard) //Don't need to check this as its covered by the service data but it's a convenient early-out
+             && (__range       == _other.__range)
+             && __PodiumServiceDataEqual(__formattedServiceData, _other.__formattedServiceData));
+    }
+    
     static __Dispatch = function()
     {
         if (__dispatched) return;
@@ -34,6 +42,7 @@ function __PodiumClassGetScores(_leaderboard, _range) : __PodiumClassCommonOp() 
         
         array_push(_activityArray, self);
         
+        //Catch edge case where the clock ticks over!
         __formattedServiceData = __leaderboard.__GetFormattedServiceData();
         
         if (_system.__local)

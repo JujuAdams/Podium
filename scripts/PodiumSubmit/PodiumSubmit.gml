@@ -18,17 +18,27 @@ function PodiumSubmit(_leaderboardName, _value, _priority = PODIUM_PRIORITY_NORM
     {
         var _struct = new __PodiumClassSubmit(variable_clone(_leaderboardStruct.__GetFormattedServiceData()), _value);
         
-        if (_priority == PODIUM_PRIORITY_HIGH)
+        if (not __PodiumGetUniqueOperation(_struct))
         {
-            array_insert(_queuedArray, _struct, 0);
-        }
-        else if (_priority == PODIUM_PRIORITY_IMMEDIATE)
-        {
-            _struct.__Dispatch();
+            if (PODIUM_VERBOSE)
+            {
+                __PodiumTrace($"Discarding SUBMIT operation {string(ptr(self))} as an identical operation is queued or pending");
+            }
         }
         else
         {
-            array_push(_queuedArray, _struct);
+            if (_priority == PODIUM_PRIORITY_HIGH)
+            {
+                array_insert(_queuedArray, _struct, 0);
+            }
+            else if (_priority == PODIUM_PRIORITY_IMMEDIATE)
+            {
+                _struct.__Dispatch();
+            }
+            else
+            {
+                array_push(_queuedArray, _struct);
+            }
         }
     }
 }

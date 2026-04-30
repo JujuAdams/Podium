@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"__PodiumGetUniqueOperation",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__PodiumGetUniqueOperation",
+  "parent":{
+    "name":"(System)",
+    "path":"folders/Podium/(System).yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

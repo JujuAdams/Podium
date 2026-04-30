@@ -1,8 +1,9 @@
 /// @param leaderboardName
 /// @param value
 /// @param [priority=normal]
+/// @param [clearCache=true]
 
-function PodiumSubmit(_leaderboardName, _value, _priority = PODIUM_PRIORITY_NORMAL)
+function PodiumSubmit(_leaderboardName, _value, _priority = PODIUM_PRIORITY_NORMAL, _clearCache = true)
 {
     static _system = __PodiumSystem();
     static _queuedArray = _system.__queuedArray;
@@ -27,6 +28,12 @@ function PodiumSubmit(_leaderboardName, _value, _priority = PODIUM_PRIORITY_NORM
         }
         else
         {
+            if (_clearCache)
+            {
+                //Clear the cache for this leaderboard because it may be invalidated by the user's score
+                PodiumClearCache(_leaderboardName, -1);
+            }
+            
             if (_priority == PODIUM_PRIORITY_HIGH)
             {
                 array_insert(_queuedArray, _struct, 0);

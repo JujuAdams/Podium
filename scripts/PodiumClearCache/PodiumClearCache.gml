@@ -8,6 +8,7 @@ function PodiumClearCache(_leaderboardName, _range = -1)
         PodiumClearCache(_leaderboardName, PODIUM_RANGE_TOP);
         PodiumClearCache(_leaderboardName, PODIUM_RANGE_AROUND);
         PodiumClearCache(_leaderboardName, PODIUM_RANGE_FRIENDS);
+        PodiumClearCache(_leaderboardName, __PODIUM_RANGE_USER);
     }
     else
     {

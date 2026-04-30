@@ -15,14 +15,14 @@ function __PodiumClassLeaderboard(_serviceData) constructor
     
     
     
-    static __GetCached = function(_range)
+    static __GetCachedScores = function(_range)
     {
-        return __EnsureScoresStruct(_range).__GetCached();
+        return __EnsureScoresStruct(_range).__GetCachedScores();
     }
     
-    static __GetData = function(_range)
+    static __GetScoresData = function(_range)
     {
-        return __EnsureScoresStruct(_range).__GetData();
+        return __EnsureScoresStruct(_range).__GetScoresData();
     }
     
     static __GetFormattedServiceData = function()

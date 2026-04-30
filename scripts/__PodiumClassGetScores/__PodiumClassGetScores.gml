@@ -60,6 +60,10 @@ function __PodiumClassGetScores(_leaderboard, _range) : __PodiumClassCommonOp() 
                 {
                     __asyncID = steam_download_scores_around_user(__formattedServiceData.__formattedRef, -5, 5);
                 }
+                else if (__range == __PODIUM_RANGE_USER)
+                {
+                    __asyncID = steam_download_scores_around_user(__formattedServiceData.__formattedRef, 0, 0);
+                }
             }
             else if (PODIUM_ON_SWITCH)
             {
@@ -182,6 +186,11 @@ function __PodiumClassGetScores(_leaderboard, _range) : __PodiumClassCommonOp() 
                     if (not is_array(_json.entries)) throw 666;
                     
                     _data = _json.entries;
+                    
+                    if (__range == __PODIUM_RANGE_USER)
+                    {
+                        _data = _data[0];
+                    }
                 }
                 catch(_error)
                 {

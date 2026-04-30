@@ -3,7 +3,7 @@
 
 function __PodiumScoresFind(_leaderboardName, _range)
 {
-    if ((_range != PODIUM_RANGE_TOP) && (_range != PODIUM_RANGE_FRIENDS) && (_range != PODIUM_RANGE_AROUND))
+    if ((_range != PODIUM_RANGE_TOP) && (_range != PODIUM_RANGE_FRIENDS) && (_range != PODIUM_RANGE_AROUND) && (_range != __PODIUM_RANGE_USER))
     {
         __PodiumSoftError($"Unhandled range `{_range}`");
         return false;

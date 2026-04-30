@@ -13,12 +13,12 @@ function __PodiumClassScores() constructor
         __lastReceivedTime = -infinity;
     }
     
-    static __GetCached = function()
+    static __GetCachedScores = function()
     {
         return (current_time - __lastReceivedTime < 5*60_000); //Every five minutes
     }
     
-    static __GetData = function()
+    static __GetScoresData = function()
     {
         return __data;
     }

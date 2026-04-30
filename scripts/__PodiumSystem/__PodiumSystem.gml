@@ -7,6 +7,8 @@
 #macro __PODIUM_OP_SUBMIT      0
 #macro __PODIUM_OP_GET_SCORES  1
 
+#macro __PODIUM_RANGE_USER  100
+
 __PodiumSystem();
 
 function __PodiumSystem()

@@ -124,6 +124,7 @@
     {"id":{"name":"PodiumGetScores","path":"scripts/PodiumGetScores/PodiumGetScores.yy",},},
     {"id":{"name":"PodiumGetState","path":"scripts/PodiumGetState/PodiumGetState.yy",},},
     {"id":{"name":"PodiumGetSwitchNPLNUserHandle","path":"scripts/PodiumGetSwitchNPLNUserHandle/PodiumGetSwitchNPLNUserHandle.yy",},},
+    {"id":{"name":"PodiumGetUserScore","path":"scripts/PodiumGetUserScore/PodiumGetUserScore.yy",},},
     {"id":{"name":"PodiumGetUserSignedIn","path":"scripts/PodiumGetUserSignedIn/PodiumGetUserSignedIn.yy",},},
     {"id":{"name":"PodiumGetUsingLocal","path":"scripts/PodiumGetUsingLocal/PodiumGetUsingLocal.yy",},},
     {"id":{"name":"PodiumGetXboxUser","path":"scripts/PodiumGetXboxUser/PodiumGetXboxUser.yy",},},

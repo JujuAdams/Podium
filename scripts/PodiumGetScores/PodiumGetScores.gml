@@ -25,7 +25,7 @@ function PodiumGetScores(_leaderboardName, _range = PODIUM_RANGE_TOP, _priority 
         return undefined;
     }
     
-    if ((_range != PODIUM_RANGE_TOP) && (_range != PODIUM_RANGE_FRIENDS) && (_range != PODIUM_RANGE_AROUND))
+    if ((_range != PODIUM_RANGE_TOP) && (_range != PODIUM_RANGE_FRIENDS) && (_range != PODIUM_RANGE_AROUND) && (_range != __PODIUM_RANGE_USER))
     {
         __PodiumSoftError($"Unhandled range `{_range}`");
         return undefined;
@@ -38,9 +38,9 @@ function PodiumGetScores(_leaderboardName, _range = PODIUM_RANGE_TOP, _priority 
         return undefined;
     }
     
-    if (_leaderboardStruct.__GetCached(_range))
+    if (_leaderboardStruct.__GetCachedScores(_range))
     {
-        return _leaderboardStruct.__GetData(_range);
+        return _leaderboardStruct.__GetScoresData(_range);
     }
     else
     {

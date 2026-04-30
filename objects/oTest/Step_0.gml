@@ -8,13 +8,19 @@ if (signedIn != _signedIn)
     signedIn = _signedIn;
     if (_signedIn)
     {
-        PodiumSubmit("all time score",   111);
-        PodiumSubmit("best time",        222);
-        PodiumSubmit("daily challenge",  555);
+        //PodiumSubmit("all time score",   111);
+        //PodiumSubmit("best time",        222);
+        //PodiumSubmit("daily challenge",  555);
+        //
+        //PodiumGetScores("all time score");
+        //PodiumGetScores("best time");
+        //PodiumGetScores("daily challenge");
         
-        PodiumGetScores("all time score");
-        PodiumGetScores("best time");
-        PodiumGetScores("daily challenge");
+        PodiumGetUserScore("all time score");
+        
+        //switch_npln_leaderboard_get_category_data(PodiumGetSwitchNPLNUserHandle(), "testDaily", 0);
+        //switch_npln_leaderboard_get_season_data(PodiumGetSwitchNPLNUserHandle(), "testDaily", 0, 0);
+        //switch_npln_leaderboard_get_season_data(PodiumGetSwitchNPLNUserHandle(), "testDaily", 0, 3);
     }
 }
 

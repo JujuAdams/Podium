@@ -20,5 +20,10 @@ if (PodiumGetUsingLocal())
     _string += $"\n";
 }
 
+if (PodiumGetUserSignedIn())
+{
+    _string += $"\"all time score\" score = {json_stringify(PodiumGetUserScore("all time score"), true)}\n";
+}
+
 draw_set_font(fntConsolas);
 draw_text(10, 10, _string);

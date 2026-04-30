@@ -91,6 +91,13 @@ function __PodiumClassGetScores(_leaderboard, _range) : __PodiumClassCommonOp() 
                                                                         __PODIUM_SWITCH_CURRENT_SEASON,
                                                                         10);
                 }
+                else if (__range == __PODIUM_RANGE_USER)
+                {
+                    __asyncID = switch_npln_leaderboard_get_scores_near(_system.__switchNPLNUserHandle,
+                                                                        __formattedServiceData.__categoryTypeName, __formattedServiceData.__categoryID,
+                                                                        __PODIUM_SWITCH_CURRENT_SEASON,
+                                                                        0);
+                }
             }
             else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
             {
@@ -122,6 +129,10 @@ function __PodiumClassGetScores(_leaderboard, _range) : __PodiumClassCommonOp() 
                 else if (__range == PODIUM_RANGE_AROUND)
                 {
                     __asyncID = __PodiumPlayFabGetLeaderboardAround(__formattedServiceData.__leaderboardName, 10, _callbackFunction);
+                }
+                else if (__range == __PODIUM_RANGE_USER)
+                {
+                    __asyncID = __PodiumPlayFabGetLeaderboardAround(__formattedServiceData.__leaderboardName, 0, _callbackFunction);
                 }
             }
         }
@@ -185,10 +196,12 @@ function __PodiumClassGetScores(_leaderboard, _range) : __PodiumClassCommonOp() 
                     _json = json_parse(async_load[? "entries"]);
                     if (not is_array(_json.entries)) throw 666;
                     
+                    //TODO - Perform conversion step
                     _data = _json.entries;
                     
                     if (__range == __PODIUM_RANGE_USER)
                     {
+                        //Flatten data
                         _data = _data[0];
                     }
                 }
@@ -212,12 +225,32 @@ function __PodiumClassGetScores(_leaderboard, _range) : __PodiumClassCommonOp() 
                 }
                 
                 var _scoresArray = async_load[? "scores"];
-                var _i = 0;
-                repeat(array_length(_scoresArray))
+                
+                try
                 {
-                    var _scoreStruct = _scoresArray[_i];
-                    array_push(_data, new __PodiumClassRanking(_scoreStruct.user_name, _scoreStruct.score, _scoreStruct.rank));
-                    ++_i;
+                    if (__range == __PODIUM_RANGE_USER)
+                    {
+                        //Flatten data
+                        var _scoreStruct = _scoresArray[0];
+                        _data = new __PodiumClassRanking(_scoreStruct.user_name, _scoreStruct.score, _scoreStruct.rank)
+                    }
+                    else
+                    {
+                        var _i = 0;
+                        repeat(array_length(_scoresArray))
+                        {
+                            var _scoreStruct = _scoresArray[_i];
+                            array_push(_data, new __PodiumClassRanking(_scoreStruct.user_name, _scoreStruct.score, _scoreStruct.rank));
+                            ++_i;
+                        }
+                    }
+                }
+                catch(_error)
+                {
+                    __PodiumWarning($"Failed to parse returned leaderboard data for \"{__formattedServiceData}\"");
+                    
+                    _json = undefined;
+                    __status = PODIUM_STATE_ERROR;
                 }
             }
             else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)

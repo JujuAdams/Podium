@@ -4,7 +4,7 @@ function PodiumGetUserID()
     
     if (PodiumGetOfflineOnly())
     {
-        return "PLAYER";
+        return "Player";
     }
     else if (PODIUM_USING_STEAMWORKS)
     {
@@ -14,9 +14,17 @@ function PodiumGetUserID()
     {
         return _system.__switchUserID;
     }
+    else if (PODIUM_ON_PS5)
+    {
+        return psn_user_for_pad(_system.__psGamepad);
+    }
+    else if (PODIUM_USING_GDK)
+    {
+        return _system.__xboxUser;
+    }
     else
     {
         //TODO
-        return "";
+        return undefined;
     }
 }

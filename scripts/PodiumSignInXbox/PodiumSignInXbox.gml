@@ -8,9 +8,15 @@ function PodiumSignInXbox(_xboxUser = 0)
     {
         with(_system)
         {
+            if (__signInState == PODIUM_USER_SIGNING_IN)
+            {
+                __PodiumSoftError("Cannot sign in a new Xbox user, a user is already signing in");
+                return;
+            }
+            
             __xboxUser = int64(_xboxUser);
             __username = (_xboxUser < 0)? "" : xboxone_modern_gamertag_for_user(_xboxUser);
-        
+            
             if (PODIUM_VERBOSE)
             {
                 __PodiumTrace($"Set Xbox user to {_xboxUser} \"{__username}\"");
@@ -37,8 +43,6 @@ function PodiumSignInXbox(_xboxUser = 0)
             }
             else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
             {
-                //FIXME - It's possible for tokens to get confused if you set the Xbox user rapidly
-                
                 __playFabLoggedIn = false;
                 __PodiumPlayFabXboxRequestToken();
             }

@@ -4,23 +4,32 @@
 
 #macro PODIUM_VERBOSE_ASYNC  false
 
-#macro PODIUM_UNKNOWN_RANK  "?"
-
-#macro PODIUM_WARNINGS_HAVE_CALLSTACKS  true
+#macro PODIUM_WARNINGS_HAVE_CALLSTACKS  (PODIUM_RUNNING_FROM_IDE)
 
 #macro PODIUM_REFERENCE_DATE  date_create_datetime(2026, 1, 1, 0, 0, 0)
 
-/// Whether to force use of local data storage. This will ignore any remote or per-platform
-/// services.
-#macro PODIUM_FORCE_OFFLINE_ONLY  false
+/// The maximum length of time that a leaderboard cache is valid for before forcing a refresh. This
+/// macro only applies on desktop and mobile platforms. Console platforms will never automatically
+/// time-out a cache to avoid the anger of the Gods.
+#macro PODIUM_GREEDY_CACHE_TIMEOUT  600 //seconds
+
+#macro PODIUM_UNKNOWN_RANK  "?"
 
 #macro PODIUM_DEBUG_DAY_OFFSET  0
 
 #macro PODIUM_DEBUG_IGNORE_LOCAL_IMPORT  false
 
-#macro PODIUM_PSN_LEADERBOARD_SERVICE_LABEL  undefined
+///////
+// Platforms Controls
+///////
+
+/// Whether to force use of local data storage. This will ignore any remote or per-platform
+/// services.
+#macro PODIUM_FORCE_OFFLINE_ONLY  false
 
 #macro PODIUM_SWITCH_NPLN_TENANT  ""
+
+#macro PODIUM_PSN_LEADERBOARD_SERVICE_LABEL  undefined
 
 ///////
 // PlayFab

@@ -16,8 +16,14 @@ function __PodiumClassScoreCache() constructor
     
     static __GetUsingCache = function()
     {
-        //FIXME - Disable this on console
-        return (current_time - __lastReceivedTime < 5*60_000); //Every five minutes
+        if (PODIUM_ON_DESKTOP || PODIUM_ON_MOBILE)
+        {
+            return (current_time - __lastReceivedTime < 1_000*PODIUM_GREEDY_CACHE_TIMEOUT);
+        }
+        else
+        {
+            return (not is_infinity(__lastReceivedTime));
+        }
     }
     
     static __GetReceivedTime = function()

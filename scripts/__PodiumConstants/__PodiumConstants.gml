@@ -9,6 +9,7 @@
 #macro PODIUM_ON_DESKTOP      (PODIUM_ON_WINDOWS || PODIUM_ON_MACOS || PODIUM_ON_LINUX)
 #macro PODIUM_ON_IOS          (os_type == os_ios)
 #macro PODIUM_ON_ANDROID      (os_type == os_android)
+#macro PODIUM_ON_MOBILE       (PODIUM_ON_IOS || PODIUM_ON_ANDROID)
 #macro PODIUM_ON_XBOX_SERIES  (os_type == os_xboxseriesxs)
 #macro PODIUM_ON_PS5          (os_type == os_ps5)
 #macro PODIUM_ON_SWITCH       (os_type == os_switch)

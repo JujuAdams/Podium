@@ -1,4 +1,4 @@
-#macro PODIUM_VERSION  "0.1.0-alpha"
+#macro PODIUM_VERSION  "0.2.0-alpha"
 #macro PODIUM_DATE     "2026-05-06"
 
 #macro PODIUM_RUNNING_FROM_IDE  (GM_build_type == "run")

@@ -64,7 +64,7 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
         }
         else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
         {
-            __asyncID = __PodiumPlayFabSetStat(__formattedServiceData.playFab.statisticName, __value, function(_resultJSON)
+            __asyncID = __PodiumPlayFabSetStat(__formattedServiceData.playFab.statisticName, __value, __metadataString, function(_resultJSON)
             {
                 __Complete((_resultJSON == undefined)? PODIUM_LEADERBOARD_ERROR : PODIUM_LEADERBOARD_SUCCESS, _resultJSON);
             });

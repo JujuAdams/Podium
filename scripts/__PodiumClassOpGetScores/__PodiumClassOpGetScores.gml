@@ -312,7 +312,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                         repeat(array_length(_rankingsArray))
                         {
                             var _ranking = _rankingsArray[_i];
-                            array_push(_data, new __PodiumClassRecord(_ranking.DisplayName, _ranking.Scores[0], _ranking.Rank, _ranking.Entity.Id, "", false));
+                            array_push(_data, new __PodiumClassRecord(_ranking.DisplayName, _ranking.Scores[0], _ranking.Rank, _ranking.Entity.Id, _ranking[$ "Metadata"] ?? "", false));
                             ++_i;
                         }
                     }

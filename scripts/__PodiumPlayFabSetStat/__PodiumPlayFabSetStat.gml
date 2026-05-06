@@ -1,8 +1,9 @@
 /// @param statName
 /// @param integerValue
+/// @param metadataString
 /// @param [callback]
 
-function __PodiumPlayFabSetStat(_statisticName, _value, _callback = undefined)
+function __PodiumPlayFabSetStat(_statisticName, _value, _metadataString, _callback = undefined)
 {
     static _system = __PodiumSystem();
     static _headerMap = ds_map_create();
@@ -22,6 +23,7 @@ function __PodiumPlayFabSetStat(_statisticName, _value, _callback = undefined)
                 Scores: [
                     int64(_value),
                 ],
+                Metadata: _metadataString,
             },
         ],
     });

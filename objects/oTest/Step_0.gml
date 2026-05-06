@@ -16,7 +16,7 @@ if (signedIn != _signedIn)
         //PodiumGetScores("best time");
         //PodiumGetScores("daily challenge");
         
-        PodiumGetScores("all time score", PODIUM_RANGE_USER);
+        //PodiumGetScores("all time score", PODIUM_RANGE_USER);
         
         //switch_npln_leaderboard_get_category_data(PodiumGetSwitchNPLNUserHandle(), "testDaily", 0);
         //switch_npln_leaderboard_get_season_data(PodiumGetSwitchNPLNUserHandle(), "testDaily", 0, 0);

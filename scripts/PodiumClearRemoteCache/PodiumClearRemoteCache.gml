@@ -1,22 +1,12 @@
 /// @param leaderboardName
-/// @param [range=all]
+/// @param range
 /// @param [seasonOffset=0]
 
-function PodiumClearRemoteCache(_leaderboardName, _range = -1, _seasonOffset)
+function PodiumClearRemoteCache(_leaderboardName, _range, _seasonOffset = 0)
 {
-    if (_range < 0)
+    var _scoresStruct = __PodiumScoreCacheFind(_leaderboardName, _range, _seasonOffset);
+    if (is_struct(_scoresStruct))
     {
-        PodiumClearRemoteCache(_leaderboardName, PODIUM_RANGE_TOP,     _seasonOffset);
-        PodiumClearRemoteCache(_leaderboardName, PODIUM_RANGE_AROUND,  _seasonOffset);
-        PodiumClearRemoteCache(_leaderboardName, PODIUM_RANGE_FRIENDS, _seasonOffset);
-        PodiumClearRemoteCache(_leaderboardName, PODIUM_RANGE_USER,    _seasonOffset);
-    }
-    else
-    {
-        var _scoresStruct = __PodiumScoreCacheFind(_leaderboardName, _range, _seasonOffset);
-        if (is_struct(_scoresStruct))
-        {
-            _scoresStruct.__ClearCache();
-        }
+        _scoresStruct.__ClearCache();
     }
 }

@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"__PodiumClearAllCaches",
+  "%Name":"__PodiumGlobalClearRemoteCaches",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"__PodiumClearAllCaches",
+  "name":"__PodiumGlobalClearRemoteCaches",
   "parent":{
     "name":"(System)",
     "path":"folders/Podium/(System).yy",

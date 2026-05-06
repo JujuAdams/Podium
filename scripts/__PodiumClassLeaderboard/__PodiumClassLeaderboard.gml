@@ -6,7 +6,7 @@ function __PodiumClassLeaderboard(_serviceData) constructor
     
     __serviceData = _serviceData;
     
-    __scoresDict = {};
+    __remoteCacheDict = {};
     
     if (PODIUM_USING_STEAMWORKS)
     {
@@ -21,6 +21,11 @@ function __PodiumClassLeaderboard(_serviceData) constructor
     }
     
     
+    
+    static __ClearAllCaches = function()
+    {
+        __remoteCacheDict = {};
+    }
     
     static __GetUsingCache = function(_range, _seasonOffset)
     {
@@ -98,13 +103,13 @@ function __PodiumClassLeaderboard(_serviceData) constructor
     {
         var _scoresID = $"{__GetFormattedServiceData(_seasonOffset).__formattedRef}_range{_range}_seasonsOffset{_seasonOffset}";
         
-        var _struct = __scoresDict[$ _scoresID];
-        if (not is_struct(_struct))
+        var _scoreCacheStruct = __remoteCacheDict[$ _scoresID];
+        if (not is_struct(_scoreCacheStruct))
         {
-            _struct = new __PodiumClassScoreCache();
-            __scoresDict[$ _scoresID] = _struct;
+            _scoreCacheStruct = new __PodiumClassScoreCache();
+            __remoteCacheDict[$ _scoresID] = _scoreCacheStruct;
         }
         
-        return _struct;
+        return _scoreCacheStruct;
     }
 }

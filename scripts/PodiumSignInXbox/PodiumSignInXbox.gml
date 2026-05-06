@@ -22,6 +22,8 @@ function PodiumSignInXbox(_xboxUser = 0)
                 __PodiumTrace($"Set Xbox user to {_xboxUser} \"{__username}\"");
             }
             
+            __PodiumGlobalClearRemoteCaches();
+            
             if (_xboxUser <= 0)
             {
                 __signInState = PODIUM_USER_SIGNED_OUT;
@@ -29,7 +31,6 @@ function PodiumSignInXbox(_xboxUser = 0)
             }
             
             __signInState = PODIUM_USER_SIGNING_IN;
-            __PodiumClearAllCaches();
             
             if (PODIUM_USING_XBOX_LEADERBOARDS)
             {

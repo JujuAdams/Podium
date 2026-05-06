@@ -6,6 +6,6 @@ function __PodiumUserSignedIn()
     
     _system.__signInState = PODIUM_USER_SIGNED_IN;
     
-    __PodiumClearAllCaches();
+    __PodiumGlobalClearRemoteCaches();
     __PodiumSubmitAllPendingOfflineRecords();
 }

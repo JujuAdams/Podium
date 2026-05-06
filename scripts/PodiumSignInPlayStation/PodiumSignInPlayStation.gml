@@ -16,7 +16,7 @@ function PodiumSignInPlayStation(_gamepad = -1)
                 __PodiumTrace($"Set PlayStation gamepad to {_gamepad} \"{__username}\"");
             }
             
-            __PodiumClearAllCaches();
+            __PodiumGlobalClearRemoteCaches();
             
             if (_gamepad < 0)
             {

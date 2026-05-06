@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"PodiumClearAllRemoteCaches",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"PodiumClearAllRemoteCaches",
+  "parent":{
+    "name":"Leaderboards",
+    "path":"folders/Podium/Leaderboards.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -45,7 +45,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
         
         if (PodiumGetOfflineOnly())
         {
-            //TODO
+            __PodiumSoftError("OfflineOnly defensive branch reached. Please report this error");
         }
         else
         {

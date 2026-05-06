@@ -22,6 +22,8 @@ function PodiumSignInSwitch(_accountIndex)
                 __PodiumTrace($"Set Switch account index to {_accountIndex} \"{__username}\"");
             }
             
+            __PodiumGlobalClearRemoteCaches();
+            
             if (_accountIndex == undefined)
             {
                 __signInState = PODIUM_USER_SIGNED_OUT;

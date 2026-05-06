@@ -89,7 +89,7 @@ function __PodiumSystem()
                 {
                     __PodiumWarning($"User {__xboxUser} signed out");
                     __signInState = PODIUM_USER_SIGNED_OUT;
-                    __PodiumClearAllCaches();
+                    __PodiumGlobalClearRemoteCaches();
                 }
             }
             

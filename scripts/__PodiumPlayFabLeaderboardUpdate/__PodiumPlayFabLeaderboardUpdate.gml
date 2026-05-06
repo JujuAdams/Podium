@@ -1,24 +1,35 @@
-/// @param statName
+/// @param leaderboardName
+/// @param integerValue
+/// @param metadataString
 /// @param [callback]
 
-function __PodiumPlayFabDebugGetStat(_statisticName, _callback = undefined)
+function __PodiumPlayFabLeaderboardUpdate(_leaderboardName, _value, _metadataString, _callback = undefined)
 {
     static _system = __PodiumSystem();
     static _headerMap = ds_map_create();
     
     if (not _system.__playFabLoggedIn)
     {
-        __PodiumWarning("Cannot get statistic, not logged into PlayFab");
+        __PodiumWarning("Cannot update leaderboard, not logged into PlayFab");
     }
     
     _headerMap[? "Content-Type" ] = "application/json";
     _headerMap[? "X-EntityToken"] = _system.__playFabEntityToken;
       
     var _bodyString = __PodiumPlayFabJSONStringify({
-        StatisticNames: [_statisticName],
+        LeaderboardName: _leaderboardName,
+        Entries: [
+            {
+                EntityId: _system.__playFabEntityID,
+                Scores: [
+                    int64(_value),
+                ],
+                Metadata: _metadataString,
+            }
+        ],
     });
     
-    var _result = http_request($"https://{PODIUM_PLAYFAB_TITLE_ID}.playfabapi.com/Statistic/GetStatistics", "POST", _headerMap, _bodyString);
+    var _result = http_request($"https://{PODIUM_PLAYFAB_TITLE_ID}.playfabapi.com/Leaderboard/UpdateLeaderboardEntries", "POST", _headerMap, _bodyString);
     ds_map_clear(_headerMap);
     
     __PodiumRegisterHTTPAsyncID(_result, method({
@@ -30,7 +41,7 @@ function __PodiumPlayFabDebugGetStat(_statisticName, _callback = undefined)
         var _httpStatus        = async_load[? "http_status"     ];
         var _url               = async_load[? "url"             ];
         var _resultString      = async_load[? "result"          ];
-    
+        
         var _resultJSON = __PodiumPlayFabJSONParse(_resultString);
         if (_resultJSON == undefined)
         {
@@ -44,7 +55,7 @@ function __PodiumPlayFabDebugGetStat(_statisticName, _callback = undefined)
         
         if (_httpStatus != 200)
         {
-            __PodiumWarning($"PlayFab statistics get received unexpected HTTP status {_httpStatus}");
+            __PodiumWarning($"PlayFab statistics set received unexpected HTTP status {_httpStatus}");
             
             if (PODIUM_VERBOSE)
             {
@@ -60,7 +71,7 @@ function __PodiumPlayFabDebugGetStat(_statisticName, _callback = undefined)
         {
             if (PODIUM_VERBOSE)
             {
-                __PodiumTrace($"PlayFab statistics get received response");
+                __PodiumTrace($"PlayFab statistics set received response");
             }
             
             if (is_callable(__callback))

@@ -48,23 +48,23 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
         }
         else if (PODIUM_USING_GAMECENTER)
         {
-            GameCenter_Leaderboard_Submit(__formattedServiceData.__ref, __value, 0);
+            GameCenter_Leaderboard_Submit(__formattedServiceData.gameCenter, __value, 0);
         }
         else if (_system.__playServicesAvailable)
         {
-            GooglePlayServices_Leaderboard_SubmitScore(__formattedServiceData.__ref, __value, __metadataString);
+            GooglePlayServices_Leaderboard_SubmitScore(__formattedServiceData.playServices, __value, __metadataString);
         }
         else if (PODIUM_ON_PS5)
         {
-            psn_post_leaderboard_score_comment(_system.__psGamepad, __formattedServiceData.__formattedRef, __value, __metadataString);
+            psn_post_leaderboard_score_comment(_system.__psGamepad, __formattedServiceData.playStation, __value, __metadataString);
         }
         else if (PODIUM_USING_XBOX_LEADERBOARDS)
         {
-            xboxone_stats_set_stat_int(_system.__xboxUser, __formattedServiceData.__ref, __value);
+            xboxone_stats_set_stat_int(_system.__xboxUser, __formattedServiceData.xbox, __value);
         }
         else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
         {
-            __asyncID = __PodiumPlayFabSetStat(__formattedServiceData.playFab.statisticName, __value, __metadataString, function(_resultJSON)
+            __asyncID = __PodiumPlayFabLeaderboardUpdate(__formattedServiceData.playFab, __value, __metadataString, function(_resultJSON)
             {
                 __Complete((_resultJSON == undefined)? PODIUM_LEADERBOARD_ERROR : PODIUM_LEADERBOARD_SUCCESS, _resultJSON);
             });

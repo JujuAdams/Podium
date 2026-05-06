@@ -16,6 +16,8 @@ if (signedIn != _signedIn)
         //PodiumGetScores("best time");
         //PodiumGetScores("daily challenge");
         
+        PodiumSubmit("all time score", 224, "hello world 2");
+        
         //PodiumGetScores("all time score", PODIUM_RANGE_USER);
         
         //switch_npln_leaderboard_get_category_data(PodiumGetSwitchNPLNUserHandle(), "testDaily", 0);

@@ -8,10 +8,7 @@ function __PodiumConfigLeaderboards()
             displayType: lb_disp_numeric,
         },
         
-        playFab: {
-            statisticName: "testDescendingStat",
-            leaderboardName: "testDescending",
-        },
+        playFab: "testDescending",
     });
     
     PodiumCreate({
@@ -22,10 +19,7 @@ function __PodiumConfigLeaderboards()
             displayType: lb_disp_time_sec,
         },
         
-        playFab: {
-            statisticName: "testAscendingStat",
-            leaderboardName: "testAscending",
-        },
+        playFab: "testAscending",
     });
     
     PodiumCreate({
@@ -37,10 +31,7 @@ function __PodiumConfigLeaderboards()
             displayType: lb_disp_numeric,
         },
         
-        playFab: {
-            statisticName: "testDailyStat",
-            leaderboardName: "testDaily",
-        },
+        playFab: "testDaily",
     });
     
     //PodiumCreate({
@@ -57,10 +48,7 @@ function __PodiumConfigLeaderboards()
     //        categoryID: 0,
     //    },
     //    playStation: [0, 1, 2, 3, 4, 5, 6],
-    //    playFab: {
-    //        statisticName: "testDailyStat",
-    //        leaderboardName: "testDaily",
-    //    },
+    //    playFab: "testDaily",
     //    playServices: "",
     //    gameCenter: "",
     //});

@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"__PodiumPlayFabSetStat",
+  "%Name":"__PodiumPlayFabLeaderboardUpdate",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"__PodiumPlayFabSetStat",
+  "name":"__PodiumPlayFabLeaderboardUpdate",
   "parent":{
     "name":"HTTP Requests",
     "path":"folders/Podium/(System)/PlayFab/HTTP Requests.yy",

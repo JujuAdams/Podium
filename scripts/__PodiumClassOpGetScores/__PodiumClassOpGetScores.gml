@@ -116,7 +116,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                     }
                     else if (_resultJSON[$ "status"] != "OK")
                     {
-                        __PodiumWarning($"Leaderboard data \"{__formattedServiceData.playFab.leaderboardName}\" returned as not \"OK\"");
+                        __PodiumWarning($"Leaderboard data \"{__formattedServiceData.playFab}\" returned as not \"OK\"");
                         __Complete(PODIUM_LEADERBOARD_ERROR, undefined);
                     }
                     else
@@ -127,19 +127,19 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                 
                 if (__range == PODIUM_RANGE_TOP)
                 {
-                    __asyncID = __PodiumPlayFabGetLeaderboardTop(__formattedServiceData.playFab.leaderboardName, 1, 10, _callbackFunction);
+                    __asyncID = __PodiumPlayFabGetLeaderboardTop(__formattedServiceData.playFab, 1, 10, _callbackFunction);
                 }
                 else if (__range == PODIUM_RANGE_FRIENDS)
                 {
-                    __asyncID = __PodiumPlayFabGetLeaderboardFriends(__formattedServiceData.playFab.leaderboardName, 1, 10, _callbackFunction);
+                    __asyncID = __PodiumPlayFabGetLeaderboardFriends(__formattedServiceData.playFab, 1, 10, _callbackFunction);
                 }
                 else if (__range == PODIUM_RANGE_AROUND)
                 {
-                    __asyncID = __PodiumPlayFabGetLeaderboardAround(__formattedServiceData.playFab.leaderboardName, 10, _callbackFunction);
+                    __asyncID = __PodiumPlayFabGetLeaderboardAround(__formattedServiceData.playFab, 10, _callbackFunction);
                 }
                 else if (__range == PODIUM_RANGE_USER)
                 {
-                    __asyncID = __PodiumPlayFabGetLeaderboardUser(__formattedServiceData.playFab.leaderboardName, _callbackFunction);
+                    __asyncID = __PodiumPlayFabGetLeaderboardUser(__formattedServiceData.playFab, _callbackFunction);
                 }
             }
             else

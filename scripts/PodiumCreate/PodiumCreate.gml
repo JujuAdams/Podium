@@ -173,12 +173,7 @@ function PodiumCreate(_serviceData)
         var _platformData = _serviceData.playFab;
         if (_platformData != undefined)
         {
-            if ((not _funcCheckPresence(_platformData, "statisticName")) || (not _funcCheckPresence(_platformData, "leaderboardName")))
-            {
-                return false;
-            }
-        
-            _serviceData.__ref = $"{_platformData.statisticName}_{_platformData.leaderboardName}";
+            _serviceData.__ref = _platformData;
         }
     }
     else if (PODIUM_USING_XBOX_LEADERBOARDS)
@@ -190,9 +185,10 @@ function PodiumCreate(_serviceData)
         
         //TODO
         
+        var _platformData = _serviceData.xbox;
         if (_platformData != undefined)
         {
-            _serviceData.__ref = _serviceData.xbox;
+            _serviceData.__ref = _platformData;
         }
     }
     else if (PODIUM_USING_GAMECENTER)

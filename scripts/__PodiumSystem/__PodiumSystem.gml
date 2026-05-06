@@ -31,10 +31,11 @@ function __PodiumSystem()
         __runningDefinitions = false;
         
         __signInState = PODIUM_USER_SIGNED_OUT;
+        __username = "";
         
-        __local        = false;
-        __localChanged = false;
-        __localData    = {};
+        __offlineOnly       = false;
+        __localChanged      = false;
+        __offlineRecordDict = {};
         
         __lastActivityTime = -infinity;
         __pendingArray  = [];
@@ -43,11 +44,10 @@ function __PodiumSystem()
         
         __psGamepad = -1;
         
-        __xboxUser           = int64(0);
-        __xboxModernGamertag = "";
+        __xboxUser = int64(0);
         
+        __switchAccountIndex   = undefined;
         __switchNPLNUserHandle = undefined;
-        __switchNickname       = "";
         __switchUserID         = undefined;
         
         __steamAvailable        = false;
@@ -60,7 +60,6 @@ function __PodiumSystem()
         
         __leaderboardDict            = {};
         __httpAsyncIDMap             = ds_map_create();
-        __socialAsyncIDMap           = ds_map_create();
         __psLeaderboardScoreRangeMap = ds_map_create();
         __psLeaderboardFriendsMap    = ds_map_create();
         
@@ -81,6 +80,16 @@ function __PodiumSystem()
                 else if (not __PodiumController.persistent)
                 {
                     __PodiumError("`__PodiumController` has been set to not persistent");
+                }
+            }
+            
+            if (PODIUM_ON_XBOX_SERIES && (__xboxUser > 0) && (__signInState == PODIUM_USER_SIGNED_IN))
+            {
+                if (not xboxone_user_is_signed_in(__xboxUser))
+                {
+                    __PodiumWarning($"User {__xboxUser} signed out");
+                    __signInState = PODIUM_USER_SIGNED_OUT;
+                    __PodiumClearAllCaches();
                 }
             }
             

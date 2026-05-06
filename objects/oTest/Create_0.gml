@@ -5,5 +5,8 @@ signedIn = false;
 
 if (PODIUM_ON_SWITCH)
 {
-    SwitchLogInDefaultAccount();
+    PodiumSignInSwitch(switch_accounts_open_preselected_user());
 }
+
+//PlayStation and Xbox sign in based on gamepad input in Step event
+//Windows GDK signs in based on Async System event

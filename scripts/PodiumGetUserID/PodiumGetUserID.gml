@@ -2,7 +2,7 @@ function PodiumGetUserID()
 {
     static _system = __PodiumSystem();
     
-    if (_system.__local)
+    if (PodiumGetOfflineOnly())
     {
         return "PLAYER";
     }

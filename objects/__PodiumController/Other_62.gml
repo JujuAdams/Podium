@@ -1,6 +1,6 @@
 if (PODIUM_VERBOSE_ASYNC)
 {
-    __PodiumTrace($"HTTP:\n{json_encode(async_load, true)}");
+    __PodiumTrace($"HTTP (via `PODIUM_VERBOSE_ASYNC`):\n{json_encode(async_load, true)}");
 }
 
 if (async_load[? "status"] == 0)

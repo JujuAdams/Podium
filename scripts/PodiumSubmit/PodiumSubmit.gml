@@ -12,10 +12,10 @@ function PodiumSubmit(_leaderboardName, _value, _metadataString = "", _priority 
     var _leaderboardStruct = __PodiumLeaderboardFind(_leaderboardName);
     if (is_struct(_leaderboardStruct))
     {
-        if ((not PodiumGetUserSignedIn()) || _system.__local)
+        if ((not PodiumGetSignedIn()) || PodiumGetOfflineOnly())
         {
-            //If we're running local-only leaderboards or we're not signed in, only store a local value
-            __PodiumLocalScoreStore(_leaderboardName, _value, _metadataString);
+            //If we're running offline-only leaderboards or we're not signed in, only store a local value
+            __PodiumStoreOfflineRecord(_leaderboardName, _value, _metadataString);
         }
         else if (PodiumGetLeaderboardDisabled(_leaderboardName))
         {
@@ -40,7 +40,7 @@ function PodiumSubmit(_leaderboardName, _value, _metadataString = "", _priority 
                     PodiumClearRemoteCache(_leaderboardName, undefined, 0);
                 }
                 
-                __PodiumLocalScoreStore(_leaderboardName, _value, _metadataString);
+                __PodiumStoreOfflineRecord(_leaderboardName, _value, _metadataString);
                 
                 if (_priority == PODIUM_PRIORITY_HIGH)
                 {

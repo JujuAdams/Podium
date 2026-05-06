@@ -43,13 +43,13 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
         //Catch edge case where the clock ticks over!
         __formattedServiceData = variable_clone(__leaderboard.__GetFormattedServiceData(__seasonOffset));
         
-        if (_system.__local)
+        if (PodiumGetOfflineOnly())
         {
             //TODO
         }
         else
         {
-            if (_system.__steamAvailable)
+            if (PODIUM_STEAM_AVAILABLE)
             {
                 ///////
                 // Steam
@@ -112,16 +112,16 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                 {
                     if (_resultJSON == undefined)
                     {
-                        __Complete(PODIUM_STATE_ERROR, undefined);
+                        __Complete(PODIUM_LEADERBOARD_ERROR, undefined);
                     }
                     else if (_resultJSON[$ "status"] != "OK")
                     {
                         __PodiumWarning($"Leaderboard data \"{__formattedServiceData.leaderboardName}\" returned as not \"OK\"");
-                        __Complete(PODIUM_STATE_ERROR, undefined);
+                        __Complete(PODIUM_LEADERBOARD_ERROR, undefined);
                     }
                     else
                     {
-                        __Complete(PODIUM_STATE_SUCCESS, _resultJSON);
+                        __Complete(PODIUM_LEADERBOARD_SUCCESS, _resultJSON);
                     }
                 };
                 
@@ -150,12 +150,12 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
         
         if ((__asyncID != undefined) && (__asyncID >= 0))
         {
-            __leaderboard.__EnsureScoresStruct(__range, __seasonOffset).__SetState(PODIUM_STATE_WAITING);
+            __leaderboard.__EnsureScoresStruct(__range, __seasonOffset).__SetState(PODIUM_LEADERBOARD_WAITING);
             array_push(_pendingArray, self);
         }
         else
         {
-            __Complete(PODIUM_STATE_ERROR, undefined);
+            __Complete(PODIUM_LEADERBOARD_ERROR, undefined);
         }
     }
     
@@ -166,7 +166,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
         if (__completed) return;
         
         __completed = true;
-        __activityTime = _system.__local? -infinity : current_time;
+        __activityTime = PodiumGetOfflineOnly()? -infinity : current_time;
         
         if (PODIUM_VERBOSE)
         {
@@ -191,7 +191,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
         {
             var _data = [];
             
-            if (_system.__steamAvailable)
+            if (PODIUM_STEAM_AVAILABLE)
             {
                 ///////
                 // Steam
@@ -240,7 +240,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                     __PodiumWarning($"Failed to parse returned leaderboard data for \"{__formattedServiceData}\"");
                     
                     _json = undefined;
-                    __status = PODIUM_STATE_ERROR;
+                    __status = PODIUM_LEADERBOARD_ERROR;
                 }
             }
             else if (PODIUM_ON_SWITCH)
@@ -272,7 +272,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                     __PodiumWarning($"Failed to parse returned leaderboard data for \"{__formattedServiceData}\"");
                     
                     _json = undefined;
-                    __status = PODIUM_STATE_ERROR;
+                    __status = PODIUM_LEADERBOARD_ERROR;
                 }
             }
             else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
@@ -299,10 +299,10 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                     }
                     
                     __PodiumWarning($"Failed to find expected data in returned leaderboard data \"{__formattedServiceData.leaderboardName}\"");
-                    __status = PODIUM_STATE_ERROR;
+                    __status = PODIUM_LEADERBOARD_ERROR;
                 }
                 
-                if (__status == PODIUM_STATE_SUCCESS)
+                if (__status == PODIUM_LEADERBOARD_SUCCESS)
                 {
                     try
                     {
@@ -322,7 +322,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                         }
                         
                         __PodiumWarning($"Leaderboard data \"{__formattedServiceData.leaderboardName}\" failed to parse");
-                        __status = PODIUM_STATE_ERROR;
+                        __status = PODIUM_LEADERBOARD_ERROR;
                     }
                     
                     if (PODIUM_VERBOSE)

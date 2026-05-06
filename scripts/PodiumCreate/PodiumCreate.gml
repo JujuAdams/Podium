@@ -80,11 +80,11 @@ function PodiumCreate(_serviceData)
     var _leaderboardName = _serviceData.leaderboardName;
     var _hasWeeklyHistory = _serviceData[$ "hasWeeklyHistory"];
     
-    if (_system.__local)
+    if (PodiumGetOfflineOnly())
     {
         _serviceData.__ref = _leaderboardName;
     }
-    else if (_system.__steamAvailable)
+    else if (PODIUM_STEAM_AVAILABLE)
     {
         if (not _funcCheckPresence(_serviceData, "steam"))
         {

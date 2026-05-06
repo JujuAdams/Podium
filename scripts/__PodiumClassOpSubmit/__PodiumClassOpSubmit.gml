@@ -40,7 +40,7 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
         
         array_push(_activityArray, self);
         
-        if (_system.__steamAvailable)
+        if (PODIUM_STEAM_AVAILABLE)
         {
             buffer_resize(_buffer, string_byte_length(__metadataString));
             buffer_poke(_buffer, 0, buffer_text, __metadataString);
@@ -66,7 +66,7 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
         {
             __asyncID = __PodiumPlayFabSetStat(__formattedServiceData.playFab.statisticName, __value, function(_resultJSON)
             {
-                __Complete((_resultJSON == undefined)? PODIUM_STATE_ERROR : PODIUM_STATE_SUCCESS, _resultJSON);
+                __Complete((_resultJSON == undefined)? PODIUM_LEADERBOARD_ERROR : PODIUM_LEADERBOARD_SUCCESS, _resultJSON);
             });
         }
         else if (PODIUM_ON_SWITCH)
@@ -86,7 +86,7 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
         }
         else
         {
-            __Complete(PODIUM_STATE_ERROR, undefined);
+            __Complete(PODIUM_LEADERBOARD_ERROR, undefined);
         }
     }
     
@@ -116,7 +116,7 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
             PodiumClearRemoteCache(__formattedServiceData.leaderboardName, undefined, 0);
         }
         
-        __PodiumLocalScoreSetPending(__formattedServiceData.leaderboardName, (__status != PODIUM_STATE_SUCCESS));
+        __PodiumOfflineRecordSetPending(__formattedServiceData.leaderboardName, (__status != PODIUM_LEADERBOARD_SUCCESS));
         
         if (is_callable(__callback))
         {

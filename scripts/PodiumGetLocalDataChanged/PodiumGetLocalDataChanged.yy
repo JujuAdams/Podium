@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"PodiumGetLocalDataChanged",
   "parent":{
-    "name":"Local Data",
-    "path":"folders/Podium/Local Data.yy",
+    "name":"Local Offline Data",
+    "path":"folders/Podium/Local Offline Data.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

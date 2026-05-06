@@ -4,21 +4,21 @@ function PodiumExportLocalData()
 {
     static _system = __PodiumSystem();
     
-    var _localData = _system.__localData;
+    var _offlineRecordDict = _system.__offlineRecordDict;
     
     var _buffer = buffer_create(1024, buffer_grow, 1);
     buffer_write(_buffer, buffer_string, "POD");
     
     buffer_write(_buffer, buffer_u64, __PODIUM_OFFLINE_DATA_VERSION); //Version number
     
-    var _namesArray = struct_get_names(_localData);
+    var _namesArray = struct_get_names(_offlineRecordDict);
     buffer_write(_buffer, buffer_u64, array_length(_namesArray));
     
     var _i = 0;
     repeat(array_length(_namesArray))
     {
         var _name = _namesArray[_i];
-        var _struct = _localData[$ _name];
+        var _struct = _offlineRecordDict[$ _name];
         
         buffer_write(_buffer, buffer_string, _name);
         buffer_write(_buffer, buffer_u64,    _struct.__value);

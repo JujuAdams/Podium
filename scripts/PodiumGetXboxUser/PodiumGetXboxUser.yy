@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"PodiumGetXboxUser",
   "parent":{
-    "name":"Platform-specific",
-    "path":"folders/Podium/Platform-specific.yy",
+    "name":"Sign In",
+    "path":"folders/Podium/Sign In.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"__PodiumOfflineRecordSetPending",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__PodiumOfflineRecordSetPending",
+  "parent":{
+    "name":"(System)",
+    "path":"folders/Podium/(System).yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

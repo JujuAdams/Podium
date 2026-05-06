@@ -30,7 +30,7 @@ function PodiumImportLocalData(_string, _submitPendingScores = true)
             return false;
         }
         
-        var _localData = {};
+        var _offlineRecordDict = {};
         
         try
         {
@@ -66,11 +66,11 @@ function PodiumImportLocalData(_string, _submitPendingScores = true)
                 if (_leaderboardStruct == undefined)
                 {
                     __PodiumWarning($"Found offline record for leaderboard \"{_leaderboardName}\" but that leaderboard doesn't exist");
-                    _localData[$ _leaderboardName] = _offlineRecord;
+                    _offlineRecordDict[$ _leaderboardName] = _offlineRecord;
                 }
                 else if (_leaderboardStruct.__GetOfflineRecordValid(_offlineRecord))
                 {
-                    _localData[$ _leaderboardName] = _offlineRecord;
+                    _offlineRecordDict[$ _leaderboardName] = _offlineRecord;
                 }
                 else
                 {
@@ -103,11 +103,11 @@ function PodiumImportLocalData(_string, _submitPendingScores = true)
         }
         
         __localChanged = false;
-        __localData = _localData;
+        __offlineRecordDict = _offlineRecordDict;
         
-        if (_submitPendingScores && PodiumGetUserSignedIn())
+        if (_submitPendingScores && PodiumGetSignedIn())
         {
-            __PodiumLocalSubmitAllPending();
+            __PodiumSubmitAllPendingOfflineRecords();
         }
         
         return true;

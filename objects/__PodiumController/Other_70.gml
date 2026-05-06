@@ -1,28 +1,41 @@
 if (PODIUM_VERBOSE_ASYNC)
 {
-    show_debug_message($"Social:\n{json_encode(async_load, true)}");
+    __PodiumTrace($"Social (via `PODIUM_VERBOSE_ASYNC`):\n{json_encode(async_load, true)}");
 }
 
 with(__PodiumSystem())
 {
     if (PODIUM_ON_SWITCH && (async_load[? "event_type"] == "switch_npln_login_prearranged_user"))
     {
-        if (async_load[? "success"])
+        if (__signInState != PODIUM_USER_SIGNING_IN)
         {
-            var _oldSignedIn = PodiumGetUserSignedIn();
-            
+            __PodiumWarning("Unexpected user sign-in received");
+        }
+        else if (async_load[? "success"])
+        {
             __switchUserID = async_load[? "user_id"];
             
-            if (PODIUM_VERBOSE_ASYNC)
+            if (PODIUM_VERBOSE)
             {
                 __PodiumTrace($"Prearranged user logged in, user ID = \"{__switchUserID}\"");
             }
             
-            __PodiumSwitchTryCompleteLogin(_oldSignedIn);
+            switch_npln_leaderboard_set_user_data(__switchNPLNUserHandle, __username);
+            
+            if (PODIUM_VERBOSE)
+            {
+                __PodiumTrace($"Set NPLN username to \"{__username}\"");
+            }
+            
+            __PodiumUserSignedIn();
         }
         else
         {
+            __signInState = PODIUM_USER_SIGN_IN_FAILED;
+            
+            __switchNPLNUserHandle = undefined;
             __switchUserID = undefined;
+            
             __PodiumWarning("Prearranged user failed to log in");
         }
     }
@@ -60,7 +73,7 @@ with(__PodiumSystem())
             {
                 if (async_load[? "id"] == _opStruct.__asyncID)
                 {
-                    _opStruct.__Complete(async_load[? "success"]? PODIUM_STATE_SUCCESS : PODIUM_STATE_ERROR);
+                    _opStruct.__Complete(async_load[? "success"]? PODIUM_LEADERBOARD_SUCCESS : PODIUM_LEADERBOARD_ERROR);
                 }
             }
         }

@@ -7,6 +7,8 @@ function __PodiumConfigLeaderboards()
             serviceName: "testBestScore",
             displayType: lb_disp_numeric,
         },
+        
+        switch: undefined,
     });
     
     PodiumCreate({
@@ -16,6 +18,8 @@ function __PodiumConfigLeaderboards()
             serviceName: "testBestTime",
             displayType: lb_disp_time_sec,
         },
+        
+        switch: undefined,
     });
     
     PodiumCreate({
@@ -26,6 +30,8 @@ function __PodiumConfigLeaderboards()
             serviceName: "testDaily",
             displayType: lb_disp_numeric,
         },
+        
+        switch: undefined,
     });
     
     //PodiumCreate({

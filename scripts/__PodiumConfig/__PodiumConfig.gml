@@ -12,7 +12,7 @@
 
 /// Whether to force use of local data storage. This will ignore any remote or per-platform
 /// services.
-#macro PODIUM_FORCE_LOCAL_DATA  false
+#macro PODIUM_FORCE_OFFLINE_ONLY  false
 
 #macro PODIUM_DEBUG_DAY_OFFSET  0
 

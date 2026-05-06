@@ -14,6 +14,7 @@
 #macro PODIUM_ON_SWITCH       (os_type == os_switch)
 
 #macro PODIUM_USING_STEAMWORKS            (PODIUM_ON_DESKTOP && extension_exists("Steamworks"))
+#macro PODIUM_STEAM_AVAILABLE             (__PodiumSystem().__steamAvailable)
 #macro PODIUM_USING_GAMECENTER            (PODIUM_ON_IOS && extension_exists("GameCenter"))
 #macro PODIUM_USING_PLAY_SERVICES         (PODIUM_ON_ANDROID && extension_exists("GooglePlayServices"))
 #macro PODIUM_USING_GDK                   (PODIUM_ON_XBOX_SERIES || PODIUM_USING_WINDOWS_GDK)
@@ -26,9 +27,10 @@
 #macro PODIUM_RANGE_AROUND   2
 #macro PODIUM_RANGE_USER     3
 
-#macro PODIUM_USER_SIGNED_OUT  0
-#macro PODIUM_USER_SIGNING_IN  1
-#macro PODIUM_USER_SIGNED_IN   2
+#macro PODIUM_USER_SIGN_IN_FAILED  -2
+#macro PODIUM_USER_SIGNED_OUT      -1
+#macro PODIUM_USER_SIGNING_IN       0
+#macro PODIUM_USER_SIGNED_IN        1
 
 ///////
 // State Constants
@@ -38,22 +40,22 @@
 // leaderboard data. These constants do not reflect the state of submitting states.
 
 // Indicates there was an error receiving data. This means a request has been made and has failed.
-#macro PODIUM_STATE_ERROR   -1
+#macro PODIUM_LEADERBOARD_ERROR   -1
 
 // We do not have have any data nor have we sent a request. This state indicates that a request
 // must be sent before any data may be received. A leaderboard initializes into this state, it will
 // be reset to this state when a score is submitted to reflect the factor that the local user's
 // score may be represented in leaderboard data, and a leaderboard will be reset to this date when
 // `PodiumClearRemoteCache()` is called.
-#macro PODIUM_STATE_NULL  0
+#macro PODIUM_LEADERBOARD_NULL  0
 
 // A request has been queued or sent and we are waiting for a response.
-#macro PODIUM_STATE_WAITING  1
+#macro PODIUM_LEADERBOARD_WAITING  1
 
 // A request has been sent and a response has been received. This does not necessarily mean that
 // we received useful data and you should still check that the return value from `PodiumGetScores()`
 // is valid (not `undefined`) before using it.
-#macro PODIUM_STATE_SUCCESS  2
+#macro PODIUM_LEADERBOARD_SUCCESS  2
 
 ///////
 // Priority

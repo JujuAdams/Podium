@@ -2,5 +2,5 @@
 
 function __PodiumError(_string)
 {
-    show_error($" \nPodium:\n{_string}\n ", true);
+    show_error($" \nPodium {PODIUM_VERSION}:\n{_string}\n ", true);
 }

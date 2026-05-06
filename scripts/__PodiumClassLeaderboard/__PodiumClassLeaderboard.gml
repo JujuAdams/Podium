@@ -54,11 +54,11 @@ function __PodiumClassLeaderboard(_serviceData) constructor
         
         if (__serviceData.hasWeeklyHistory)
         {
-            if (_system.__local)
+            if (PodiumGetOfflineOnly())
             {
                 // n/a
             }
-            else if (_system.__steamAvailable)
+            else if (PODIUM_STEAM_AVAILABLE)
             {
                 var _date = date_inc_day(PodiumGetTime(), _seasonOffset);
                 _serviceRefFormatted += $"_y{date_get_year(_date)}_d{date_get_day_of_year(_date)}";

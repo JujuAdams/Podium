@@ -12,12 +12,15 @@ function PodiumInitialize()
         
         var _fallback = true;
         
-        if (PODIUM_FORCE_LOCAL_DATA)
+        if (PODIUM_FORCE_OFFLINE_ONLY)
         {
-            __PodiumTrace($"Forcing local data use via `PODIUM_FORCE_LOCAL_DATA`");
+            __PodiumTrace($"Forcing offline data use via `PODIUM_FORCE_OFFLINE_ONLY`");
+            
+            __signInState = PODIUM_USER_SIGNED_IN;
+            __username = "Player";
             
             _fallback = false;
-            __local = true;
+            __offlineOnly = true;
         }
         else if (PODIUM_ON_DESKTOP)
         {
@@ -50,7 +53,7 @@ function PodiumInitialize()
                 }
                 
                 _fallback = false;
-                __local = false;
+                __offlineOnly = false;
             }
             else if (PODIUM_USING_STEAMWORKS)
             {
@@ -77,8 +80,16 @@ function PodiumInitialize()
                     __PodiumSoftError("Steam extension present in game but failed to initialize\nPlease check your Steam extension settings and that Steam is running");
                 }
                 
+                __signInState = PODIUM_USER_SIGNED_IN;
+                __username = steam_get_persona_name();
+                
+                if (PODIUM_VERBOSE)
+                {
+                    __PodiumTrace($"Found Steam username \"{__username}\"");
+                }
+                
                 _fallback = false;
-                __local = false;
+                __offlineOnly = false;
             }
         }
         else if (PODIUM_ON_IOS)
@@ -101,7 +112,7 @@ function PodiumInitialize()
                 }
                 
                 _fallback = false;
-                __local = false;
+                __offlineOnly = false;
             }
         }
         else if (PODIUM_ON_ANDROID)
@@ -137,7 +148,7 @@ function PodiumInitialize()
                     }
                     
                     _fallback = false;
-                    __local = false;
+                    __offlineOnly = false;
                 }
                 else
                 {
@@ -164,7 +175,7 @@ function PodiumInitialize()
             psn_init_leaderboard(PODIUM_PSN_LEADERBOARD_SERVICE_LABEL);
             
             _fallback = false;
-            __local = false;
+            __offlineOnly = false;
         }
         else if (PODIUM_ON_XBOX_SERIES)
         {
@@ -178,7 +189,7 @@ function PodiumInitialize()
             }
             
             _fallback = false;
-            __local = false;
+            __offlineOnly = false;
         }
         else if (PODIUM_ON_SWITCH)
         {
@@ -192,20 +203,21 @@ function PodiumInitialize()
             }
             
             _fallback = false;
-            __local = false;
+            __offlineOnly = false;
         }
         else
         {          
-            __PodiumTrace($"Platform ({os_type}) has no explicit support, falling back on locally stored data");
-            
-            _fallback = false;
-            __local = true;
+            __PodiumTrace($"Platform ({os_type}) has no explicit support");
         }
         
         if (_fallback)
         {
-            __PodiumTrace($"Remote service not available, falling back on locally stored data");
-            __local = true;
+            __PodiumTrace($"Remote service not available, falling back on offline data");
+            
+            __signInState = PODIUM_USER_SIGNED_IN;
+            __username = "Player";
+            
+            __offlineOnly = true;
         }
         
         __runningDefinitions = true;

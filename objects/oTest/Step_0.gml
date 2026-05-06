@@ -2,7 +2,7 @@ gdk_update();
 psn_tick();
 steam_update();
 
-var _signedIn = PodiumGetUserSignedIn();
+var _signedIn = PodiumGetSignedIn();
 if (signedIn != _signedIn)
 {
     signedIn = _signedIn;
@@ -16,7 +16,7 @@ if (signedIn != _signedIn)
         //PodiumGetScores("best time");
         //PodiumGetScores("daily challenge");
         
-        PodiumGetUserScore("all time score");
+        PodiumGetScores("all time score", PODIUM_RANGE_USER);
         
         //switch_npln_leaderboard_get_category_data(PodiumGetSwitchNPLNUserHandle(), "testDaily", 0);
         //switch_npln_leaderboard_get_season_data(PodiumGetSwitchNPLNUserHandle(), "testDaily", 0, 0);
@@ -32,8 +32,8 @@ repeat(gamepad_get_device_count())
         show_debug_message($"Found input from gamepad {_i}");
         
         gamepad = _i;
-        PodiumSetPSGamepad(_i);
-        PodiumSetXboxUser(xboxone_user_for_pad(_i));
+        PodiumSignInPlayStation(_i);
+        PodiumSignInXbox(xboxone_user_for_pad(_i));
     }
     
     ++_i;

@@ -1,29 +1,12 @@
 var _string = $"Podium {PODIUM_VERSION}, {PODIUM_DATE}\n";
 _string += $"Gamepad = {gamepad} (press gp_face1 to choose gamepad)\n";
 _string += $"\n";
-_string += $"User signed in  = {PodiumGetUserSignedIn()? "true" : "false"}\n";
-_string += $"Using local data = {PodiumGetUsingLocal()? "true" : "false"}\n";
+_string += $"User signed in = {PodiumGetSignedIn()? "true" : "false"}\n";
+_string += $"Sign in state = {PodiumGetSignedInState()}\n";
 _string += $"Busy = {PodiumGetBusy()? "true" : "false"}\n";
 _string += $"Jobs = {PodiumGetJobs()}\n";
-
-if (PodiumGetUsingLocal())
-{
-    _string += $"Local changed = {PodiumGetLocalDataChanged()? "true" : "false"}\n";
-}
-
 _string += $"\n";
-
-if (PodiumGetUsingLocal())
-{
-    _string += $"[E] / [start]  = Export local data\n";
-    _string += $"[I] / [select] = Import local data\n";
-    _string += $"\n";
-}
-
-if (PodiumGetUserSignedIn())
-{
-    _string += $"\"all time score\" score = {json_stringify(PodiumGetUserScore("all time score"), true)}\n";
-}
+_string += $"\"all time score\" score = {json_stringify(PodiumGetScores("all time score", PODIUM_RANGE_USER), true)}\n";
 
 draw_set_font(fntConsolas);
 draw_text(10, 10, _string);

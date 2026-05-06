@@ -1,6 +1,6 @@
 function __PodiumClassScoreCache() constructor
 {
-    __state = PODIUM_STATE_NULL;
+    __state = PODIUM_LEADERBOARD_NULL;
     __data  = [];
     __lastReceivedTime = -infinity;
     
@@ -8,7 +8,7 @@ function __PodiumClassScoreCache() constructor
     
     static __ClearCache = function()
     {
-        __SetState(PODIUM_STATE_NULL);
+        __SetState(PODIUM_LEADERBOARD_NULL);
         
         __data = [];
         __lastReceivedTime = -infinity;
@@ -60,7 +60,7 @@ function __PodiumClassScoreCache() constructor
     //    
     //    __lastRequestTime = current_time;
     //    
-    //    if (_system.__local)
+    //    if (PodiumGetOfflineOnly())
     //    {
     //        //TODO
     //    }
@@ -115,7 +115,7 @@ function __PodiumClassScoreCache() constructor
     //                }
     //                else
     //                {
-    //                    __state = PODIUM_STATE_SUCCESS;
+    //                    __state = PODIUM_LEADERBOARD_SUCCESS;
     //                }
     //                
     //                __ExecuteCallback();
@@ -174,7 +174,7 @@ function __PodiumClassScoreCache() constructor
     //                }
     //                else
     //                {
-    //                    __state = PODIUM_STATE_SUCCESS;
+    //                    __state = PODIUM_LEADERBOARD_SUCCESS;
     //                }
     //                
     //                __ExecuteCallback();
@@ -226,7 +226,7 @@ function __PodiumClassScoreCache() constructor
     //                    }
     //                    else
     //                    {
-    //                        __state = PODIUM_STATE_SUCCESS;
+    //                        __state = PODIUM_LEADERBOARD_SUCCESS;
     //                    }
     //                    
     //                    __ExecuteCallback();
@@ -276,7 +276,7 @@ function __PodiumClassScoreCache() constructor
     //                    }
     //                    else
     //                    {
-    //                        __state = PODIUM_STATE_SUCCESS;
+    //                        __state = PODIUM_LEADERBOARD_SUCCESS;
     //                    }
     //                    
     //                    __ExecuteCallback();
@@ -305,14 +305,14 @@ function __PodiumClassScoreCache() constructor
     //        
     //        if (__asyncID != undefined)
     //        {
-    //            if (__state != PODIUM_STATE_ERROR)
+    //            if (__state != PODIUM_LEADERBOARD_ERROR)
     //            {
     //                if (PODIUM_VERBOSE)
     //                {
     //                    __PodiumTrace($"Started leaderboard fetch for \"{__formattedServiceData}\" using range `{__range}`");
     //                }
     //                
-    //                __state = PODIUM_STATE_WAITING;
+    //                __state = PODIUM_LEADERBOARD_WAITING;
     //            }
     //        }
     //    }

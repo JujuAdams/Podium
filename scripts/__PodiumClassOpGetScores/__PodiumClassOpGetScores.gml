@@ -127,7 +127,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                 
                 if (__range == PODIUM_RANGE_TOP)
                 {
-                    __asyncID = __PodiumPlayFabGetLeaderboard(__formattedServiceData.playFab.leaderboardName, 1, 10, _callbackFunction);
+                    __asyncID = __PodiumPlayFabGetLeaderboardTop(__formattedServiceData.playFab.leaderboardName, 1, 10, _callbackFunction);
                 }
                 else if (__range == PODIUM_RANGE_FRIENDS)
                 {
@@ -139,7 +139,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                 }
                 else if (__range == PODIUM_RANGE_USER)
                 {
-                    __asyncID = __PodiumPlayFabGetLeaderboardAround(__formattedServiceData.playFab.leaderboardName, 0, _callbackFunction);
+                    __asyncID = __PodiumPlayFabGetLeaderboardUser(__formattedServiceData.playFab.leaderboardName, _callbackFunction);
                 }
             }
             else
@@ -312,7 +312,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                         repeat(array_length(_rankingsArray))
                         {
                             var _ranking = _rankingsArray[_i];
-                            array_push(_data, new __PodiumClassRecord(_ranking.DisplayName, _ranking.Scores[0], _ranking.Rank, _scoreStruct.UserID, "", false));
+                            array_push(_data, new __PodiumClassRecord(_ranking.DisplayName, _ranking.Scores[0], _ranking.Rank, _ranking.Entity.Id, "", false));
                             ++_i;
                         }
                     }

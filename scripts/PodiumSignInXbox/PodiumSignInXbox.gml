@@ -33,6 +33,13 @@ function PodiumSignInXbox(_xboxUser = 0)
             if (_xboxUser <= 0)
             {
                 __signInState = PODIUM_USER_SIGNED_OUT;
+                
+                __playFabLoggedIn              = false;
+                __playFabXboxTokenAndSignature = undefined;
+                __playFabSessionTicket         = undefined;
+                __playFabEntityToken           = undefined;
+                __playFabEntityID              = undefined;
+                
                 return;
             }
             

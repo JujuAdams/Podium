@@ -58,6 +58,7 @@ function __PodiumSystem()
         __playFabXboxTokenAndSignature = undefined;
         __playFabSessionTicket         = undefined;
         __playFabEntityToken           = undefined;
+        __playFabEntityID              = undefined;
         
         __leaderboardDict            = {};
         __httpAsyncIDMap             = ds_map_create();

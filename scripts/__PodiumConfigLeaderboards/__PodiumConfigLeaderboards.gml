@@ -8,7 +8,10 @@ function __PodiumConfigLeaderboards()
             displayType: lb_disp_numeric,
         },
         
-        switch: undefined,
+        playFab: {
+            statisticName: "testDescendingStat",
+            leaderboardName: "testDescending",
+        },
     });
     
     PodiumCreate({
@@ -19,7 +22,10 @@ function __PodiumConfigLeaderboards()
             displayType: lb_disp_time_sec,
         },
         
-        switch: undefined,
+        playFab: {
+            statisticName: "testAscendingStat",
+            leaderboardName: "testAscending",
+        },
     });
     
     PodiumCreate({
@@ -31,7 +37,10 @@ function __PodiumConfigLeaderboards()
             displayType: lb_disp_numeric,
         },
         
-        switch: undefined,
+        playFab: {
+            statisticName: "testDailyStat",
+            leaderboardName: "testDaily",
+        },
     });
     
     //PodiumCreate({

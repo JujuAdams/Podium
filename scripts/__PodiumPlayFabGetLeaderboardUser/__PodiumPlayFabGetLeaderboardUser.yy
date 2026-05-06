@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"__PodiumPlayFabGetLeaderboard",
+  "%Name":"__PodiumPlayFabGetLeaderboardUser",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"__PodiumPlayFabGetLeaderboard",
+  "name":"__PodiumPlayFabGetLeaderboardUser",
   "parent":{
     "name":"HTTP Requests",
     "path":"folders/Podium/(System)/PlayFab/HTTP Requests.yy",

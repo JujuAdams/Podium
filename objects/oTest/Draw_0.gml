@@ -1,6 +1,8 @@
 var _string = $"Podium {PODIUM_VERSION}, {PODIUM_DATE}\n";
 _string += $"Gamepad = {gamepad} (press gp_face1 to choose gamepad)\n";
 _string += $"\n";
+_string += $"User ID = \"{PodiumGetUserID()}\"\n";
+_string += $"Username = \"{PodiumGetUserName()}\"\n";
 _string += $"User signed in = {PodiumGetSignedIn()? "true" : "false"}\n";
 _string += $"Sign in state = {PodiumGetSignedInState()}\n";
 _string += $"Busy = {PodiumGetBusy()? "true" : "false"}\n";

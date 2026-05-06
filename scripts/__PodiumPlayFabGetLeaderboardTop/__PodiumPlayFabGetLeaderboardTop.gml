@@ -3,7 +3,7 @@
 /// @param count
 /// @param [callback]
 
-function __PodiumPlayFabGetLeaderboard(_leaderboardName, _startPosition, _count, _callback = undefined)
+function __PodiumPlayFabGetLeaderboardTop(_leaderboardName, _startPosition, _count, _callback = undefined)
 {
     static _system = __PodiumSystem();
     static _headerMap = ds_map_create();

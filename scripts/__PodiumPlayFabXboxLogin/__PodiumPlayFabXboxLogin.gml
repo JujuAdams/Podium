@@ -54,6 +54,7 @@ function __PodiumPlayFabXboxLogin()
                 var _playFabID     = _resultJSON.data.PlayFabId;
                 var _entityToken   = _resultJSON.data.EntityToken.EntityToken;
                 var _entityType    = _resultJSON.data.EntityToken.Entity.Type;
+                var _entityID      = _resultJSON.data.EntityToken.Entity.Id;
                 
                 if (_entityType != "title_player_account")
                 {
@@ -72,6 +73,7 @@ function __PodiumPlayFabXboxLogin()
                 __playFabLoggedIn      = true;
                 __playFabSessionTicket = _sessionTicket;
                 __playFabEntityToken   = _entityToken;
+                __playFabEntityID      = _entityID;
                 
                 if (__signInState == PODIUM_USER_SIGNING_IN)
                 {

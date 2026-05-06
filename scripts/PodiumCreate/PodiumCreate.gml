@@ -171,7 +171,7 @@ function PodiumCreate(_serviceData)
         }
         
         var _platformData = _serviceData.playFab;
-        if (_platformData == undefined)
+        if (_platformData != undefined)
         {
             if ((not _funcCheckPresence(_platformData, "statisticName")) || (not _funcCheckPresence(_platformData, "leaderboardName")))
             {

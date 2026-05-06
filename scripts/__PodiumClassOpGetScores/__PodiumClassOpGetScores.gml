@@ -116,7 +116,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                     }
                     else if (_resultJSON[$ "status"] != "OK")
                     {
-                        __PodiumWarning($"Leaderboard data \"{__formattedServiceData.leaderboardName}\" returned as not \"OK\"");
+                        __PodiumWarning($"Leaderboard data \"{__formattedServiceData.playFab.leaderboardName}\" returned as not \"OK\"");
                         __Complete(PODIUM_LEADERBOARD_ERROR, undefined);
                     }
                     else
@@ -165,6 +165,8 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
     {
         if (__completed) return;
         
+        var _leaderboardName = __formattedServiceData.leaderboardName;
+        
         __completed = true;
         __activityTime = PodiumGetOfflineOnly()? -infinity : current_time;
         
@@ -185,7 +187,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
         var _scoresStruct = __leaderboard.__EnsureScoresStruct(__range, __seasonOffset);
         if (_scoresStruct == undefined)
         {
-            __PodiumSoftError($"Scores struct not found for leaderboard \"{__formattedServiceData}\"");
+            __PodiumSoftError($"Scores struct not found for leaderboard \"{_leaderboardName}\"");
         }
         else
         {
@@ -298,7 +300,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                         show_debug_message(_error);
                     }
                     
-                    __PodiumWarning($"Failed to find expected data in returned leaderboard data \"{__formattedServiceData.leaderboardName}\"");
+                    __PodiumWarning($"Failed to find expected data in returned leaderboard data \"{_leaderboardName}\"");
                     __status = PODIUM_LEADERBOARD_ERROR;
                 }
                 
@@ -321,7 +323,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                             show_debug_message(_error);
                         }
                         
-                        __PodiumWarning($"Leaderboard data \"{__formattedServiceData.leaderboardName}\" failed to parse");
+                        __PodiumWarning($"Leaderboard data \"{_leaderboardName}\" failed to parse");
                         __status = PODIUM_LEADERBOARD_ERROR;
                     }
                     
@@ -337,9 +339,18 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                 __PodiumTrace($"Completing GET_SCORES operation {string(ptr(self))}: final status = {__status}, found {array_length(_data)} entries");
             }
             
-            //TODO - Find player scores and update our local cache
-            
             _scoresStruct.__ReceiveData(_data, __status);
+            
+            //Find player scores and update our local cache provided that this is not a historic score
+            if ((__status == PODIUM_LEADERBOARD_SUCCESS) && (__seasonOffset == 0))
+            {
+                var _playerIndex = PodiumGetUserScoreIndex(_leaderboardName, __range, __seasonOffset);
+                if (_playerIndex >= 0)
+                {
+                    var _playerRecord = _data[_playerIndex];
+                    __PodiumStoreOfflineRecord(_leaderboardName, _playerRecord.value, _playerRecord.metadataString, false);
+                }
+            }
         }
         
         if (is_callable(__callback))

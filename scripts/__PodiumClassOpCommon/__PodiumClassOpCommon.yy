@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"__PodiumClassOpCommon",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__PodiumClassOpCommon",
+  "parent":{
+    "name":"Classes",
+    "path":"folders/Podium/(System)/Classes.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

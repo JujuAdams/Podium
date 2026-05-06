@@ -11,12 +11,18 @@ function PodiumSetPSGamepad(_gamepad)
     
     if (PODIUM_ON_PS5)
     {
-        psn_init_trophy(_gamepad);
-        _system.__psGamepad = _gamepad;
-        
-        if (PODIUM_VERBOSE)
+        if ((_gamepad != _system.__psGamepad) && (_gamepad >= 0))
         {
-            __PodiumTrace($"Set PlayStation gamepad to {_gamepad}");
+            psn_init_trophy(_gamepad);
+            _system.__psGamepad = _gamepad;
+            
+            if (PODIUM_VERBOSE)
+            {
+                __PodiumTrace($"Set PlayStation gamepad to {_gamepad}");
+            }
+            
+            __PodiumClearAllCaches();
+            __PodiumLocalSubmitAllPending();
         }
     }
 }

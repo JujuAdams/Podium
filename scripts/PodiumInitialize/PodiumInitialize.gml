@@ -1,3 +1,5 @@
+/// Initializes leaderboard services and calls `__PodiumConfigLeaderboards` afterwards.
+
 function PodiumInitialize()
 {
     with(__PodiumSystem())
@@ -8,17 +10,14 @@ function PodiumInitialize()
             return;
         }
         
-        __runningDefinitions = true;
         var _fallback = true;
         
         if (PODIUM_FORCE_LOCAL_DATA)
         {
-            __PodiumTrace($"Forcing local data use via `PODIUM_FORCE_LOCAL_DATA` (__PodiumDefinitionsLocal)");
+            __PodiumTrace($"Forcing local data use via `PODIUM_FORCE_LOCAL_DATA`");
             
             _fallback = false;
-            
             __local = true;
-            __PodiumDefinitionsLocal();
         }
         else if (PODIUM_ON_DESKTOP)
         {
@@ -41,25 +40,20 @@ function PodiumInitialize()
                     __PodiumTrace("Using GDK extension");
                 }
                 
-                _fallback = false;
-                
-                __local = false;
-                
                 if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
                 {
-                    __PodiumTrace("Using PlayFab leaderboards (__PodiumDefinitionsPlayFab)");
-                    __PodiumDefinitionsPlayFab();
+                    __PodiumTrace("Using PlayFab leaderboards on desktop");
                 }
                 else if (PODIUM_USING_XBOX_LEADERBOARDS)
                 {
-                    __PodiumTrace("Using Xbox native leaderboards (__PodiumDefinitionsXbox)");
-                    __PodiumDefinitionsXbox();
+                    __PodiumTrace("Using Xbox native leaderboards on Windows");
                 }
+                
+                _fallback = false;
+                __local = false;
             }
             else if (PODIUM_USING_STEAMWORKS)
-            { 
-                _fallback = false;
-                
+            {
                 try
                 {
                     __steamAvailable = steam_initialised();
@@ -75,7 +69,7 @@ function PodiumInitialize()
                     
                     if (PODIUM_VERBOSE)
                     {
-                        __PodiumTrace("Using Steam remote service with `__PodiumDefinitionsSteam`");
+                        __PodiumTrace("Using Steam remote service");
                     }
                 }
                 else
@@ -83,8 +77,8 @@ function PodiumInitialize()
                     __PodiumSoftError("Steam extension present in game but failed to initialize\nPlease check your Steam extension settings and that Steam is running");
                 }
                 
+                _fallback = false;
                 __local = false;
-                __PodiumDefinitionsSteam();
             }
         }
         else if (PODIUM_ON_IOS)
@@ -101,13 +95,12 @@ function PodiumInitialize()
             {
                 __PodiumTrace("GameCenter extension is present");
                 
-                _fallback = false;
-                
                 if (PODIUM_VERBOSE)
                 {
-                    __PodiumTrace("Using GameCenter remote service with `__PodiumDefinitionsGameCenter`");
+                    __PodiumTrace("Using GameCenter remote service");
                 }
                 
+                _fallback = false;
                 __local = false;
             }
         }
@@ -125,8 +118,6 @@ function PodiumInitialize()
             {
                 __PodiumTrace("Googe Play Services extension is present");
                 
-                _fallback = false;
-                
                 try
                 {
                     __playServicesAvailable = GooglePlayServices_IsAvailable();
@@ -142,11 +133,10 @@ function PodiumInitialize()
                     
                     if (PODIUM_VERBOSE)
                     {
-                        __PodiumTrace("Using Googe Play Services with `__PodiumDefinitionsPlayServices`");
+                        __PodiumTrace("Using Googe Play Services");
                     }
                     
                     _fallback = false;
-                    
                     __local = false;
                 }
                 else
@@ -163,7 +153,7 @@ function PodiumInitialize()
             
             if (PODIUM_VERBOSE)
             {
-                __PodiumTrace("Using PlayStation remote service with `__PodiumDefinitionsPlayStation`");
+                __PodiumTrace("Using PlayStation remote service");
             }
             
             if (PODIUM_PSN_LEADERBOARD_SERVICE_LABEL == undefined)
@@ -174,7 +164,6 @@ function PodiumInitialize()
             psn_init_leaderboard(PODIUM_PSN_LEADERBOARD_SERVICE_LABEL);
             
             _fallback = false;
-            
             __local = false;
         }
         else if (PODIUM_ON_XBOX_SERIES)
@@ -185,21 +174,11 @@ function PodiumInitialize()
             
             if (PODIUM_VERBOSE)
             {
-                __PodiumTrace("Using Xbox remote service with `__PodiumDefinitionsXbox`");
+                __PodiumTrace("Using Xbox remote service");
             }
             
             _fallback = false;
-            
             __local = false;
-            
-            if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
-            {
-                __PodiumDefinitionsXbox();
-            }
-            else if (PODIUM_USING_XBOX_LEADERBOARDS)
-            {
-                __PodiumDefinitionsPlayFab();
-            }
         }
         else if (PODIUM_ON_SWITCH)
         {
@@ -209,32 +188,30 @@ function PodiumInitialize()
             
             if (PODIUM_VERBOSE)
             {
-                __PodiumTrace("Using Switch remote service with `__PodiumDefinitionsSwitch`");
+                __PodiumTrace("Using Switch remote service");
             }
             
             _fallback = false;
-            
             __local = false;
-            __PodiumDefinitionsSwitch();
         }
         else
         {          
-            __PodiumTrace($"Platform ({os_type}) has no explicit support, falling back on locally stored data with `__PodiumDefinitionsLocal`");
+            __PodiumTrace($"Platform ({os_type}) has no explicit support, falling back on locally stored data");
             
             _fallback = false;
-            
             __local = true;
-            __PodiumDefinitionsLocal();
         }
         
         if (_fallback)
         {
-            __PodiumTrace($"Remote service not available, falling back on locally stored data with `__PodiumDefinitionsLocal`");
-            
+            __PodiumTrace($"Remote service not available, falling back on locally stored data");
             __local = true;
-            __PodiumDefinitionsLocal();
         }
         
+        __runningDefinitions = true;
+        __PodiumConfigLeaderboards();
         __runningDefinitions = false;
+        
+        __initialized = true;
     }
 }

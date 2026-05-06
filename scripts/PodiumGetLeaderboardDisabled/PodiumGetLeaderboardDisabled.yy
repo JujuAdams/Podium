@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"PodiumGetLeaderboardDisabled",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"PodiumGetLeaderboardDisabled",
+  "parent":{
+    "name":"Leaderboards",
+    "path":"folders/Podium/Leaderboards.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

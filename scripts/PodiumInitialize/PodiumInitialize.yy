@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"PodiumInitialize",
   "parent":{
-    "name":"Initialization",
-    "path":"folders/Podium/Initialization.yy",
+    "name":"Podium",
+    "path":"folders/Podium.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

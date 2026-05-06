@@ -11,13 +11,10 @@ function PodiumSetSwitchNickname(_nickname)
     
     with(_system)
     {
-        if (not PodiumGetUserSignedIn())
+        if (__switchNickname != _nickname)
         {
-            __PodiumSoftError("Cannot set Switch nickname, NPLN user handle has not been set by `PodiumSetSwitchNPLNUserHandle()`");
-        }
-        else
-        {
-            switch_npln_leaderboard_set_user_data(__switchNPLNUserHandle, _nickname);
+            __switchNickname = _nickname;
+            __PodiumSwitchTryCompleteLogin(false);
         }
     }
 }

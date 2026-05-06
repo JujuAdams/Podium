@@ -18,7 +18,7 @@ function SwitchLogInDefaultAccount()
         show_debug_message($"Failed to login user");
     }
     
-    var _userHandle = switch_npln_login_prearranged_user(_accountIndex, 0, "t-01234567") ?? 0;
+    var _userHandle = switch_npln_login_prearranged_user(_accountIndex, 0, "") ?? 0;
     show_debug_message($"NPLN user handle is {ptr(_userHandle)}");
     
     if (_userHandle == 0)

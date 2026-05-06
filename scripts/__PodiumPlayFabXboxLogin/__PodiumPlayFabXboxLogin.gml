@@ -69,9 +69,17 @@ function __PodiumPlayFabXboxLogin()
             
             with(__PodiumSystem())
             {
+                var _oldSignedIn = PodiumGetUserSignedIn();
+                
                 __playFabLoggedIn      = true;
                 __playFabSessionTicket = _sessionTicket;
                 __playFabEntityToken   = _entityToken;
+                
+                //Submit all pending local scores if we're newly signed in
+                if ((not _oldSignedIn) && PodiumGetUserSignedIn())
+                {
+                    __PodiumLocalSubmitAllPending();
+                }
             }
             
             if (PODIUM_VERBOSE)

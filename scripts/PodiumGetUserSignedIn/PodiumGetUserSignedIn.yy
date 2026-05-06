@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"PodiumGetUserSignedIn",
   "parent":{
-    "name":"Podium",
-    "path":"folders/Podium.yy",
+    "name":"Global Getters",
+    "path":"folders/Podium/Global Getters.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

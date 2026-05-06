@@ -27,9 +27,5 @@ with(__PodiumSystem())
                 }
             }
         }
-        else if (PODIUM_ON_SWITCH)
-        {
-            
-        }
     }
 }

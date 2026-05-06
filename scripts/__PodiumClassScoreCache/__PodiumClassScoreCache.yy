@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"__PodiumClassScoreCache",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__PodiumClassScoreCache",
+  "parent":{
+    "name":"Classes",
+    "path":"folders/Podium/(System)/Classes.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

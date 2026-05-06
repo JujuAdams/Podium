@@ -9,27 +9,36 @@ function PodiumSetXboxUser(_xboxUser)
     
     if (PODIUM_USING_GDK)
     {
-        _system.__xboxUser = int64(_xboxUser);
-        
-        if (PODIUM_VERBOSE)
+        if (_system.__xboxUser != _xboxUser)
         {
-            __PodiumTrace($"Set Xbox user to {_xboxUser}");
-        }
-        
-        if (_xboxUser > 0)
-        {
-            if (PODIUM_USING_XBOX_LEADERBOARDS)
+            _system.__xboxUser = int64(_xboxUser);
+            
+            if (PODIUM_VERBOSE)
             {
-                xboxone_stats_add_user(_xboxUser);
+                __PodiumTrace($"Set Xbox user to {_xboxUser}");
             }
-            else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
+            
+            if (_xboxUser > 0)
             {
-                //FIXME - It's possible for tokens to get confused if you set the Xbox user rapidly
+                _system.__xboxModernGamertag = xboxone_modern_gamertag_for_user(_xboxUser);
                 
-                _system.__playFabLoggedIn = false;
-                
-                __PodiumPlayFabXboxRequestToken();
+                if (PODIUM_USING_XBOX_LEADERBOARDS)
+                {
+                    xboxone_stats_setup(undefined, undefined, undefined); //TODO
+                    xboxone_stats_add_user(_xboxUser);
+                }
+                else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
+                {
+                    //FIXME - It's possible for tokens to get confused if you set the Xbox user rapidly
+                    
+                    _system.__playFabLoggedIn = false;
+                    
+                    __PodiumPlayFabXboxRequestToken();
+                }
             }
+            
+            __PodiumClearAllCaches();
+            __PodiumLocalSubmitAllPending();
         }
     }
 }

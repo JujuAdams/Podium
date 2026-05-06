@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"__PodiumLocalScoreSetPending",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__PodiumLocalScoreSetPending",
+  "parent":{
+    "name":"(System)",
+    "path":"folders/Podium/(System).yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

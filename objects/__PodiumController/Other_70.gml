@@ -5,7 +5,28 @@ if (PODIUM_VERBOSE_ASYNC)
 
 with(__PodiumSystem())
 {
-    if (PODIUM_ON_PS5 && (async_load[? "id"] == PSN_LEADERBOARD_SCORE_RANGE_MSG))
+    if (PODIUM_ON_SWITCH && (async_load[? "event_type"] == "switch_npln_login_prearranged_user"))
+    {
+        if (async_load[? "success"])
+        {
+            var _oldSignedIn = PodiumGetUserSignedIn();
+            
+            __switchUserID = async_load[? "user_id"];
+            
+            if (PODIUM_VERBOSE_ASYNC)
+            {
+                __PodiumTrace($"Prearranged user logged in, user ID = \"{__switchUserID}\"");
+            }
+            
+            __PodiumSwitchTryCompleteLogin(_oldSignedIn);
+        }
+        else
+        {
+            __switchUserID = undefined;
+            __PodiumWarning("Prearranged user failed to log in");
+        }
+    }
+    else if (PODIUM_ON_PS5 && (async_load[? "id"] == PSN_LEADERBOARD_SCORE_RANGE_MSG))
     {
         var _leaderboardID = async_load[? "leaderboardid"]; //The actual ID we want to check against
         

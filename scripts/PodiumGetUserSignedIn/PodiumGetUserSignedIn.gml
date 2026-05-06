@@ -27,7 +27,7 @@ function PodiumGetUserSignedIn()
     }
     else if (PODIUM_ON_SWITCH)
     {
-        return is_struct(_system.__switchNPLNUserHandle);
+        return (is_struct(_system.__switchNPLNUserHandle) && (_system.__switchUserID != undefined));
     }
     else if (_system.__local)
     {

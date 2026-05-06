@@ -1,13 +1,13 @@
 #macro __PODIUM_SWITCH_CURRENT_SEASON  (-2147483648)
 
-#macro PODIUM_MIN_DELAY  100 //ms between requests
+#macro PODIUM_MIN_DELAY  500 //ms between requests
 #macro PODIUM_MAX_FREQUENCY  25  //per minute
 #macro __PODIUM_MAX_SIMULTANEOUS_OPERATIONS  1
 
 #macro __PODIUM_OP_SUBMIT      0
 #macro __PODIUM_OP_GET_SCORES  1
 
-#macro __PODIUM_RANGE_USER  100
+#macro __PODIUM_OFFLINE_DATA_VERSION  2
 
 __PodiumSystem();
 
@@ -30,6 +30,8 @@ function __PodiumSystem()
         __initialized = false;
         __runningDefinitions = false;
         
+        __signInState = PODIUM_USER_SIGNED_OUT;
+        
         __local        = false;
         __localChanged = false;
         __localData    = {};
@@ -39,9 +41,14 @@ function __PodiumSystem()
         __queuedArray   = [];
         __activityArray = [];
         
-        __psGamepad            = -1;
-        __xboxUser             = int64(0);
-        __switchNPLNUserHandle = 0;
+        __psGamepad = -1;
+        
+        __xboxUser           = int64(0);
+        __xboxModernGamertag = "";
+        
+        __switchNPLNUserHandle = undefined;
+        __switchNickname       = "";
+        __switchUserID         = undefined;
         
         __steamAvailable        = false;
         __playServicesAvailable = false;

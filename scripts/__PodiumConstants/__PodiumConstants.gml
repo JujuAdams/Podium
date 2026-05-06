@@ -1,5 +1,5 @@
-#macro PODIUM_VERSION  "0.0.3-alpha"
-#macro PODIUM_DATE     "2026-04-30"
+#macro PODIUM_VERSION  "0.1.0-alpha"
+#macro PODIUM_DATE     "2026-05-06"
 
 #macro PODIUM_RUNNING_FROM_IDE  (GM_build_type == "run")
 
@@ -21,24 +21,48 @@
 #macro PODIUM_USING_XBOX_LEADERBOARDS     (PODIUM_USING_GDK && (not PODIUM_GDK_USES_PLAYFAB_LEADERBOARDS))
 #macro PODIUM_USING_PLAYFAB_LEADERBOARDS  (PODIUM_USING_GDK && PODIUM_GDK_USES_PLAYFAB_LEADERBOARDS)
 
-#macro PODIUM_REFRESH_NEVER    0
-#macro PODIUM_REFRESH_DAILY    1
-#macro PODIUM_REFRESH_WEEKLY   2
-#macro PODIUM_REFRESH_MONTHLY  3
-
 #macro PODIUM_RANGE_TOP      0
 #macro PODIUM_RANGE_FRIENDS  1
 #macro PODIUM_RANGE_AROUND   2
+#macro PODIUM_RANGE_USER     3
 
-#macro PODIUM_STATE_UNKNOWN  -2
-#macro PODIUM_STATE_ERROR    -1
-#macro PODIUM_STATE_NO_DATA   0
-#macro PODIUM_STATE_PENDING   1
-#macro PODIUM_STATE_SUCCESS   2
+#macro PODIUM_USER_SIGNED_OUT  0
+#macro PODIUM_USER_SIGNING_IN  1
+#macro PODIUM_USER_SIGNED_IN   2
+
+///////
+// State Constants
+///////
+
+// These constants are returned by `PodiumGetScoreState()` and reflect the state of received
+// leaderboard data. These constants do not reflect the state of submitting states.
+
+// Indicates there was an error receiving data. This means a request has been made and has failed.
+#macro PODIUM_STATE_ERROR   -1
+
+// We do not have have any data nor have we sent a request. This state indicates that a request
+// must be sent before any data may be received. A leaderboard initializes into this state, it will
+// be reset to this state when a score is submitted to reflect the factor that the local user's
+// score may be represented in leaderboard data, and a leaderboard will be reset to this date when
+// `PodiumClearRemoteCache()` is called.
+#macro PODIUM_STATE_NULL  0
+
+// A request has been queued or sent and we are waiting for a response.
+#macro PODIUM_STATE_WAITING  1
+
+// A request has been sent and a response has been received. This does not necessarily mean that
+// we received useful data and you should still check that the return value from `PodiumGetScores()`
+// is valid (not `undefined`) before using it.
+#macro PODIUM_STATE_SUCCESS  2
 
 ///////
 // Priority
 ///////
+
+// No operation will be started. This priority can only be used by `PodiumGetScores()`. Using this
+// priority with `PodiumSubmit()` will instead cause the operation to have its priority set to
+// `PODIUM_PRIORITY_NORMAL`.
+#macro PODIUM_PRIORITY_NO_REQUEST  -1
 
 // The operation will be added to the back of the queue and will be dispatched when prior
 // operations have completed.

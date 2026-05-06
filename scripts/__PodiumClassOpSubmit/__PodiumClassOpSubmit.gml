@@ -113,7 +113,10 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
         
         if (__clearCache)
         {
-            PodiumClearRemoteCache(__formattedServiceData.leaderboardName, undefined, 0);
+            PodiumClearRemoteCache(__formattedServiceData.leaderboardName, PODIUM_RANGE_TOP,     0);
+            PodiumClearRemoteCache(__formattedServiceData.leaderboardName, PODIUM_RANGE_AROUND,  0);
+            PodiumClearRemoteCache(__formattedServiceData.leaderboardName, PODIUM_RANGE_FRIENDS, 0);
+            PodiumClearRemoteCache(__formattedServiceData.leaderboardName, PODIUM_RANGE_USER,    0);
         }
         
         __PodiumOfflineRecordSetPending(__formattedServiceData.leaderboardName, (__status != PODIUM_LEADERBOARD_SUCCESS));

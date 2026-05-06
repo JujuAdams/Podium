@@ -37,7 +37,10 @@ function PodiumSubmit(_leaderboardName, _value, _metadataString = "", _priority 
                 if (_clearCache)
                 {
                     //Clear the cache for this leaderboard because it may be invalidated by the user's score
-                    PodiumClearRemoteCache(_leaderboardName, undefined, 0);
+                    PodiumClearRemoteCache(_leaderboardName, PODIUM_RANGE_TOP,     0);
+                    PodiumClearRemoteCache(_leaderboardName, PODIUM_RANGE_AROUND,  0);
+                    PodiumClearRemoteCache(_leaderboardName, PODIUM_RANGE_FRIENDS, 0);
+                    PodiumClearRemoteCache(_leaderboardName, PODIUM_RANGE_USER,    0);
                 }
                 
                 __PodiumStoreOfflineRecord(_leaderboardName, _value, _metadataString, not PodiumGetOfflineOnly());

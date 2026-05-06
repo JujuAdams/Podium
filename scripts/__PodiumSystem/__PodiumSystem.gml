@@ -31,7 +31,8 @@ function __PodiumSystem()
         __runningDefinitions = false;
         
         __signInState = PODIUM_USER_SIGNED_OUT;
-        __username = "";
+        __usernameHint = "";
+        __username = undefined;
         
         __offlineOnly       = false;
         __localChanged      = false;

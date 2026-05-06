@@ -8,8 +8,14 @@ function PodiumSignInPlayStation(_gamepad = -1)
     {
         with(_system)
         {
+            if ((_gamepad >= 0) && (__signInState == PODIUM_USER_SIGNED_IN))
+            {
+                __PodiumWarning("A user is already signed in");
+                return;
+            }
+            
             __psGamepad = _gamepad;
-            __username = (_gamepad < 0)? "" : psn_name_for_pad(_gamepad);
+            __username = (_gamepad < 0)? undefined : psn_name_for_pad(_gamepad);
             
             if (PODIUM_VERBOSE)
             {

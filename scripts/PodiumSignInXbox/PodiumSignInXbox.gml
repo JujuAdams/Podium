@@ -14,8 +14,14 @@ function PodiumSignInXbox(_xboxUser = 0)
                 return;
             }
             
+            if ((_xboxUser > 0) && (__signInState == PODIUM_USER_SIGNED_IN))
+            {
+                __PodiumWarning("A user is already signed in");
+                return;
+            }
+            
             __xboxUser = int64(_xboxUser);
-            __username = (_xboxUser < 0)? "" : xboxone_modern_gamertag_for_user(_xboxUser);
+            __username = (_xboxUser < 0)? undefined : xboxone_modern_gamertag_for_user(_xboxUser);
             
             if (PODIUM_VERBOSE)
             {

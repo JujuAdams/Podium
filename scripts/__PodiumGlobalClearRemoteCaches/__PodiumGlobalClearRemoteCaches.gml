@@ -4,7 +4,7 @@ function __PodiumGlobalClearRemoteCaches()
     
     if (PODIUM_VERBOSE)
     {
-        __PodiumWarning("Clearning all caches");
+        __PodiumWarning("Clearing all caches");
     }
     
     with(_system)
@@ -14,7 +14,7 @@ function __PodiumGlobalClearRemoteCaches()
         var _i = 0;
         repeat(array_length(_namesArray))
         {
-            PodiumClearRemoteCache(_namesArray[_i]);
+            PodiumClearAllRemoteCaches(_namesArray[_i]);
             ++_i;
         }
     }

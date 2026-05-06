@@ -139,6 +139,7 @@
     {"id":{"name":"PodiumGetXboxUser","path":"scripts/PodiumGetXboxUser/PodiumGetXboxUser.yy",},},
     {"id":{"name":"PodiumImportLocalData","path":"scripts/PodiumImportLocalData/PodiumImportLocalData.yy",},},
     {"id":{"name":"PodiumInitialize","path":"scripts/PodiumInitialize/PodiumInitialize.yy",},},
+    {"id":{"name":"PodiumSetUsernameHint","path":"scripts/PodiumSetUsernameHint/PodiumSetUsernameHint.yy",},},
     {"id":{"name":"PodiumSignInPlayStation","path":"scripts/PodiumSignInPlayStation/PodiumSignInPlayStation.yy",},},
     {"id":{"name":"PodiumSignInSwitch","path":"scripts/PodiumSignInSwitch/PodiumSignInSwitch.yy",},},
     {"id":{"name":"PodiumSignInXbox","path":"scripts/PodiumSignInXbox/PodiumSignInXbox.yy",},},

@@ -11,8 +11,14 @@ function PodiumSignInSwitch(_accountIndex)
     {
         with(_system)
         {
+            if ((_accountIndex >= 0) && (__signInState == PODIUM_USER_SIGNED_IN))
+            {
+                __PodiumWarning("A user is already signed in");
+                return;
+            }
+            
             __switchAccountIndex = _accountIndex;
-            __username = (_accountIndex == undefined)? "" : switch_accounts_get_nickname(_accountIndex);
+            __username = (_accountIndex == undefined)? undefined : switch_accounts_get_nickname(_accountIndex);
             
             __switchNPLNUserHandle = undefined;
             __switchUserID = undefined;

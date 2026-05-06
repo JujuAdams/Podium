@@ -18,7 +18,7 @@
 /// time-out a cache to avoid the anger of the Gods.
 #macro PODIUM_GREEDY_CACHE_TIMEOUT  600 //seconds
 
-#macro PODIUM_UNKNOWN_RANK  "?"
+#macro PODIUM_UNKNOWN_RANK  "??"
 
 #macro PODIUM_DEBUG_DAY_OFFSET  0
 

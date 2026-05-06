@@ -127,7 +127,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                 
                 if (__range == PODIUM_RANGE_TOP)
                 {
-                    __asyncID = __PodiumPlayFabGetLeaderboardTop(__formattedServiceData.playFab, 1, 10, _callbackFunction);
+                    __asyncID = __PodiumPlayFabGetLeaderboardTop(__formattedServiceData.playFab, 1, 10, __seasonOffset, _callbackFunction);
                 }
                 else if (__range == PODIUM_RANGE_FRIENDS)
                 {

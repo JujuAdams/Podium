@@ -7,7 +7,7 @@
 #macro __PODIUM_OP_SUBMIT      0
 #macro __PODIUM_OP_GET_SCORES  1
 
-#macro __PODIUM_OFFLINE_DATA_VERSION  2
+#macro __PODIUM_OFFLINE_DATA_VERSION  3
 
 __PodiumSystem();
 

@@ -4,6 +4,16 @@ function PodiumExportLocalData()
 {
     static _system = __PodiumSystem();
     
+    if (PODIUM_OFFLINE_ENCRYPTION_KEY == undefined)
+    {
+        __PodiumError("Please set `PODIUM_OFFLINE_ENCRYPTION_KEY` to an unsigned 64-bit integer\nThis is a number in the format of `0x0000_0000_0000_0000`");
+    }
+    
+    if (PODIUM_OFFLINE_ENCRYPTION_KEY == 0x0000_0000_0000_0000)
+    {
+        __PodiumError("Encryption key cannot literally be `0x0000_0000_0000_0000`. Choose another random number");
+    }
+    
     var _offlineRecordDict = _system.__offlineRecordDict;
     
     var _buffer = buffer_create(1024, buffer_grow, 1);
@@ -31,10 +41,16 @@ function PodiumExportLocalData()
     
     buffer_write(_buffer, buffer_string, "IUM");
     
-    //TODO - Encryption
-    
-    var _string = buffer_base64_encode(_buffer, 0, buffer_tell(_buffer));
+    var _compressedBuffer = buffer_compress(_buffer, 0, buffer_tell(_buffer));
     buffer_delete(_buffer);
+    
+    if (buffer_get_size(_compressedBuffer) >= 16)
+    {
+        buffer_poke(_compressedBuffer, 8, buffer_u64, PODIUM_OFFLINE_ENCRYPTION_KEY ^ buffer_peek(_compressedBuffer, 8, buffer_u64));
+    }
+    
+    var _string = buffer_base64_encode(_compressedBuffer, 0, buffer_get_size(_compressedBuffer));
+    buffer_delete(_compressedBuffer);
     
     _system.__localChanged = false;
     

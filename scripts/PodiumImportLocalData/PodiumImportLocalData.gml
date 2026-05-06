@@ -5,6 +5,16 @@ function PodiumImportLocalData(_string, _submitPendingScores = true)
 {
     static _system = __PodiumSystem();
     
+    if (PODIUM_OFFLINE_ENCRYPTION_KEY == undefined)
+    {
+        __PodiumError("Please set `PODIUM_OFFLINE_ENCRYPTION_KEY` to an unsigned 64-bit integer\nThis is a number in the format of `0x0000_0000_0000_0000`");
+    }
+    
+    if (PODIUM_OFFLINE_ENCRYPTION_KEY == 0x0000_0000_0000_0000)
+    {
+        __PodiumError("Encryption key cannot literally be `0x0000_0000_0000_0000`. Choose another random number");
+    }
+    
     with(_system)
     {
         if (not __initialized)
@@ -14,13 +24,26 @@ function PodiumImportLocalData(_string, _submitPendingScores = true)
         }
         
         var _buffer = -1;
+        var _compressedBuffer = -1;
         try
         {
-            _buffer = buffer_base64_decode(_string);
+            var _compressedBuffer = buffer_base64_decode(_string);
+            
+            if (not buffer_exists(_compressedBuffer))
+            {
+                throw "Base64 decode failed";
+            }
+            
+            if (buffer_get_size(_compressedBuffer) >= 16)
+            {
+                buffer_poke(_compressedBuffer, 8, buffer_u64, PODIUM_OFFLINE_ENCRYPTION_KEY ^ buffer_peek(_compressedBuffer, 8, buffer_u64));
+            }
+            
+            var _buffer = buffer_decompress(_compressedBuffer);
             
             if (not buffer_exists(_buffer))
             {
-                throw "Buffer does not exist";
+                throw "Decompression failed";
             }
         }
         catch(_error)
@@ -28,6 +51,13 @@ function PodiumImportLocalData(_string, _submitPendingScores = true)
             show_debug_message(_error);
             __PodiumWarning("Failed to decode string");
             return false;
+        }
+        finally
+        {
+            if (buffer_exists(_compressedBuffer))
+            {
+                buffer_delete(_compressedBuffer);
+            }
         }
         
         var _offlineRecordDict = {};
@@ -58,7 +88,7 @@ function PodiumImportLocalData(_string, _submitPendingScores = true)
                 var _value           = buffer_read(_buffer, buffer_u64);
                 var _metadata        = buffer_read(_buffer, buffer_string);
                 var _datetime        = buffer_read(_buffer, buffer_f64);
-                var _pending         = buffer_read(_buffer, buffer_bool);
+                var _pending         = bool(buffer_read(_buffer, buffer_bool));
                 
                 var _offlineRecord = new __PodiumClassOfflineRecord(_value, _metadata, _datetime, _pending);
                 

@@ -1,3 +1,8 @@
+/// Encryption key for locally stored data. Please note that this is not a foolproof system and for
+/// full security you should encrypt the string returned by `PodiumExportLocalData()` yourself. The
+/// encryption key must be a 64-bit integer e.g. a number in the format of `0x0000_0000_0000_0000`.
+#macro PODIUM_OFFLINE_ENCRYPTION_KEY  undefined
+
 /// Whether to report lots of information messages to the console. This can be helpful to diagnose
 /// problems. You will likely want to set this macro to `false` for production builds.
 #macro PODIUM_VERBOSE  false

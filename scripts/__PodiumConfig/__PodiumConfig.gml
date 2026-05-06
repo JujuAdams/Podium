@@ -20,6 +20,8 @@
 
 #macro PODIUM_PSN_LEADERBOARD_SERVICE_LABEL  undefined
 
+#macro PODIUM_SWITCH_NPLN_TENANT  ""
+
 ///////
 // PlayFab
 ///////

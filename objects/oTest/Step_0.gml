@@ -16,7 +16,7 @@ if (signedIn != _signedIn)
         //PodiumGetScores("best time");
         //PodiumGetScores("daily challenge");
         
-        //PodiumSubmit("all time score", 224, "helloWorld2");
+        PodiumSubmit("all time score", 225, "hello world 3");
         
         //PodiumGetScores("all time score", PODIUM_RANGE_USER);
         

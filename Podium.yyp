@@ -97,6 +97,8 @@
     {"id":{"name":"__PodiumPlayFabSetDisplayName","path":"scripts/__PodiumPlayFabSetDisplayName/__PodiumPlayFabSetDisplayName.yy",},},
     {"id":{"name":"__PodiumPlayFabXboxLogin","path":"scripts/__PodiumPlayFabXboxLogin/__PodiumPlayFabXboxLogin.yy",},},
     {"id":{"name":"__PodiumPlayFabXboxRequestToken","path":"scripts/__PodiumPlayFabXboxRequestToken/__PodiumPlayFabXboxRequestToken.yy",},},
+    {"id":{"name":"__PodiumPlayServicesDecode","path":"scripts/__PodiumPlayServicesDecode/__PodiumPlayServicesDecode.yy",},},
+    {"id":{"name":"__PodiumPlayServicesEncode","path":"scripts/__PodiumPlayServicesEncode/__PodiumPlayServicesEncode.yy",},},
     {"id":{"name":"__PodiumRegisterHTTPAsyncID","path":"scripts/__PodiumRegisterHTTPAsyncID/__PodiumRegisterHTTPAsyncID.yy",},},
     {"id":{"name":"__PodiumRegisterPSLeaderboardFriends","path":"scripts/__PodiumRegisterPSLeaderboardFriends/__PodiumRegisterPSLeaderboardFriends.yy",},},
     {"id":{"name":"__PodiumRegisterPSLeaderboardScoreRange","path":"scripts/__PodiumRegisterPSLeaderboardScoreRange/__PodiumRegisterPSLeaderboardScoreRange.yy",},},

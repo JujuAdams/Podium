@@ -52,8 +52,20 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
         }
         else if (PODIUM_PLAY_SERVICES_AVAILABLE)
         {
-            //FIXME - URI encode, 64 char limit
-            GooglePlayServices_Leaderboard_SubmitScore(__formattedServiceData.playServices, __value, __metadataString);
+            var _scoreTag = __PodiumPlayServicesEncode(__metadataString);
+            if (string_length(_scoreTag) > 64)
+            {
+                if (PODIUM_VERBOSE || PODIUM_RUNNING_FROM_IDE)
+                {
+                    __PodiumTrace($"Metadata string = \"{__metadataString}\", encoded = \"{_scoreTag}\" (length = {string_length(_scoreTag)})");
+                }
+                
+                __PodiumSoftError("Encoded metadata string is longer than 64 characters");
+            }
+            else
+            {
+                GooglePlayServices_Leaderboard_SubmitScore(__formattedServiceData.playServices, __value, _scoreTag);
+            }
         }
         else if (PODIUM_ON_PS5)
         {

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"__PodiumPlayServicesDecode",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__PodiumPlayServicesDecode",
+  "parent":{
+    "name":"(System)",
+    "path":"folders/Podium/(System).yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

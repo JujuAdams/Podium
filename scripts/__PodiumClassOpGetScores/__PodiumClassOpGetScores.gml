@@ -370,10 +370,9 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                     {
                         var _scoreStruct = _scoresArray[_i];
                         
-                        var _metadataString = _scoreStruct[$ "scoreTag"] ?? "";
-                        //TODO - URI decode
-                        
+                        var _metadataString = __PodiumPlayServicesDecode(_scoreStruct[$ "scoreTag"] ?? "");
                         array_push(_data, new __PodiumClassRecord(_scoreStruct.scoreHolderDisplayName, _scoreStruct.rawScore, _scoreStruct.rank, _scoreStruct.scoreHolder.playerId, _metadataString, false));
+                        
                         ++_i;
                     }
                 }

@@ -26,6 +26,10 @@ function PodiumGetUserID()
     {
         return _system.__xboxUser;
     }
+    else if (PODIUM_PLAY_SERVICES_AVAILABLE)
+    {
+        return _system.__playServicesID;
+    }
     else
     {
         //TODO

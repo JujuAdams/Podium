@@ -18,6 +18,7 @@
 #macro PODIUM_STEAM_AVAILABLE             (__PodiumSystem().__steamAvailable)
 #macro PODIUM_USING_GAMECENTER            (PODIUM_ON_IOS && extension_exists("GameCenter"))
 #macro PODIUM_USING_PLAY_SERVICES         (PODIUM_ON_ANDROID && extension_exists("GooglePlayServices"))
+#macro PODIUM_PLAY_SERVICES_AVAILABLE     (__PodiumSystem().__playServicesAvailable)
 #macro PODIUM_USING_GDK                   (PODIUM_ON_XBOX_SERIES || PODIUM_USING_WINDOWS_GDK)
 #macro PODIUM_USING_WINDOWS_GDK           (PODIUM_ON_WINDOWS && extension_exists("GDKExtension"))
 #macro PODIUM_USING_XBOX_LEADERBOARDS     (PODIUM_USING_GDK && (not PODIUM_GDK_USES_PLAYFAB_LEADERBOARDS))

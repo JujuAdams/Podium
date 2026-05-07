@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"PodiumShowNativeLeaderboards",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"PodiumShowNativeLeaderboards",
+  "parent":{
+    "name":"Podium",
+    "path":"folders/Podium.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

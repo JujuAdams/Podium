@@ -212,8 +212,7 @@ function PodiumCreate(_serviceData)
             return false;
         }
         
-        //TODO
-        
+        var _platformData = _serviceData.playServices;
         if (_platformData != undefined)
         {
             _serviceData.__ref = _serviceData.playServices;

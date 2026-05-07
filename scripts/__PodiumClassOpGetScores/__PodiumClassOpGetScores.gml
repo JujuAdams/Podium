@@ -142,9 +142,26 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                     __asyncID = __PodiumPlayFabGetLeaderboardUser(__formattedServiceData.playFab, __seasonOffset, _callbackFunction);
                 }
             }
-            else
+            else if (PODIUM_PLAY_SERVICES_AVAILABLE)
             {
-                //TODO
+                var _span = __formattedServiceData.daily? Leaderboard_TIME_SPAN_DAILY : Leaderboard_TIME_SPAN_ALL_TIME;
+                
+                if (__range == PODIUM_RANGE_TOP)
+                {
+                    __asyncID = GooglePlayServices_Leaderboard_LoadTopScores(__formattedServiceData.playServices, _span, Leaderboard_COLLECTION_PUBLIC, 10, false);
+                }
+                else if (__range == PODIUM_RANGE_FRIENDS)
+                {
+                    __asyncID = GooglePlayServices_Leaderboard_LoadTopScores(__formattedServiceData.playServices, _span, Leaderboard_COLLECTION_SOCIAL, 10, false);
+                }
+                else if (__range == PODIUM_RANGE_AROUND)
+                {
+                    __asyncID = GooglePlayServices_Leaderboard_LoadPlayerCenteredScores(__formattedServiceData.playServices, _span, Leaderboard_COLLECTION_PUBLIC, 10, false);
+                }
+                else if (__range == PODIUM_RANGE_USER)
+                {
+                    __asyncID = GooglePlayServices_Leaderboard_LoadPlayerCenteredScores(__formattedServiceData.playServices, _span, Leaderboard_COLLECTION_SOCIAL, 1, false);
+                }
             }
         }
         
@@ -331,6 +348,41 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                     {
                         show_debug_message(json_stringify(_data, true));
                     }
+                }
+            }
+            else if (PODIUM_PLAY_SERVICES_AVAILABLE)
+            {
+                ///////
+                // Google Play Services
+                ///////
+                
+                if (PODIUM_VERBOSE)
+                {
+                    __PodiumTrace($"Using Google Play Services parser");
+                }
+                
+                var _scoresArray = undefined;
+                try
+                {
+                    var _scoresArray = json_parse(async_load[? "data"]);
+                    var _i = 0;
+                    repeat(array_length(_scoresArray))
+                    {
+                        var _scoreStruct = _scoresArray[_i];
+                        
+                        var _metadataString = _scoreStruct[$ "scoreTag"] ?? "";
+                        //TODO - URI decode
+                        
+                        array_push(_data, new __PodiumClassRecord(_scoreStruct.scoreHolderDisplayName, _scoreStruct.rawScore, _scoreStruct.rank, _scoreStruct.scoreHolder.playerId, _metadataString, false));
+                        ++_i;
+                    }
+                }
+                catch(_error)
+                {
+                    __PodiumWarning($"Failed to parse returned leaderboard data for \"{__formattedServiceData}\"");
+                    
+                    _scoresArray = undefined;
+                    __status = PODIUM_LEADERBOARD_ERROR;
                 }
             }
             

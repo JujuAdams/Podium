@@ -51,8 +51,10 @@ function __PodiumSystem()
         __switchNPLNUserHandle = undefined;
         __switchUserID         = undefined;
         
-        __steamAvailable        = false;
+        __steamAvailable = false;
+        
         __playServicesAvailable = false;
+        __playServicesID        = undefined;
         
         __playFabLoggedIn              = false;
         __playFabXboxTokenAndSignature = undefined;

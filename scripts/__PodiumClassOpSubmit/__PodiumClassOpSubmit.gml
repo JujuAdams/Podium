@@ -50,8 +50,9 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
         {
             GameCenter_Leaderboard_Submit(__formattedServiceData.gameCenter, __value, 0);
         }
-        else if (_system.__playServicesAvailable)
+        else if (PODIUM_PLAY_SERVICES_AVAILABLE)
         {
+            //FIXME - URI encode, 64 char limit
             GooglePlayServices_Leaderboard_SubmitScore(__formattedServiceData.playServices, __value, __metadataString);
         }
         else if (PODIUM_ON_PS5)

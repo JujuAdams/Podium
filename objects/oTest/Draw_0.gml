@@ -8,7 +8,7 @@ _string += $"Username = \"{PodiumGetUserName()}\"\n";
 _string += $"Busy = {PodiumGetBusy()? "true" : "false"}\n";
 _string += $"Jobs = {PodiumGetJobs()}\n";
 _string += $"\n";
-_string += $"\"all time score\" score = {json_stringify(PodiumGetScores("all time score", PODIUM_RANGE_USER), true)}\n";
+_string += $"\"all time score\" score = {json_stringify(PodiumGetScores("all time score", PODIUM_RANGE_TOP), true)}\n";
 
 draw_set_font(fntConsolas);
 draw_text(10, 10, _string);

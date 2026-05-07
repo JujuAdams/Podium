@@ -9,6 +9,7 @@ function __PodiumConfigLeaderboards()
         },
         
         playFab: "testDescending",
+        playServices: "CgkIjtmczOYOEAIQAQ",
     });
     
     PodiumCreate({
@@ -20,6 +21,7 @@ function __PodiumConfigLeaderboards()
         },
         
         playFab: "testAscending",
+        playServices: undefined,
     });
     
     PodiumCreate({
@@ -32,6 +34,7 @@ function __PodiumConfigLeaderboards()
         },
         
         playFab: "testDaily",
+        playServices: undefined,
     });
     
     //PodiumCreate({

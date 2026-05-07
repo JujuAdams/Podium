@@ -48,7 +48,24 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
         }
         else if (PODIUM_USING_GAMECENTER)
         {
-            GameCenter_Leaderboard_Submit(__formattedServiceData.gameCenter, __value, 0);
+            var _metadataValue = 0;
+            if (__metadataString != "")
+            {
+                try
+                {
+                    _metadataValue = real(__metadataString);
+                }
+                catch(_error)
+                {
+                    if (PODIUM_VERBOSE || PODIUM_RUNNING_FROM_IDE)
+                    {
+                        show_debug_message(_error);
+                        __PodiumWarning($"GameCenter metadata must be a numeric value (was \"{__metadataString}\")");
+                    }
+                }
+            }
+            
+            GameCenter_Leaderboard_Submit(__formattedServiceData.gameCenter, __value, _metadataValue);
         }
         else if (PODIUM_PLAY_SERVICES_AVAILABLE)
         {

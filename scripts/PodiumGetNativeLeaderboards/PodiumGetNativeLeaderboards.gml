@@ -3,5 +3,5 @@
 
 function PodiumGetNativeLeaderboards()
 {
-    return PODIUM_USING_PLAY_SERVICES;
+    return (PODIUM_USING_PLAY_SERVICES || PODIUM_USING_GAMECENTER);
 }

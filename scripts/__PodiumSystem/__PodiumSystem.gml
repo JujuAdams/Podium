@@ -53,6 +53,8 @@ function __PodiumSystem()
         
         __steamAvailable = false;
         
+        __gameCenterPlayerID = undefined;
+        
         __playServicesAvailable = false;
         __playServicesID        = undefined;
         

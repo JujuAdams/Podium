@@ -30,6 +30,10 @@ function PodiumGetUserID()
     {
         return _system.__playServicesID;
     }
+    else if (PODIUM_USING_GAMECENTER)
+    {
+        return _system.__gameCenterPlayerID;
+    }
     else
     {
         //TODO

@@ -10,4 +10,8 @@ function PodiumShowNativeLeaderboards()
     {
         GooglePlayServices_Leaderboard_ShowAll();
     }
+    else if (PODIUM_USING_GAMECENTER)
+    {
+        GameCenter_PresentView_Leaderboards();
+    }
 }

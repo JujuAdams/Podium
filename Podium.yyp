@@ -145,6 +145,7 @@
     {"id":{"name":"PodiumInitialize","path":"scripts/PodiumInitialize/PodiumInitialize.yy",},},
     {"id":{"name":"PodiumSetUsernameHint","path":"scripts/PodiumSetUsernameHint/PodiumSetUsernameHint.yy",},},
     {"id":{"name":"PodiumShowNativeLeaderboards","path":"scripts/PodiumShowNativeLeaderboards/PodiumShowNativeLeaderboards.yy",},},
+    {"id":{"name":"PodiumSignInGameCenter","path":"scripts/PodiumSignInGameCenter/PodiumSignInGameCenter.yy",},},
     {"id":{"name":"PodiumSignInGooglePlay","path":"scripts/PodiumSignInGooglePlay/PodiumSignInGooglePlay.yy",},},
     {"id":{"name":"PodiumSignInPlayStation","path":"scripts/PodiumSignInPlayStation/PodiumSignInPlayStation.yy",},},
     {"id":{"name":"PodiumSignInSwitch","path":"scripts/PodiumSignInSwitch/PodiumSignInSwitch.yy",},},

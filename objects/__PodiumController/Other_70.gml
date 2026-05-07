@@ -130,6 +130,56 @@ with(__PodiumSystem())
             __PodiumWarning("Failed to obtain Google Play player info");
         }
     }
+    else if (PODIUM_USING_GAMECENTER && (async_load[? "type"] == "GameCenter_Authenticate"))
+    {
+        if (__signInState != PODIUM_USER_SIGNING_IN)
+        {
+            __PodiumWarning("Unexpected GameCenter authenticate received");
+        }
+        else if (async_load[? "success"])
+        {
+            if (PODIUM_VERBOSE)
+            {
+                __PodiumTrace($"GameCenter authenticate received");
+            }
+            
+            var _infoJSON = GameCenter_LocalPlayer_GetInfo();
+            
+            var _info        = undefined;
+            var _displayName = undefined;
+            var _playerID    = undefined;
+            try
+            {
+                _info        = json_parse(_infoJSON);
+                _displayName = _info.displayName;
+                _playerID    = _info.playerID;
+            }
+            catch(_error)
+            {
+                show_debug_message(_error);
+            }
+            
+            if ((_displayName != undefined) && (_playerID != undefined))
+            {
+                __username           = _displayName;
+                __gameCenterPlayerID = _playerID;
+                
+                __PodiumUserSignedIn();
+            }
+            else
+            {
+                __signInState = PODIUM_USER_SIGN_IN_FAILED;
+                
+                __PodiumWarning("Failed to parse GameCenter player info");
+            }
+        }
+        else
+        {
+            __signInState = PODIUM_USER_SIGN_IN_FAILED;
+            
+            __PodiumWarning("Failed to authenticate GameCenter");
+        }
+    }
     else
     {
         for(var _i = 0; _i < array_length(__pendingArray); _i++) //Length of the array can change

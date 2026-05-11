@@ -39,6 +39,17 @@ with(__PodiumSystem())
             __PodiumWarning("Prearranged user failed to log in");
         }
     }
+    else if (PODIUM_ON_PS5 && (async_load[? "id"] == PSN_LEADERBOARD_SCORE_POSTED_MSG))
+    {
+        var _leaderboardID = async_load[? "leaderboardid"]; //The actual ID we want to check against
+        
+        if (ds_map_exists(__psLeaderboardSubmitMap, _leaderboardID))
+        {
+            var _callback = __psLeaderboardSubmitMap[? _leaderboardID];
+            ds_map_delete(__psLeaderboardSubmitMap, _leaderboardID);
+            _callback(false);
+        }
+    }
     else if (PODIUM_ON_PS5 && (async_load[? "id"] == PSN_LEADERBOARD_SCORE_RANGE_MSG))
     {
         var _leaderboardID = async_load[? "leaderboardid"]; //The actual ID we want to check against
@@ -47,7 +58,6 @@ with(__PodiumSystem())
         {
             var _callback = __psLeaderboardScoreRangeMap[? _leaderboardID];
             ds_map_delete(__psLeaderboardScoreRangeMap, _leaderboardID);
-        
             _callback(false);
         }
     }
@@ -55,11 +65,21 @@ with(__PodiumSystem())
     {
         var _leaderboardID = async_load[? "leaderboardid"]; //The actual ID we want to check against
         
-        if (ds_map_exists(__psLeaderboardScoreRangeMap, _leaderboardID))
+        if (ds_map_exists(__psLeaderboardFriendsMap, _leaderboardID))
         {
-            var _callback = __psLeaderboardScoreRangeMap[? _leaderboardID];
-            ds_map_delete(__psLeaderboardScoreRangeMap, _leaderboardID);
+            var _callback = __psLeaderboardFriendsMap[? _leaderboardID];
+            ds_map_delete(__psLeaderboardFriendsMap, _leaderboardID);
+            _callback(false);
+        }
+    }
+    else if (PODIUM_ON_PS5 && (async_load[? "id"] == PSN_LEADERBOARD_SCORE_MSG))
+    {
+        var _leaderboardID = async_load[? "leaderboardid"]; //The actual ID we want to check against
         
+        if (ds_map_exists(__psLeaderboardUserMap, _leaderboardID))
+        {
+            var _callback = __psLeaderboardUserMap[? _leaderboardID];
+            ds_map_delete(__psLeaderboardUserMap, _leaderboardID);
             _callback(false);
         }
     }
@@ -78,13 +98,4 @@ with(__PodiumSystem())
             }
         }
     }
-    
-    //var _asyncIDMap = __PodiumSystem().__socialAsyncIDMap;
-    //if (ds_map_exists(_asyncIDMap, _id))
-    //{
-    //    var _callback = _asyncIDMap[? _id];
-    //    ds_map_delete(_asyncIDMap, _id);
-    //    
-    //    _callback(false);
-    //}
 }

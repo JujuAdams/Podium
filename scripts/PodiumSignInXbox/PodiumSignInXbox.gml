@@ -47,7 +47,6 @@ function PodiumSignInXbox(_xboxUser = 0)
             
             if (PODIUM_USING_XBOX_LEADERBOARDS)
             {
-                xboxone_stats_setup(undefined, undefined, undefined); //TODO - Is this needed any more?
                 xboxone_stats_add_user(_xboxUser);
                 
                 call_later(1, time_source_units_frames, function()

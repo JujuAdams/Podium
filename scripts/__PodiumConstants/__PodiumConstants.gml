@@ -1,5 +1,5 @@
-#macro PODIUM_VERSION  "0.2.2-alpha"
-#macro PODIUM_DATE     "2026-05-06"
+#macro PODIUM_VERSION  "0.2.4-alpha"
+#macro PODIUM_DATE     "2026-05-11"
 
 #macro PODIUM_RUNNING_FROM_IDE  (GM_build_type == "run")
 
@@ -48,7 +48,7 @@
 // be reset to this state when a score is submitted to reflect the factor that the local user's
 // score may be represented in leaderboard data, and a leaderboard will be reset to this date when
 // `PodiumClearRemoteCache()` is called.
-#macro PODIUM_LEADERBOARD_NULL  0
+#macro PODIUM_LEADERBOARD_NOT_FETCHED  0
 
 // A request has been queued or sent and we are waiting for a response.
 #macro PODIUM_LEADERBOARD_WAITING  1

@@ -1,9 +1,9 @@
 /// @param leaderboardID
 /// @param callbackFunction
 
-function __PodiumRegisterPSLeaderboardFriends(_leaderboardID, _callbackFunction)
+function __PodiumRegisterPSLeaderboardSubmit(_leaderboardID, _callbackFunction)
 {
-    static _asyncIDMap = __PodiumSystem().__psLeaderboardFriendsMap;
+    static _asyncIDMap = __PodiumSystem().__psLeaderboardSubmitMap;
     
     if (_leaderboardID == undefined)
     {
@@ -19,7 +19,7 @@ function __PodiumRegisterPSLeaderboardFriends(_leaderboardID, _callbackFunction)
     
     if (ds_map_exists(_asyncIDMap, _callbackFunction))
     {
-        __PodiumWarning($"Redefining friends' scores leaderboard ID {_leaderboardID}");
+        __PodiumWarning($"Redefining submit leaderboard ID {_leaderboardID}");
         
         var _oldCallbackFunction = _asyncIDMap[? _leaderboardID];
         _oldCallbackFunction(true);

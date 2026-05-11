@@ -19,7 +19,7 @@ function __PodiumPlayFabGetLeaderboardFriends(_leaderboardName, _startPosition, 
     }
     else
     {
-        var _result = __PodiumPlayFabGetLeaderboardUser(_leaderboardName, undefined, method({
+        var _result = __PodiumPlayFabGetLeaderboardUser(_leaderboardName, 0, method({
             __leaderboardName: _leaderboardName,
             __startPosition:   _startPosition,
             __count:           _count,

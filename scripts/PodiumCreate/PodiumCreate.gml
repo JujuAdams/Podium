@@ -61,7 +61,7 @@ function PodiumCreate(_serviceData)
         return false;
     }
     
-    if (not _funcValidateStruct(_serviceData, ["leaderboardName", "descending",
+    if (not _funcValidateStruct(_serviceData, ["leaderboardName", "descending", "overwrite",
                                                "daily", "hasWeeklyHistory",
                                                "steam", "switch",
                                                "playStation", "playFab",
@@ -75,6 +75,7 @@ function PodiumCreate(_serviceData)
     _serviceData[$ "descending"      ] ??= true;
     _serviceData[$ "daily"           ] ??= false;
     _serviceData[$ "hasWeeklyHistory"] ??= false;
+    _serviceData[$ "overwrite"       ] ??= false;
     _serviceData.__formattedRef          = undefined;
     
     var _leaderboardName = _serviceData.leaderboardName;
@@ -158,6 +159,11 @@ function PodiumCreate(_serviceData)
                     __PodiumSoftError("Leaderboard's `.playStation` variable must be an array with 7 elements when using weekly history");
                     return false;
                 }
+            }
+            else if ((not is_numeric(_platformData)) || (floor(_platformData) != _platformData))
+            {
+                __PodiumSoftError("PlayStation leaderboard IDs must be integers");
+                return false;
             }
             
             _serviceData.__ref = _platformData;

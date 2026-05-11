@@ -44,7 +44,7 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
         {
             buffer_resize(_buffer, string_byte_length(__metadataString));
             buffer_poke(_buffer, 0, buffer_text, __metadataString);
-            __asyncID = steam_upload_score_buffer_ext(__formattedServiceData.__formattedRef, __value, _buffer, true);
+            __asyncID = steam_upload_score_buffer_ext(__formattedServiceData.__formattedRef, __value, _buffer, __formattedServiceData.overwrite);
         }
         else if (PODIUM_USING_GAMECENTER)
         {
@@ -56,7 +56,12 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
         }
         else if (PODIUM_ON_PS5)
         {
-            psn_post_leaderboard_score_comment(_system.__psGamepad, __formattedServiceData.playStation, __value, __metadataString);
+            __asyncID = 999_999;
+            psn_post_leaderboard_score_comment(_system.__psGamepad, __formattedServiceData.__formattedRef, __value, __metadataString);
+            __PodiumRegisterPSLeaderboardSubmit(__formattedServiceData.__formattedRef, function(_cancelled)
+            {
+                __Complete(((not _cancelled) && async_load[? "succeeded"])? PODIUM_LEADERBOARD_SUCCESS : PODIUM_LEADERBOARD_ERROR, undefined);
+            });
         }
         else if (PODIUM_USING_XBOX_LEADERBOARDS)
         {
@@ -96,6 +101,14 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
         
         __completed = true;
         __activityTime = current_time;
+        
+        //Redirect this "failure" to a success. `0x8222f404` is the error code for "not best score". To avoid
+        //constantly resubmitting not-best scores, we want to chalk this up as a success for our purposes
+        if (PODIUM_ON_PS5 && (_status == PODIUM_LEADERBOARD_ERROR)
+        &&  (async_load >= 0) && (async_load[? "error_code"] == 0xffff_ffff_8222_f404))
+        {
+            _status = PODIUM_LEADERBOARD_SUCCESS;
+        }
         
         if (PODIUM_VERBOSE)
         {

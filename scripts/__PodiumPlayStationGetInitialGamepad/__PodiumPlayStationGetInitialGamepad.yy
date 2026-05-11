@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"__PodiumPlayStationGetInitialGamepad",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__PodiumPlayStationGetInitialGamepad",
+  "parent":{
+    "name":"(System)",
+    "path":"folders/Podium/(System).yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

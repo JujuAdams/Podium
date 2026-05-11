@@ -16,7 +16,9 @@ function PodiumGetUserID()
     }
     else if (PODIUM_ON_PS5)
     {
-        return psn_user_for_pad(_system.__psGamepad);
+        // N.B. User ID on leaderboards seems to be the same as the username rather than the user ID
+        //      We'll return the more useful value here to avoid branching when doing ID checks downstream
+        return _system.__username;
     }
     else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
     {

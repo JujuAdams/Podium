@@ -1,6 +1,6 @@
 function __PodiumClassScoreCache() constructor
 {
-    __state = PODIUM_LEADERBOARD_NULL;
+    __state = PODIUM_LEADERBOARD_NOT_FETCHED;
     __data  = [];
     __lastReceivedTime = -infinity;
     
@@ -8,7 +8,7 @@ function __PodiumClassScoreCache() constructor
     
     static __ClearCache = function()
     {
-        __SetState(PODIUM_LEADERBOARD_NULL);
+        __SetState(PODIUM_LEADERBOARD_NOT_FETCHED);
         
         __data = [];
         __lastReceivedTime = -infinity;

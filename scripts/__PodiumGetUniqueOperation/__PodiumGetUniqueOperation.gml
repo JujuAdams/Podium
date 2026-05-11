@@ -1,12 +1,24 @@
 function __PodiumGetUniqueOperation(_opStruct)
 {
-    static _pendingArray = __PodiumSystem().__pendingArray;
-    static _queuedArray  = __PodiumSystem().__queuedArray;
+    static _pendingArray      = __PodiumSystem().__pendingArray;
+    static _queuedSubmitArray = __PodiumSystem().__queuedSubmitArray;
+    static _queuedFetchArray = __PodiumSystem().__queuedFetchArray;
     
     var _i = 0;
-    repeat(array_length(_queuedArray))
+    repeat(array_length(_queuedSubmitArray))
     {
-        if (_queuedArray[_i].__OperationEqual(_opStruct))
+        if (_queuedSubmitArray[_i].__OperationEqual(_opStruct))
+        {
+            return false;
+        }
+        
+        ++_i;
+    }
+    
+    var _i = 0;
+    repeat(array_length(_queuedFetchArray))
+    {
+        if (_queuedFetchArray[_i].__OperationEqual(_opStruct))
         {
             return false;
         }

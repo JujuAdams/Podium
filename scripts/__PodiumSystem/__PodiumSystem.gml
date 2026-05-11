@@ -1,7 +1,9 @@
 #macro __PODIUM_SWITCH_CURRENT_SEASON  (-2147483648)
 
-#macro PODIUM_MIN_DELAY  500 //ms between requests
-#macro PODIUM_MAX_FREQUENCY  25  //per minute
+#macro PODIUM_MIN_SUBMIT_DELAY  100 //ms between requests
+#macro PODIUM_MIN_FETCH_DELAY   500 //ms between requests
+#macro PODIUM_MAX_FREQUENCY      25 //per minute
+
 #macro __PODIUM_MAX_SIMULTANEOUS_OPERATIONS  1
 
 #macro __PODIUM_OP_SUBMIT      0
@@ -38,14 +40,14 @@ function __PodiumSystem()
         __localChanged      = false;
         __offlineRecordDict = {};
         
-        __lastActivityTime = -infinity;
-        __pendingArray  = [];
-        __queuedArray   = [];
-        __activityArray = [];
+        __lastActivityTime  = -infinity;
+        __queuedSubmitArray = [];
+        __queuedFetchArray  = [];
+        __pendingArray      = [];
+        __activityArray     = [];
         
-        __psGamepad                = -1;
-        __psExpectingSystemOverlay = false;
-        __psNPAvailabilityAsyncID  = undefined;
+        __psGamepad               = -1;
+        __psNPAvailabilityAsyncID = undefined;
         
         __xboxUser = int64(0);
         
@@ -117,9 +119,34 @@ function __PodiumSystem()
             }
             
             //Dispatch queued operations
-            while(array_length(__queuedArray) > 0)
+            if (array_length(__queuedSubmitArray) > 0)
             {
-                if (current_time - __lastActivityTime < PODIUM_MIN_DELAY)
+                while(array_length(__queuedSubmitArray) > 0)
+                {
+                    if (current_time - __lastActivityTime < PODIUM_MIN_SUBMIT_DELAY)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        __lastActivityTime = current_time;
+                        
+                        if ((array_length(__activityArray) < PODIUM_MAX_FREQUENCY)
+                        &&  (array_length(__pendingArray) < max(1, __PODIUM_MAX_SIMULTANEOUS_OPERATIONS)))
+                        {
+                            __queuedSubmitArray[0].__Dispatch();
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            while(array_length(__queuedFetchArray) > 0)
+            {
+                if (current_time - __lastActivityTime < PODIUM_MIN_FETCH_DELAY)
                 {
                     break;
                 }
@@ -130,7 +157,7 @@ function __PodiumSystem()
                     if ((array_length(__activityArray) < PODIUM_MAX_FREQUENCY)
                     &&  (array_length(__pendingArray) < max(1, __PODIUM_MAX_SIMULTANEOUS_OPERATIONS)))
                     {
-                        __queuedArray[0].__Dispatch();
+                        __queuedFetchArray[0].__Dispatch();
                     }
                     else
                     {

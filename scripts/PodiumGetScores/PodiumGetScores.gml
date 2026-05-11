@@ -40,7 +40,7 @@
 function PodiumGetScores(_leaderboardName, _range, _seasonOffset = 0, _priority = PODIUM_PRIORITY_NORMAL)
 {
     static _system = __PodiumSystem();
-    static _queuedArray = _system.__queuedArray;
+    static _queuedFetchArray = _system.__queuedFetchArray;
     static _emptyArray = [];
     
     array_resize(_emptyArray, 0); //Ensure the array is empty
@@ -142,7 +142,7 @@ function PodiumGetScores(_leaderboardName, _range, _seasonOffset = 0, _priority 
             
             if (_priority == PODIUM_PRIORITY_HIGH)
             {
-                array_insert(_queuedArray, 0, _struct);
+                array_insert(_queuedFetchArray, 0, _struct);
             }
             else if (_priority == PODIUM_PRIORITY_IMMEDIATE)
             {
@@ -150,7 +150,7 @@ function PodiumGetScores(_leaderboardName, _range, _seasonOffset = 0, _priority 
             }
             else
             {
-                array_push(_queuedArray, _struct);
+                array_push(_queuedFetchArray, _struct);
             }
         }
     }

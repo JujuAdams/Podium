@@ -1,9 +1,10 @@
 function __PodiumClassOpCommon() constructor
 {
-    static _system        = __PodiumSystem();
-    static _queuedArray   = _system.__queuedArray;
-    static _pendingArray  = _system.__pendingArray;
-    static _activityArray = _system.__activityArray;
+    static _system            = __PodiumSystem();
+    static _queuedSubmitArray = _system.__queuedSubmitArray;
+    static _queuedFetchArray  = _system.__queuedFetchArray;
+    static _pendingArray      = _system.__pendingArray;
+    static _activityArray     = _system.__activityArray;
     
     __dispatched       = false;
     __completed        = false;

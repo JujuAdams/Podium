@@ -7,7 +7,7 @@
 function PodiumSubmit(_leaderboardName, _value, _metadataString = "", _priority = PODIUM_PRIORITY_HIGH, _clearCache = true)
 {
     static _system = __PodiumSystem();
-    static _queuedArray = _system.__queuedArray;
+    static _queuedSubmitArray = _system.__queuedSubmitArray;
     
     var _leaderboardStruct = __PodiumLeaderboardFind(_leaderboardName);
     if (is_struct(_leaderboardStruct))
@@ -47,7 +47,7 @@ function PodiumSubmit(_leaderboardName, _value, _metadataString = "", _priority 
                 
                 if (_priority == PODIUM_PRIORITY_HIGH)
                 {
-                    array_insert(_queuedArray, 0, _struct);
+                    array_insert(_queuedSubmitArray, 0, _struct);
                 }
                 else if (_priority == PODIUM_PRIORITY_IMMEDIATE)
                 {
@@ -60,7 +60,7 @@ function PodiumSubmit(_leaderboardName, _value, _metadataString = "", _priority 
                         __PodiumWarning($"Cannot use `PODIUM_PRIORITY_NO_REQUEST` with `PodiumSubmit()`; reinterpreting as `PODIUM_PRIORITY_NORMAL`");
                     }
                     
-                    array_push(_queuedArray, _struct);
+                    array_push(_queuedSubmitArray, _struct);
                 }
             }
         }

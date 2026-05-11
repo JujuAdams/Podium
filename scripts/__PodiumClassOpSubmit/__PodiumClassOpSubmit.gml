@@ -23,7 +23,8 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
     
     static __Dispatch = function()
     {
-        static _buffer = buffer_create(1024, buffer_grow, 1);
+        static _bufferStatic = buffer_create(1024, buffer_grow, 1);
+        var _buffer = _bufferStatic;
         
         if (__dispatched) return;
         
@@ -35,16 +36,23 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
             __PodiumTrace($"Dispatching SUBMIT operation {string(ptr(self))}");
         }
         
-        var _index = array_get_index(_queuedArray, self);
-        if (_index >= 0) array_delete(_queuedArray, _index, 1);
+        var _index = array_get_index(_queuedSubmitArray, self);
+        if (_index >= 0) array_delete(_queuedSubmitArray, _index, 1);
         
         array_push(_activityArray, self);
         
         if (PODIUM_STEAM_AVAILABLE)
         {
-            buffer_resize(_buffer, string_byte_length(__metadataString));
-            buffer_poke(_buffer, 0, buffer_text, __metadataString);
-            __asyncID = steam_upload_score_buffer_ext(__formattedServiceData.__formattedRef, __value, _buffer, __formattedServiceData.overwrite);
+            if (__metadataString == "")
+            {
+                __asyncID = steam_upload_score_ext(__formattedServiceData.__formattedRef, __value, __formattedServiceData.overwrite);
+            }
+            else
+            {
+                buffer_resize(_buffer, string_byte_length(__metadataString));
+                buffer_poke(_buffer, 0, buffer_text, __metadataString);
+                __asyncID = steam_upload_score_buffer_ext(__formattedServiceData.__formattedRef, __value, _buffer, __formattedServiceData.overwrite);
+            }
         }
         else if (PODIUM_USING_GAMECENTER)
         {
@@ -148,8 +156,8 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
         __status = _status;
         __asyncID = undefined;
         
-        var _index = array_get_index(_queuedArray, self);
-        if (_index >= 0) array_delete(_queuedArray, _index, 1);
+        var _index = array_get_index(_queuedSubmitArray, self);
+        if (_index >= 0) array_delete(_queuedSubmitArray, _index, 1);
         
         var _index = array_get_index(_pendingArray, self);
         if (_index >= 0) array_delete(_pendingArray, _index, 1);

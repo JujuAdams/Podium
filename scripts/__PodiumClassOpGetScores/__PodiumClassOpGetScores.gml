@@ -35,8 +35,8 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
             __PodiumTrace($"Dispatching GET_SCORES operation {string(ptr(self))}");
         }
         
-        var _index = array_get_index(_queuedArray, self);
-        if (_index >= 0) array_delete(_queuedArray, _index, 1);
+        var _index = array_get_index(_queuedFetchArray, self);
+        if (_index >= 0) array_delete(_queuedFetchArray, _index, 1);
         
         array_push(_activityArray, self);
         
@@ -245,8 +245,8 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
         __status = _status;
         __asyncID = undefined;
         
-        var _index = array_get_index(_queuedArray, self);
-        if (_index >= 0) array_delete(_queuedArray, _index, 1);
+        var _index = array_get_index(_queuedFetchArray, self);
+        if (_index >= 0) array_delete(_queuedFetchArray, _index, 1);
         
         var _index = array_get_index(_pendingArray, self);
         if (_index >= 0) array_delete(_pendingArray, _index, 1);

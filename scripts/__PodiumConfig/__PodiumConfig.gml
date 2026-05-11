@@ -24,6 +24,8 @@
 
 #macro PODIUM_DEBUG_IGNORE_LOCAL_IMPORT  false
 
+#macro PODIUM_DEBUG_IGNORE_SUBMIT  true
+
 ///////
 // Platforms Controls
 ///////

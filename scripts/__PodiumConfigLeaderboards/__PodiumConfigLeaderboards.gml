@@ -14,6 +14,7 @@ function __PodiumConfigLeaderboards()
     
     PodiumCreate({
         leaderboardName: "best time",
+        descending: false,
         
         steam: {
             serviceName: "testBestTime",
@@ -39,9 +40,11 @@ function __PodiumConfigLeaderboards()
     
     //PodiumCreate({
     //    leaderboardName: "daily",
+    //    
     //    descending: true, //descending = higher is better
     //    daily: false,
     //    hasWeeklyHistory: true,
+    //    
     //    steam: {
     //        serviceName: "test",
     //        displayType: lb_disp_numeric,

@@ -8,15 +8,16 @@ if (signedIn != _signedIn)
     signedIn = _signedIn;
     if (_signedIn)
     {
-        //PodiumSubmit("all time score",   111);
-        //PodiumSubmit("best time",        222);
-        //PodiumSubmit("daily challenge",  555);
-        //
-        //PodiumGetScores("all time score");
-        //PodiumGetScores("best time");
-        //PodiumGetScores("daily challenge");
+        PodiumGetScores("all time score", PODIUM_RANGE_TOP);
+        PodiumSubmit("all time score", 111);
         
-        PodiumSubmit("all time score", 225, "hello world 3");
+        PodiumGetScores("best time", PODIUM_RANGE_TOP);
+        PodiumSubmit("best time", 222);
+        
+        PodiumGetScores("daily challenge", PODIUM_RANGE_TOP);
+        PodiumSubmit("daily challenge", 555);
+        
+        //PodiumSubmit("all time score", 230, "hello world 3");
         
         //PodiumGetScores("all time score", PODIUM_RANGE_USER);
         

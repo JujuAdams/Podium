@@ -57,7 +57,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                 
                 if (__range == PODIUM_RANGE_TOP)
                 {
-                    __asyncID = steam_download_scores(__formattedServiceData.__formattedRef, 1, 10);
+                    __asyncID = steam_download_scores(__formattedServiceData.__formattedRef, 1, 100);
                 }
                 else if (__range == PODIUM_RANGE_FRIENDS)
                 {
@@ -65,7 +65,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                 }
                 else if (__range == PODIUM_RANGE_AROUND)
                 {
-                    __asyncID = steam_download_scores_around_user(__formattedServiceData.__formattedRef, -5, 5);
+                    __asyncID = steam_download_scores_around_user(__formattedServiceData.__formattedRef, -50, 50);
                 }
                 else if (__range == PODIUM_RANGE_USER)
                 {
@@ -83,7 +83,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                     __asyncID = switch_npln_leaderboard_get_scores_range(_system.__switchNPLNUserHandle,
                                                                          __formattedServiceData.switch.__formattedCategoryTypeName, __formattedServiceData.switch.categoryID,
                                                                          __PODIUM_SWITCH_CURRENT_SEASON,
-                                                                         0, 10);
+                                                                         0, 100);
                 }
                 else if (__range == PODIUM_RANGE_FRIENDS)
                 {
@@ -96,7 +96,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                     __asyncID = switch_npln_leaderboard_get_scores_near(_system.__switchNPLNUserHandle,
                                                                         __formattedServiceData.switch.__formattedCategoryTypeName, __formattedServiceData.switch.categoryID,
                                                                         __PODIUM_SWITCH_CURRENT_SEASON,
-                                                                        10);
+                                                                        100);
                 }
                 else if (__range == PODIUM_RANGE_USER)
                 {
@@ -116,13 +116,13 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                 if (__range == PODIUM_RANGE_TOP)
                 {
                     __asyncID = 999_999;
-                    psn_get_leaderboard_score_range(_system.__psGamepad, __formattedServiceData.__formattedRef, 0, 10); //zero-indexed
+                    psn_get_leaderboard_score_range(_system.__psGamepad, __formattedServiceData.__formattedRef, 0, 100); //zero-indexed
                     __PodiumRegisterPSLeaderboardScoreRange(__formattedServiceData.__formattedRef, _func);
                 }
                 else if (__range == PODIUM_RANGE_FRIENDS)
                 {
                     __asyncID = 999_999;
-                    psn_get_friends_scores(_system.__psGamepad, __formattedServiceData.__formattedRef, 0, 10); //zero-indexed
+                    psn_get_friends_scores(_system.__psGamepad, __formattedServiceData.__formattedRef, 0, 100); //zero-indexed
                     __PodiumRegisterPSLeaderboardFriends(__formattedServiceData.__formattedRef, _func);
                 }
                 else if (__range == PODIUM_RANGE_AROUND)
@@ -158,15 +158,15 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                 
                 if (__range == PODIUM_RANGE_TOP)
                 {
-                    __asyncID = __PodiumPlayFabGetLeaderboardTop(__formattedServiceData.playFab, 1, 10, __seasonOffset, _callbackFunction);
+                    __asyncID = __PodiumPlayFabGetLeaderboardTop(__formattedServiceData.playFab, 1, 100, __seasonOffset, _callbackFunction);
                 }
                 else if (__range == PODIUM_RANGE_FRIENDS)
                 {
-                    __asyncID = __PodiumPlayFabGetLeaderboardFriends(__formattedServiceData.playFab, 1, 10, __seasonOffset, _callbackFunction);
+                    __asyncID = __PodiumPlayFabGetLeaderboardFriends(__formattedServiceData.playFab, 1, 100, __seasonOffset, _callbackFunction);
                 }
                 else if (__range == PODIUM_RANGE_AROUND)
                 {
-                    __asyncID = __PodiumPlayFabGetLeaderboardAround(__formattedServiceData.playFab, 10, __seasonOffset, _callbackFunction);
+                    __asyncID = __PodiumPlayFabGetLeaderboardAround(__formattedServiceData.playFab, 100, __seasonOffset, _callbackFunction);
                 }
                 else if (__range == PODIUM_RANGE_USER)
                 {
@@ -179,15 +179,15 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                 
                 if (__range == PODIUM_RANGE_TOP)
                 {
-                    __asyncID = GooglePlayServices_Leaderboard_LoadTopScores(__formattedServiceData.playServices, _span, Leaderboard_COLLECTION_PUBLIC, 10, false);
+                    __asyncID = GooglePlayServices_Leaderboard_LoadTopScores(__formattedServiceData.playServices, _span, Leaderboard_COLLECTION_PUBLIC, 25, false);
                 }
                 else if (__range == PODIUM_RANGE_FRIENDS)
                 {
-                    __asyncID = GooglePlayServices_Leaderboard_LoadTopScores(__formattedServiceData.playServices, _span, Leaderboard_COLLECTION_SOCIAL, 10, false);
+                    __asyncID = GooglePlayServices_Leaderboard_LoadTopScores(__formattedServiceData.playServices, _span, Leaderboard_COLLECTION_SOCIAL, 25, false);
                 }
                 else if (__range == PODIUM_RANGE_AROUND)
                 {
-                    __asyncID = GooglePlayServices_Leaderboard_LoadPlayerCenteredScores(__formattedServiceData.playServices, _span, Leaderboard_COLLECTION_PUBLIC, 10, false);
+                    __asyncID = GooglePlayServices_Leaderboard_LoadPlayerCenteredScores(__formattedServiceData.playServices, _span, Leaderboard_COLLECTION_PUBLIC, 25, false);
                 }
                 else if (__range == PODIUM_RANGE_USER)
                 {
@@ -198,11 +198,11 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
             {
                 if (__range == PODIUM_RANGE_TOP)
                 {
-                    __asyncID = GameCenter_Leaderboard_LoadGlobal(__formattedServiceData.gameCenter, GameCenter_Leaderboard_TimeScope_AllTime, 1, 10);
+                    __asyncID = GameCenter_Leaderboard_LoadGlobal(__formattedServiceData.gameCenter, GameCenter_Leaderboard_TimeScope_AllTime, 1, 25);
                 }
                 else if (__range == PODIUM_RANGE_FRIENDS)
                 {
-                    __asyncID = GameCenter_Leaderboard_LoadFriendsOnly(__formattedServiceData.gameCenter, GameCenter_Leaderboard_TimeScope_AllTime, 1, 10);
+                    __asyncID = GameCenter_Leaderboard_LoadFriendsOnly(__formattedServiceData.gameCenter, GameCenter_Leaderboard_TimeScope_AllTime, 1, 25);
                 }
                 else if (__range == PODIUM_RANGE_AROUND)
                 {

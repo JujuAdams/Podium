@@ -18,7 +18,7 @@ function __PodiumPlayFabGetLeaderboardAround(_leaderboardName, _count, _versionO
     }
     else
     {
-        var _result = __PodiumPlayFabGetLeaderboardUser(_leaderboardName, undefined, method({
+        var _result = __PodiumPlayFabGetLeaderboardUser(_leaderboardName, 0, method({
             __leaderboardName: _leaderboardName,
             __count:           _count,
             __versionOffset:   _versionOffset,

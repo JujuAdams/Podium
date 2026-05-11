@@ -106,6 +106,37 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                                                                         0);
                 }
             }
+            else if (PODIUM_ON_PS5)
+            {
+                var _func = function(_cancelled)
+                {
+                    __Complete(((not _cancelled) && async_load[? "succeeded"])? PODIUM_LEADERBOARD_SUCCESS : PODIUM_LEADERBOARD_ERROR, undefined);
+                }
+                
+                if (__range == PODIUM_RANGE_TOP)
+                {
+                    __asyncID = 999_999;
+                    psn_get_leaderboard_score_range(_system.__psGamepad, __formattedServiceData.__formattedRef, 0, 10); //zero-indexed
+                    __PodiumRegisterPSLeaderboardScoreRange(__formattedServiceData.__formattedRef, _func);
+                }
+                else if (__range == PODIUM_RANGE_FRIENDS)
+                {
+                    __asyncID = 999_999;
+                    psn_get_friends_scores(_system.__psGamepad, __formattedServiceData.__formattedRef, 0, 10); //zero-indexed
+                    __PodiumRegisterPSLeaderboardFriends(__formattedServiceData.__formattedRef, _func);
+                }
+                else if (__range == PODIUM_RANGE_AROUND)
+                {
+                    //FIXME - This doesn't seem to be supported. Can maybe make a request against the user's leaderboard ranking and then request a range around it?
+                    __PodiumWarning("`PODIUM_RANGE_AROUND` not supported on PS5 (yet)");
+                }
+                else if (__range == PODIUM_RANGE_USER)
+                {
+                    __asyncID = 999_999;
+                    psn_get_leaderboard_score(_system.__psGamepad, __formattedServiceData.__formattedRef);
+                    __PodiumRegisterPSLeaderboardUser(__formattedServiceData.__formattedRef, _func);
+                }
+            }
             else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
             {
                 var _callbackFunction = function(_resultJSON)
@@ -311,6 +342,74 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                     
                     _json = undefined;
                     __status = PODIUM_LEADERBOARD_ERROR;
+                }
+            }
+            else if (PODIUM_ON_PS5)
+            {
+                ///////
+                // PlayStation 5
+                ///////
+                
+                if (async_load < 0)
+                {
+                    __status = PODIUM_LEADERBOARD_ERROR;
+                }
+                else
+                {
+                    try
+                    {
+                        if (__range == PODIUM_RANGE_USER)
+                        {
+                            if (PODIUM_VERBOSE)
+                            {
+                                __PodiumTrace($"Using PlayStation 5 user parser");
+                            }
+                            
+                            var _rank     = async_load[? $"rank"      ];
+                            var _playerID = async_load[? $"playerid"  ]; //Called "player ID" but actually seems to be a name?
+                            var _score    = async_load[? $"scorevalue"];
+                            var _comment  = async_load[? $"comment"   ] ?? "";
+                            
+                            if ((_rank != undefined) && (_playerID != undefined) && (_score != undefined))
+                            {
+                                array_push(_data, new __PodiumClassRecord(_playerID, _score, _rank, _playerID, _comment, false));
+                            }
+                            else
+                            {
+                                throw "Incomplete user record";
+                            }
+                        }
+                        else
+                        {
+                            if (PODIUM_VERBOSE)
+                            {
+                                __PodiumTrace($"Using PlayStation 5 general parser");
+                            }
+                            
+                            var _entryNumber = async_load[? "numentries"];
+                            var _i = 0;
+                            repeat(_entryNumber)
+                            {
+                                var _rank     = async_load[? $"rank{_i}"      ];
+                                var _playerID = async_load[? $"playerid{_i}"  ]; //Called "player ID" but actually seems to be a name?
+                                var _score    = async_load[? $"scorevalue{_i}"];
+                                var _comment  = async_load[? $"comment{_i}"   ] ?? "";
+                                
+                                if ((_rank != undefined) && (_playerID != undefined) && (_score != undefined))
+                                {
+                                    array_push(_data, new __PodiumClassRecord(_playerID, _score, _rank, _playerID, _comment, false));
+                                }
+                                
+                                ++_i;
+                            }
+                        }
+                    }
+                    catch(_error)
+                    {
+                        show_debug_message(_error);
+                        __PodiumWarning($"Failed to parse returned leaderboard data for \"{__formattedServiceData}\"");
+                        __status = PODIUM_LEADERBOARD_ERROR;
+                    }
                 }
             }
             else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)

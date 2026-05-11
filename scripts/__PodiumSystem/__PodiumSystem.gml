@@ -43,7 +43,9 @@ function __PodiumSystem()
         __queuedArray   = [];
         __activityArray = [];
         
-        __psGamepad = -1;
+        __psGamepad                = -1;
+        __psExpectingSystemOverlay = false;
+        __psNPAvailabilityAsyncID  = undefined;
         
         __xboxUser = int64(0);
         
@@ -66,8 +68,10 @@ function __PodiumSystem()
         
         __leaderboardDict            = {};
         __httpAsyncIDMap             = ds_map_create();
+        __psLeaderboardSubmitMap     = ds_map_create();
         __psLeaderboardScoreRangeMap = ds_map_create();
         __psLeaderboardFriendsMap    = ds_map_create();
+        __psLeaderboardUserMap       = ds_map_create();
         
         time_source_start(time_source_create(time_source_global, 1, time_source_units_frames, function()
         {

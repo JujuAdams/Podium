@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"__PodiumRegisterPSLeaderboardUser",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__PodiumRegisterPSLeaderboardUser",
+  "parent":{
+    "name":"(System)",
+    "path":"folders/Podium/(System).yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

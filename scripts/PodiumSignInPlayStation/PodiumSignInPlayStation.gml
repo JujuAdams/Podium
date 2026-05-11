@@ -1,6 +1,7 @@
 /// @param gamepad
+/// @param [showOSDialog=true]
 
-function PodiumSignInPlayStation(_gamepad = -1)
+function PodiumSignInPlayStation(_gamepad = -1, _showOSDialog = true)
 {
     static _system = __PodiumSystem();
     
@@ -15,7 +16,8 @@ function PodiumSignInPlayStation(_gamepad = -1)
             }
             
             __psGamepad = _gamepad;
-            __username = (_gamepad < 0)? undefined : psn_name_for_pad(_gamepad);
+            __psUserID  = undefined;
+            __username  = (_gamepad < 0)? undefined : psn_name_for_pad(_gamepad);
             
             if (PODIUM_VERBOSE)
             {
@@ -32,12 +34,24 @@ function PodiumSignInPlayStation(_gamepad = -1)
             
             __signInState = PODIUM_USER_SIGNING_IN;
             
-            psn_init_trophy(_gamepad);
+            var _result = psn_check_np_availability(__psGamepad, _showOSDialog);
             
-            call_later(1, time_source_units_frames, function()
+            if (PODIUM_VERBOSE)
             {
-                __PodiumUserSignedIn();
-            });
+                __PodiumTrace($"PSN availability returned {_result}");
+            }
+            
+            if (_result < 0)
+            {
+                call_later(10, time_source_units_frames, function()
+                {
+                    __signInState = PODIUM_USER_SIGN_IN_FAILED;
+                });
+            }
+            else
+            {
+                __psNPAvailabilityAsyncID = _result;
+            }
         }
     }
 }

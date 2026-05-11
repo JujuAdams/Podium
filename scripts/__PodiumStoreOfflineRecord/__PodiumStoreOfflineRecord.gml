@@ -23,7 +23,11 @@ function __PodiumStoreOfflineRecord(_leaderboardName, _value, _metadataString, _
         }
         else
         {
-            if (_leaderboardStruct.__serviceData.descending)
+            if (_leaderboardStruct.__serviceData.overwrite)
+            {
+                var _betterScore = (_value != _offlineRecord.__value);
+            }
+            else if (_leaderboardStruct.__serviceData.descending)
             {
                 var _betterScore = (_value > _offlineRecord.__value);
             }

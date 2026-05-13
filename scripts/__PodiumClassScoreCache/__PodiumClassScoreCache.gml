@@ -3,6 +3,7 @@ function __PodiumClassScoreCache() constructor
     __state = PODIUM_LEADERBOARD_NOT_FETCHED;
     __data  = [];
     __lastReceivedTime = -infinity;
+    __lastGetTime = -infinity;
     
     
     
@@ -22,7 +23,7 @@ function __PodiumClassScoreCache() constructor
         }
         else
         {
-            return (not is_infinity(__lastReceivedTime));
+            return ((current_time - __lastGetTime < 1_000*15) && (not is_infinity(__lastGetTime)) && (not is_infinity(__lastReceivedTime)));
         }
     }
     
@@ -33,12 +34,15 @@ function __PodiumClassScoreCache() constructor
     
     static __GetScoresData = function()
     {
+        __lastGetTime = current_time;
         return __data;
     }
     
     static __ReceiveData = function(_data, _state)
     {
         __data = _data;
+        
+        __lastGetTime = current_time;
         __lastReceivedTime = current_time;
         
         __SetState(_state);

@@ -116,13 +116,13 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                 if (__range == PODIUM_RANGE_TOP)
                 {
                     __asyncID = 999_999;
-                    psn_get_leaderboard_score_range(_system.__psGamepad, __formattedServiceData.__formattedRef, 0, 100); //zero-indexed
+                    psn_get_leaderboard_score_range(_system.__psGamepad, __formattedServiceData.__formattedRef, 0, 99); //zero-indexed
                     __PodiumRegisterPSLeaderboardScoreRange(__formattedServiceData.__formattedRef, _func);
                 }
                 else if (__range == PODIUM_RANGE_FRIENDS)
                 {
                     __asyncID = 999_999;
-                    psn_get_friends_scores(_system.__psGamepad, __formattedServiceData.__formattedRef, 0, 100); //zero-indexed
+                    psn_get_friends_scores(_system.__psGamepad, __formattedServiceData.__formattedRef, 0, 99); //zero-indexed
                     __PodiumRegisterPSLeaderboardFriends(__formattedServiceData.__formattedRef, _func);
                 }
                 else if (__range == PODIUM_RANGE_AROUND)
@@ -166,7 +166,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                 }
                 else if (__range == PODIUM_RANGE_AROUND)
                 {
-                    __asyncID = __PodiumPlayFabGetLeaderboardAround(__formattedServiceData.playFab, 100, __seasonOffset, _callbackFunction);
+                    __asyncID = __PodiumPlayFabGetLeaderboardAround(__formattedServiceData.playFab, 50, __seasonOffset, _callbackFunction);
                 }
                 else if (__range == PODIUM_RANGE_USER)
                 {
@@ -179,15 +179,15 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                 
                 if (__range == PODIUM_RANGE_TOP)
                 {
-                    __asyncID = GooglePlayServices_Leaderboard_LoadTopScores(__formattedServiceData.playServices, _span, Leaderboard_COLLECTION_PUBLIC, 25, false);
+                    __asyncID = GooglePlayServices_Leaderboard_LoadTopScores(__formattedServiceData.playServices, _span, Leaderboard_COLLECTION_PUBLIC, 10, false);
                 }
                 else if (__range == PODIUM_RANGE_FRIENDS)
                 {
-                    __asyncID = GooglePlayServices_Leaderboard_LoadTopScores(__formattedServiceData.playServices, _span, Leaderboard_COLLECTION_SOCIAL, 25, false);
+                    __asyncID = GooglePlayServices_Leaderboard_LoadTopScores(__formattedServiceData.playServices, _span, Leaderboard_COLLECTION_SOCIAL, 10, false);
                 }
                 else if (__range == PODIUM_RANGE_AROUND)
                 {
-                    __asyncID = GooglePlayServices_Leaderboard_LoadPlayerCenteredScores(__formattedServiceData.playServices, _span, Leaderboard_COLLECTION_PUBLIC, 25, false);
+                    __asyncID = GooglePlayServices_Leaderboard_LoadPlayerCenteredScores(__formattedServiceData.playServices, _span, Leaderboard_COLLECTION_PUBLIC, 10, false);
                 }
                 else if (__range == PODIUM_RANGE_USER)
                 {
@@ -198,11 +198,11 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
             {
                 if (__range == PODIUM_RANGE_TOP)
                 {
-                    __asyncID = GameCenter_Leaderboard_LoadGlobal(__formattedServiceData.gameCenter, GameCenter_Leaderboard_TimeScope_AllTime, 1, 25);
+                    __asyncID = GameCenter_Leaderboard_LoadGlobal(__formattedServiceData.gameCenter, GameCenter_Leaderboard_TimeScope_AllTime, 1, 10);
                 }
                 else if (__range == PODIUM_RANGE_FRIENDS)
                 {
-                    __asyncID = GameCenter_Leaderboard_LoadFriendsOnly(__formattedServiceData.gameCenter, GameCenter_Leaderboard_TimeScope_AllTime, 1, 25);
+                    __asyncID = GameCenter_Leaderboard_LoadFriendsOnly(__formattedServiceData.gameCenter, GameCenter_Leaderboard_TimeScope_AllTime, 1, 10);
                 }
                 else if (__range == PODIUM_RANGE_AROUND)
                 {
@@ -307,8 +307,6 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                 catch(_error)
                 {
                     __PodiumWarning($"Failed to parse returned leaderboard data for \"{__formattedServiceData}\"");
-                    
-                    _json = undefined;
                     __status = PODIUM_LEADERBOARD_ERROR;
                 }
             }
@@ -323,10 +321,9 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                     __PodiumTrace($"Using Switch parser");
                 }
                 
-                var _scoresArray = async_load[? "scores"];
-                
                 try
                 {
+                    var _scoresArray = async_load[? "scores"];
                     var _i = 0;
                     repeat(array_length(_scoresArray))
                     {
@@ -339,8 +336,6 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                 catch(_error)
                 {
                     __PodiumWarning($"Failed to parse returned leaderboard data for \"{__formattedServiceData}\"");
-                    
-                    _json = undefined;
                     __status = PODIUM_LEADERBOARD_ERROR;
                 }
             }
@@ -423,20 +418,28 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                     __PodiumTrace($"Using PlayFab parser");
                 }
                 
-                try
+                if (_playFabData == undefined)
                 {
-                    var _rankingsArray = _playFabData.data.Rankings;
-                }
-                catch(_error)
-                {
-                    if (PODIUM_VERBOSE)
-                    {
-                        show_debug_message(json_stringify(_playFabData, true));
-                        show_debug_message(_error);
-                    }
-                    
-                    __PodiumWarning($"Failed to find expected data in returned leaderboard data \"{_leaderboardName}\"");
+                    __PodiumWarning("Returned PlayFab data is invalid");
                     __status = PODIUM_LEADERBOARD_ERROR;
+                }
+                else
+                {
+                    try
+                    {
+                        var _rankingsArray = _playFabData.data.Rankings;
+                    }
+                    catch(_error)
+                    {
+                        if (PODIUM_VERBOSE)
+                        {
+                            show_debug_message(json_stringify(_playFabData, true));
+                            show_debug_message(_error);
+                        }
+                        
+                        __PodiumWarning($"Failed to find expected data in returned leaderboard data \"{_leaderboardName}\"");
+                        __status = PODIUM_LEADERBOARD_ERROR;
+                    }
                 }
                 
                 if (__status == PODIUM_LEADERBOARD_SUCCESS)
@@ -497,8 +500,6 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                 catch(_error)
                 {
                     __PodiumWarning($"Failed to parse returned leaderboard data for \"{__formattedServiceData}\"");
-                    
-                    _scoresArray = undefined;
                     __status = PODIUM_LEADERBOARD_ERROR;
                 }
             }
@@ -513,39 +514,47 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                     __PodiumTrace($"Using GameCenter parser");
                 }
                 
-                var _scoreCount = async_load[? "entries"];
-                var _i = 0;
-                repeat(_scoreCount)
+                try
                 {
-                    var _infoJSON = async_load[? $"entry_info_{_i}"   ];
-                    var _score    = async_load[? $"entry_score_{_i}"  ];
-                    var _rank     = async_load[? $"entry_rank_{_i}"   ];
-                    var _metadata = async_load[? $"entry_context_{_i}"];
-                    
-                    var _info        = undefined;
-                    var _displayName = undefined;
-                    var _playerID    = undefined;
-                    try
+                    var _scoreCount = async_load[? "entries"];
+                    var _i = 0;
+                    repeat(_scoreCount)
                     {
-                        _info        = json_parse(_infoJSON);
-                        _displayName = _info.displayName;
-                        _playerID    = _info.playerID;
+                        var _infoJSON = async_load[? $"entry_info_{_i}"   ];
+                        var _score    = async_load[? $"entry_score_{_i}"  ];
+                        var _rank     = async_load[? $"entry_rank_{_i}"   ];
+                        var _metadata = async_load[? $"entry_context_{_i}"];
+                        
+                        var _info        = undefined;
+                        var _displayName = undefined;
+                        var _playerID    = undefined;
+                        try
+                        {
+                            _info        = json_parse(_infoJSON);
+                            _displayName = _info.displayName;
+                            _playerID    = _info.playerID;
+                        }
+                        catch(_error)
+                        {
+                            show_debug_message(_error);
+                        }
+                        
+                        if ((_displayName != undefined) && (_score != undefined) && (_rank != undefined) && (_playerID != undefined) && (_metadata != undefined))
+                        {
+                            array_push(_data, new __PodiumClassRecord(_displayName, _score, _rank, _playerID, _metadata, false));
+                        }
+                        else
+                        {
+                            __PodiumWarning($"Could not parse entry {_i}");
+                        }
+                        
+                        ++_i;
                     }
-                    catch(_error)
-                    {
-                        show_debug_message(_error);
-                    }
-                    
-                    if ((_displayName != undefined) && (_score != undefined) && (_rank != undefined) && (_playerID != undefined) && (_metadata != undefined))
-                    {
-                        array_push(_data, new __PodiumClassRecord(_displayName, _score, _rank, _playerID, _metadata, false));
-                    }
-                    else
-                    {
-                        __PodiumWarning($"Could not parse entry {_i}");
-                    }
-                    
-                    ++_i;
+                }
+                catch(_error)
+                {
+                    __PodiumWarning($"Failed to parse returned leaderboard data for \"{__formattedServiceData}\"");
+                    __status = PODIUM_LEADERBOARD_ERROR;
                 }
             }
             

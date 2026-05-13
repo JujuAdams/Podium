@@ -95,14 +95,37 @@ function __PodiumSystem()
                 }
             }
             
-            if (PODIUM_ON_XBOX_SERIES && (__xboxUser > 0) && (__signInState == PODIUM_USER_SIGNED_IN))
+            if (PODIUM_ON_XBOX_SERIES)
             {
-                if (not xboxone_user_is_signed_in(__xboxUser))
+                if ((__xboxUser > 0) && (__signInState == PODIUM_USER_SIGNED_IN))
                 {
-                    __PodiumWarning($"User {__xboxUser} signed out");
-                    __signInState = PODIUM_USER_SIGNED_OUT;
-                    __PodiumGlobalClearRemoteCaches();
+                    if (not xboxone_user_is_signed_in(__xboxUser))
+                    {
+                        __PodiumWarning($"User {__xboxUser} signed out");
+                        __signInState = PODIUM_USER_SIGNED_OUT;
+                        __PodiumGlobalClearRemoteCaches();
+                    }
+                    else if (not os_is_network_connected(false))
+                    {
+                        __PodiumWarning($"Device lost network connection");
+                        __signInState = PODIUM_USER_SIGNED_OUT;
+                        __PodiumGlobalClearRemoteCaches();
+                    }
                 }
+            }
+            
+            var _i = array_length(__pendingArray)-1;
+            repeat(array_length(__pendingArray))
+            {
+                with(__pendingArray[_i])
+                {
+                    if (current_time - __activityTime > 30_000)
+                    {
+                        __Complete(PODIUM_LEADERBOARD_ERROR, undefined);
+                    }
+                }
+                
+                --_i;
             }
             
             //Clean up recent activity arrays

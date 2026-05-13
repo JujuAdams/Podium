@@ -77,7 +77,7 @@ function PodiumGetScores(_leaderboardName, _range, _seasonOffset = 0, _priority 
     ///////
     
     //If we're not signed in (failure to communicate with the server etc.) then return an offline score if we're able
-    if (not PodiumGetSignedIn())
+    if ((not PodiumGetSignedIn()) || PodiumGetOfflineOnly())
     {
         if ((_range == PODIUM_RANGE_USER) && (_seasonOffset == 0))
         {

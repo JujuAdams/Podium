@@ -41,13 +41,6 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
         
         array_push(_activityArray, self);
         
-        if (PODIUM_DEBUG_IGNORE_SUBMIT)
-        {
-            __asyncID = 999_999;
-            __Complete(PODIUM_LEADERBOARD_SUCCESS, undefined);
-            return;
-        }
-        
         if (PODIUM_STEAM_AVAILABLE)
         {
             if (__metadataString == "")

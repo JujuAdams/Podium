@@ -9,13 +9,15 @@ function PodiumSubmit(_leaderboardName, _value, _metadataString = "", _priority 
     static _system = __PodiumSystem();
     static _queuedSubmitArray = _system.__queuedSubmitArray;
     
+    var _newRecord = false;
+    
     var _leaderboardStruct = __PodiumLeaderboardFind(_leaderboardName);
     if (is_struct(_leaderboardStruct))
     {
         if ((not PodiumGetSignedIn()) || PodiumGetOfflineOnly())
         {
             //If we're running offline-only leaderboards or we're not signed in, only store a local value
-            __PodiumStoreOfflineRecord(_leaderboardName, _value, _metadataString, not PodiumGetOfflineOnly());
+            _newRecord = __PodiumStoreOfflineRecord(_leaderboardName, _value, _metadataString, not PodiumGetOfflineOnly());
         }
         else if (PodiumGetLeaderboardDisabled(_leaderboardName))
         {
@@ -43,7 +45,7 @@ function PodiumSubmit(_leaderboardName, _value, _metadataString = "", _priority 
                     PodiumClearRemoteCache(_leaderboardName, PODIUM_RANGE_USER,    0);
                 }
                 
-                __PodiumStoreOfflineRecord(_leaderboardName, _value, _metadataString, not PodiumGetOfflineOnly());
+                _newRecord = __PodiumStoreOfflineRecord(_leaderboardName, _value, _metadataString, not PodiumGetOfflineOnly());
                 
                 if (_priority == PODIUM_PRIORITY_HIGH)
                 {
@@ -65,4 +67,6 @@ function PodiumSubmit(_leaderboardName, _value, _metadataString = "", _priority 
             }
         }
     }
+    
+    return _newRecord;
 }

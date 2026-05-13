@@ -7,6 +7,8 @@ function __PodiumStoreOfflineRecord(_leaderboardName, _value, _metadataString, _
 {
     static _system = __PodiumSystem();
     
+    var _betterScore = false;
+    
     var _offlineRecord = _system.__offlineRecordDict[$ _leaderboardName];
     if (not is_struct(_offlineRecord))
     {
@@ -19,21 +21,21 @@ function __PodiumStoreOfflineRecord(_leaderboardName, _value, _metadataString, _
         if (not is_struct(_leaderboardStruct))
         {
             //Unknown leaderboard requirements. We'll use the most recent score
-            var _betterScore = (_value != _offlineRecord.__value);
+            _betterScore = (_value != _offlineRecord.__value);
         }
         else
         {
             if (_leaderboardStruct.__serviceData.overwrite)
             {
-                var _betterScore = (_value != _offlineRecord.__value);
+                _betterScore = (_value != _offlineRecord.__value);
             }
             else if (_leaderboardStruct.__serviceData.descending)
             {
-                var _betterScore = (_value > _offlineRecord.__value);
+                _betterScore = (_value > _offlineRecord.__value);
             }
             else
             {
-                var _betterScore = (_value < _offlineRecord.__value);
+                _betterScore = (_value < _offlineRecord.__value);
             }
         }
         
@@ -47,4 +49,6 @@ function __PodiumStoreOfflineRecord(_leaderboardName, _value, _metadataString, _
             _offlineRecord.__pending  = _pending;
         }
     }
+    
+    return _betterScore;
 }

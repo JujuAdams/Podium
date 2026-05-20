@@ -61,7 +61,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.1400.5.1052",
+    "IDEVersion":"2024.1400.5.1065",
   },
   "name":"Podium",
   "resources":[
@@ -94,6 +94,8 @@
     {"id":{"name":"__PodiumPlayFabJSONParse","path":"scripts/__PodiumPlayFabJSONParse/__PodiumPlayFabJSONParse.yy",},},
     {"id":{"name":"__PodiumPlayFabJSONStringify","path":"scripts/__PodiumPlayFabJSONStringify/__PodiumPlayFabJSONStringify.yy",},},
     {"id":{"name":"__PodiumPlayFabLeaderboardUpdate","path":"scripts/__PodiumPlayFabLeaderboardUpdate/__PodiumPlayFabLeaderboardUpdate.yy",},},
+    {"id":{"name":"__PodiumPlayFabMetadataPack","path":"scripts/__PodiumPlayFabMetadataPack/__PodiumPlayFabMetadataPack.yy",},},
+    {"id":{"name":"__PodiumPlayFabMetadataUnpack","path":"scripts/__PodiumPlayFabMetadataUnpack/__PodiumPlayFabMetadataUnpack.yy",},},
     {"id":{"name":"__PodiumPlayFabSetDisplayName","path":"scripts/__PodiumPlayFabSetDisplayName/__PodiumPlayFabSetDisplayName.yy",},},
     {"id":{"name":"__PodiumPlayFabXboxLogin","path":"scripts/__PodiumPlayFabXboxLogin/__PodiumPlayFabXboxLogin.yy",},},
     {"id":{"name":"__PodiumPlayFabXboxRequestToken","path":"scripts/__PodiumPlayFabXboxRequestToken/__PodiumPlayFabXboxRequestToken.yy",},},

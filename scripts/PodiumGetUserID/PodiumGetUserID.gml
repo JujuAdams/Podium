@@ -22,7 +22,7 @@ function PodiumGetUserID()
     }
     else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
     {
-        return _system.__playFabEntityID;
+        return _system.__xboxUser;
     }
     else if (PODIUM_USING_XBOX_LEADERBOARDS)
     {

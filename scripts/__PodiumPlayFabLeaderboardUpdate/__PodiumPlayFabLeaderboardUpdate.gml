@@ -15,7 +15,7 @@ function __PodiumPlayFabLeaderboardUpdate(_leaderboardName, _value, _metadataStr
     
     _headerMap[? "Content-Type" ] = "application/json";
     _headerMap[? "X-EntityToken"] = _system.__playFabEntityToken;
-      
+    
     var _bodyString = __PodiumPlayFabJSONStringify({
         LeaderboardName: _leaderboardName,
         Entries: [
@@ -24,7 +24,7 @@ function __PodiumPlayFabLeaderboardUpdate(_leaderboardName, _value, _metadataStr
                 Scores: [
                     int64(_value),
                 ],
-                Metadata: _metadataString,
+                Metadata: __PodiumPlayFabMetadataPack(_system.__xboxUser, _metadataString),
             }
         ],
     });

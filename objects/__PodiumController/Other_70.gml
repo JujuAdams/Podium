@@ -41,8 +41,9 @@ with(__PodiumSystem())
     }
     else if (PODIUM_ON_PS5 && (async_load[? "id"] == PSN_LEADERBOARD_SCORE_POSTED_MSG))
     {
-        var _leaderboardID = async_load[? "leaderboardid"]; //The actual ID we want to check against
+        __PodiumCheckPSError();
         
+        var _leaderboardID = async_load[? "leaderboardid"]; //The actual ID we want to check against
         if (ds_map_exists(__psLeaderboardSubmitMap, _leaderboardID))
         {
             var _callback = __psLeaderboardSubmitMap[? _leaderboardID];
@@ -52,8 +53,9 @@ with(__PodiumSystem())
     }
     else if (PODIUM_ON_PS5 && (async_load[? "id"] == PSN_LEADERBOARD_SCORE_RANGE_MSG))
     {
-        var _leaderboardID = async_load[? "leaderboardid"]; //The actual ID we want to check against
+        __PodiumCheckPSError();
         
+        var _leaderboardID = async_load[? "leaderboardid"]; //The actual ID we want to check against
         if (ds_map_exists(__psLeaderboardScoreRangeMap, _leaderboardID))
         {
             var _callback = __psLeaderboardScoreRangeMap[? _leaderboardID];
@@ -63,8 +65,9 @@ with(__PodiumSystem())
     }
     else if (PODIUM_ON_PS5 && (async_load[? "id"] == PSN_LEADERBOARD_FRIENDS_SCORES_MSG))
     {
-        var _leaderboardID = async_load[? "leaderboardid"]; //The actual ID we want to check against
+        __PodiumCheckPSError();
         
+        var _leaderboardID = async_load[? "leaderboardid"]; //The actual ID we want to check against
         if (ds_map_exists(__psLeaderboardFriendsMap, _leaderboardID))
         {
             var _callback = __psLeaderboardFriendsMap[? _leaderboardID];
@@ -74,8 +77,9 @@ with(__PodiumSystem())
     }
     else if (PODIUM_ON_PS5 && (async_load[? "id"] == PSN_LEADERBOARD_SCORE_MSG))
     {
-        var _leaderboardID = async_load[? "leaderboardid"]; //The actual ID we want to check against
+        __PodiumCheckPSError();
         
+        var _leaderboardID = async_load[? "leaderboardid"]; //The actual ID we want to check against
         if (ds_map_exists(__psLeaderboardUserMap, _leaderboardID))
         {
             var _callback = __psLeaderboardUserMap[? _leaderboardID];
@@ -210,6 +214,14 @@ with(__PodiumSystem())
             {
                 if (async_load[? "id"] == _opStruct.__asyncID)
                 {
+                    if (PODIUM_SWITCH_SHOW_ERROR_VIEWER)
+                    {
+                        if (async_load[? "error"] > 0)
+                        {
+                            switch_error_show_os_code("2321-4993");
+                        }
+                    }
+                    
                     _opStruct.__Complete(async_load[? "success"]? PODIUM_LEADERBOARD_SUCCESS : PODIUM_LEADERBOARD_ERROR);
                 }
             }

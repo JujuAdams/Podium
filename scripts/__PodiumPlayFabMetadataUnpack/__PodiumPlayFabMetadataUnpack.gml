@@ -26,10 +26,20 @@ function __PodiumPlayFabMetadataUnpack(_inputString)
         return _result;
     }
     
-    var _xboxUser = string_copy(_inputString, 2, _pos - 2);
-    var _metadataString = string_delete(_inputString, 1, _pos);
+    var _xboxUser = undefined;
+    try
+    {
+        _xboxUser = real(string_copy(_inputString, 2, _pos - 2));
+    }
+    catch(_error)
+    {
+        show_debug_message(_error);
+        __PodiumWarning("Could not convert metadata substring into user ID");
+    }
+    
+    //TODO - Decryption
     
     _result.__xboxUser = _xboxUser;
-    _result.__metadataString = _metadataString;
+    _result.__metadataString = string_delete(_inputString, 1, _pos);
     return _result;
 }

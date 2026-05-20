@@ -48,7 +48,7 @@ function PodiumCreate(_serviceData)
     {
         if (not struct_exists(_struct, _variableName))
         {
-            __PodiumSoftError($"Leaderboard \"{_struct}\" does not have a `.{_variableName}` parameter");
+            __PodiumSoftError($"Missing `.{_variableName}` parameter from leaderboard {_struct}");
             return false;
         }
         

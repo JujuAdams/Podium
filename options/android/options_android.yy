@@ -16,7 +16,7 @@
       "option_android_gradle_plugin_version":"8.8.0",
       "option_android_package_domain":"com",
       "option_android_package_company":"jujuadams",
-      "option_android_package_product":"test_lb",
+      "option_android_package_product":"test_iap",
       "option_android_arch_armv7":"false",
       "option_android_arch_arm64":"true",
       "option_android_arch_x86_64":"false",

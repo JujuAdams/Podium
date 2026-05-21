@@ -300,7 +300,11 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                             }
                         }
                         
-                        array_push(_data, new __PodiumClassRecord(_scoreStruct.name, _scoreStruct.score, _scoreStruct.rank, _scoreStruct.userID, _metadataString, false));
+                        array_push(_data, new __PodiumClassRecord(_scoreStruct.name,
+                                                                  __PodiumConvertFromSubmitScore(_scoreStruct.score, __formattedServiceData),
+                                                                  _scoreStruct.rank,
+                                                                  _scoreStruct.userID,
+                                                                  _metadataString, false));
                         ++_i;
                     }
                 }
@@ -329,7 +333,11 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                     {
                         var _scoreStruct = _scoresArray[_i];
                         var _metadataString = _scoreStruct.data[$ "_"] ?? "";
-                        array_push(_data, new __PodiumClassRecord(_scoreStruct.user_name, _scoreStruct.score, _scoreStruct.rank, _scoreStruct.user_id, _metadataString, false));
+                        array_push(_data, new __PodiumClassRecord(_scoreStruct.user_name,
+                                                                  __PodiumConvertFromSubmitScore(_scoreStruct.score, __formattedServiceData),
+                                                                  _scoreStruct.rank,
+                                                                  _scoreStruct.user_id,
+                                                                  _metadataString, false));
                         ++_i;
                     }
                 }
@@ -367,7 +375,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                             
                             if ((_rank != undefined) && (_playerID != undefined) && (_score != undefined))
                             {
-                                array_push(_data, new __PodiumClassRecord(_playerID, _score, _rank, _playerID, _comment, false));
+                                array_push(_data, new __PodiumClassRecord(_playerID, __PodiumConvertFromSubmitScore(_score, __formattedServiceData), _rank, _playerID, _comment, false));
                             }
                             else
                             {
@@ -392,7 +400,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                                 
                                 if ((_rank != undefined) && (_playerID != undefined) && (_score != undefined))
                                 {
-                                    array_push(_data, new __PodiumClassRecord(_playerID, _score, _rank, _playerID, _comment, false));
+                                    array_push(_data, new __PodiumClassRecord(_playerID, __PodiumConvertFromSubmitScore(_score, __formattedServiceData), _rank, _playerID, _comment, false));
                                 }
                                 
                                 ++_i;
@@ -451,7 +459,11 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                         {
                             var _ranking = _rankingsArray[_i];
                             var _unpackedData = __PodiumPlayFabMetadataUnpack(_ranking[$ "Metadata"] ?? "");
-                            array_push(_data, new __PodiumClassRecord(_ranking.DisplayName, _ranking.Scores[0], _ranking.Rank, _unpackedData.__xboxUser, _unpackedData.__metadataString, false));
+                            array_push(_data, new __PodiumClassRecord(_ranking.DisplayName,
+                                                                      __PodiumConvertFromSubmitScore(_ranking.Scores[0], __formattedServiceData),
+                                                                      _ranking.Rank,
+                                                                      _unpackedData.__xboxUser,
+                                                                      _unpackedData.__metadataString, false));
                             ++_i;
                         }
                     }
@@ -493,7 +505,12 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                         var _scoreStruct = _scoresArray[_i];
                         
                         var _metadataString = __PodiumPlayServicesDecode(_scoreStruct[$ "scoreTag"] ?? "");
-                        array_push(_data, new __PodiumClassRecord(_scoreStruct.scoreHolderDisplayName, _scoreStruct.rawScore, _scoreStruct.rank, _scoreStruct.scoreHolder.playerId, _metadataString, false));
+                        array_push(_data, new __PodiumClassRecord(_scoreStruct.scoreHolderDisplayName,
+                                                                  __PodiumConvertFromSubmitScore(_scoreStruct.rawScore, __formattedServiceData),
+                                                                  _scoreStruct.rank,
+                                                                  _scoreStruct.scoreHolder.playerId,
+                                                                  _metadataString,
+                                                                  false));
                         
                         ++_i;
                     }
@@ -542,7 +559,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                         
                         if ((_displayName != undefined) && (_score != undefined) && (_rank != undefined) && (_playerID != undefined) && (_metadata != undefined))
                         {
-                            array_push(_data, new __PodiumClassRecord(_displayName, _score, _rank, _playerID, _metadata, false));
+                            array_push(_data, new __PodiumClassRecord(_displayName, __PodiumConvertFromSubmitScore(_score, __formattedServiceData), _rank, _playerID, _metadata, false));
                         }
                         else
                         {

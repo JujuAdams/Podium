@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"__PodiumConvertToSubmitScore",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__PodiumConvertToSubmitScore",
+  "parent":{
+    "name":"(System)",
+    "path":"folders/Podium/(System).yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

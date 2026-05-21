@@ -2,7 +2,9 @@
 /// 
 /// PodiumCreate({
 ///     leaderboardName: "daily",
+///     decimalPlaces: 0,
 ///     descending: true, //descending = higher is better
+///     daily: true,
 ///     hasWeeklyHistory: true,
 ///     steam: {
 ///         serviceName: "test",
@@ -76,6 +78,7 @@ function PodiumCreate(_serviceData)
     _serviceData[$ "daily"           ] ??= false;
     _serviceData[$ "hasWeeklyHistory"] ??= false;
     _serviceData[$ "overwrite"       ] ??= false;
+    _serviceData[$ "decimalPlaces"   ] ??= 0;
     _serviceData.__formattedRef          = undefined;
     
     var _leaderboardName = _serviceData.leaderboardName;
@@ -204,8 +207,7 @@ function PodiumCreate(_serviceData)
             return false;
         }
         
-        //TODO
-        
+        var _platformData = _serviceData.gameCenter;
         if (_platformData != undefined)
         {
             _serviceData.__ref = _serviceData.gameCenter;

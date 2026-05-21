@@ -41,17 +41,19 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
         
         array_push(_activityArray, self);
         
+        var _submitScore = __PodiumConvertToSubmitScore(__value, __formattedServiceData);
+        
         if (PODIUM_STEAM_AVAILABLE)
         {
             if (__metadataString == "")
             {
-                __asyncID = steam_upload_score_ext(__formattedServiceData.__formattedRef, __value, __formattedServiceData.overwrite);
+                __asyncID = steam_upload_score_ext(__formattedServiceData.__formattedRef, _submitScore, __formattedServiceData.overwrite);
             }
             else
             {
                 buffer_resize(_buffer, string_byte_length(__metadataString));
                 buffer_poke(_buffer, 0, buffer_text, __metadataString);
-                __asyncID = steam_upload_score_buffer_ext(__formattedServiceData.__formattedRef, __value, _buffer, __formattedServiceData.overwrite);
+                __asyncID = steam_upload_score_buffer_ext(__formattedServiceData.__formattedRef, _submitScore, _buffer, __formattedServiceData.overwrite);
             }
         }
         else if (PODIUM_USING_GAMECENTER)
@@ -73,7 +75,7 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
                 }
             }
             
-            GameCenter_Leaderboard_Submit(__formattedServiceData.gameCenter, __value, _metadataValue);
+            GameCenter_Leaderboard_Submit(__formattedServiceData.gameCenter, _submitScore, _metadataValue);
         }
         else if (PODIUM_PLAY_SERVICES_AVAILABLE)
         {
@@ -89,13 +91,13 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
             }
             else
             {
-                GooglePlayServices_Leaderboard_SubmitScore(__formattedServiceData.playServices, __value, _scoreTag);
+                GooglePlayServices_Leaderboard_SubmitScore(__formattedServiceData.playServices, _submitScore, _scoreTag);
             }
         }
         else if (PODIUM_ON_PS5)
         {
             __asyncID = 999_999;
-            psn_post_leaderboard_score_comment(_system.__psGamepad, __formattedServiceData.__formattedRef, __value, __metadataString);
+            psn_post_leaderboard_score_comment(_system.__psGamepad, __formattedServiceData.__formattedRef, _submitScore, __metadataString);
             __PodiumRegisterPSLeaderboardSubmit(__formattedServiceData.__formattedRef, function(_cancelled)
             {
                 __Complete(((not _cancelled) && async_load[? "succeeded"])? PODIUM_LEADERBOARD_SUCCESS : PODIUM_LEADERBOARD_ERROR, undefined);
@@ -103,11 +105,11 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
         }
         else if (PODIUM_USING_XBOX_LEADERBOARDS)
         {
-            xboxone_stats_set_stat_int(_system.__xboxUser, __formattedServiceData.xbox, __value);
+            xboxone_stats_set_stat_int(_system.__xboxUser, __formattedServiceData.xbox, _submitScore);
         }
         else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
         {
-            __asyncID = __PodiumPlayFabLeaderboardUpdate(__formattedServiceData.playFab, __value, __metadataString, function(_resultJSON)
+            __asyncID = __PodiumPlayFabLeaderboardUpdate(__formattedServiceData.playFab, _submitScore, __metadataString, function(_resultJSON)
             {
                 __Complete((_resultJSON == undefined)? PODIUM_LEADERBOARD_ERROR : PODIUM_LEADERBOARD_SUCCESS, _resultJSON);
             });
@@ -116,7 +118,7 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
         {
             __asyncID = switch_npln_leaderboard_set_score(_system.__switchNPLNUserHandle,
                                                           __formattedServiceData.switch.__formattedCategoryTypeName, __formattedServiceData.switch.categoryID,
-                                                          __value, { _: __metadataString });
+                                                          _submitScore, { _: __metadataString });
         }
         else
         {

@@ -30,6 +30,7 @@ function __PodiumSystem()
         __PodiumTrace($"Welcome to Podium by Juju Adams! This is version {PODIUM_VERSION}, {PODIUM_DATE}");
         
         __initialized = false;
+        __signedInWhilstUninitialized = false;
         __runningDefinitions = false;
         
         __signInState = PODIUM_USER_SIGNED_OUT;

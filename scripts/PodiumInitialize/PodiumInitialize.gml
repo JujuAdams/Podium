@@ -225,5 +225,13 @@ function PodiumInitialize()
         __runningDefinitions = false;
         
         __initialized = true;
+        
+        if (__signedInWhilstUninitialized)
+        {
+            __signedInWhilstUninitialized = false;
+            
+            __PodiumGlobalClearRemoteCaches();
+            __PodiumSubmitAllPendingOfflineRecords();
+        }
     }
 }

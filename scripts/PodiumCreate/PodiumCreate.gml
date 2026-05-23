@@ -50,7 +50,7 @@ function PodiumCreate(_serviceData)
     {
         if (not struct_exists(_struct, _variableName))
         {
-            __PodiumSoftError($"Missing `.{_variableName}` parameter from leaderboard {_struct}");
+            __PodiumSoftError($"Missing `.{_variableName}` parameter from leaderboard \"{_struct.leaderboardName}\"");
             return false;
         }
         
@@ -61,6 +61,11 @@ function PodiumCreate(_serviceData)
     {
         __PodiumSoftError("Cannot call `PodiumCreate()` outside `__PodiumConfigLeaderboards()`");
         return false;
+    }
+    
+    if (not struct_exists(_serviceData, "leaderboardName"))
+    {
+        __PodiumSoftError($"Missing `.leaderboardName` parameter from leaderboard");
     }
     
     if (not _funcValidateStruct(_serviceData, ["leaderboardName", "descending", "overwrite",

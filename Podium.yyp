@@ -86,6 +86,7 @@
     {"id":{"name":"__PodiumConvertFromSubmitScore","path":"scripts/__PodiumConvertFromSubmitScore/__PodiumConvertFromSubmitScore.yy",},},
     {"id":{"name":"__PodiumConvertToSubmitScore","path":"scripts/__PodiumConvertToSubmitScore/__PodiumConvertToSubmitScore.yy",},},
     {"id":{"name":"__PodiumError","path":"scripts/__PodiumError/__PodiumError.yy",},},
+    {"id":{"name":"__PodiumGetBetterThanOffline","path":"scripts/__PodiumGetBetterThanOffline/__PodiumGetBetterThanOffline.yy",},},
     {"id":{"name":"__PodiumGetUniqueOperation","path":"scripts/__PodiumGetUniqueOperation/__PodiumGetUniqueOperation.yy",},},
     {"id":{"name":"__PodiumGlobalClearRemoteCaches","path":"scripts/__PodiumGlobalClearRemoteCaches/__PodiumGlobalClearRemoteCaches.yy",},},
     {"id":{"name":"__PodiumLeaderboardFind","path":"scripts/__PodiumLeaderboardFind/__PodiumLeaderboardFind.yy",},},

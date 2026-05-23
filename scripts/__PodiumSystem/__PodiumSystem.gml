@@ -51,6 +51,7 @@ function __PodiumSystem()
         __psNPAvailabilityAsyncID = undefined;
         
         __xboxUser = int64(0);
+        __skipXboxBetterCheck = false;
         
         __switchAccountIndex   = undefined;
         __switchNPLNUserHandle = undefined;

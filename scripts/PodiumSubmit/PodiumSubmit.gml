@@ -26,6 +26,13 @@ function PodiumSubmit(_leaderboardName, _value, _metadataString = "", _priority 
                 __PodiumTrace($"Cannot submit score, \"{_leaderboardName}\" is disabled");
             }
         }
+        else if (PODIUM_USING_XBOX_LEADERBOARDS && (not _system.__skipXboxBetterCheck) && (not __PodiumGetBetterThanOffline(_leaderboardName, _value)))
+        {
+            if (PODIUM_VERBOSE)
+            {
+                __PodiumTrace($"Score {_value} for leaderboard \"{_leaderboardName}\" is not better than current offline score");
+            }
+        }
         else
         {
             var _struct = new __PodiumClassOpSubmit(variable_clone(_leaderboardStruct.__GetFormattedServiceData(0)), _value, _metadataString, _clearCache);

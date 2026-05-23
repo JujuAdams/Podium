@@ -87,6 +87,32 @@ with(__PodiumSystem())
             _callback(false);
         }
     }
+    else if (PODIUM_USING_GDK && (async_load[? "id"] == xboxlive_achievement_stat_event) && (async_load[? "event"] == "LocalUserAdded"))
+    {
+        if (async_load[? "error"] == 0)
+        {
+            __PodiumUserSignedIn();
+        }
+        else
+        {
+            __signInState = PODIUM_USER_SIGN_IN_FAILED;
+            __xboxUser = undefined;
+            
+            __PodiumWarning("User failed to sign in");
+        }
+    }
+    else if (PODIUM_USING_XBOX_LEADERBOARDS && (async_load[? "id"] == xboxlive_achievement_leaderboard_info) && (async_load[? "event"] == "GetLeaderboardComplete"))
+    {
+        if (is_callable(__xboxLeaderboardCallback))
+        {
+            __xboxLeaderboardCallback(false);
+            __xboxLeaderboardCallback = undefined;
+        }
+        else
+        {
+            __PodiumWarning("Received leaderboard information unexpectedly");
+        }
+    }
     else if (PODIUM_USING_PLAY_SERVICES && (async_load[? "type"] == "GooglePlayServices_SignIn"))
     {
         if (__signInState != PODIUM_USER_SIGNING_IN)

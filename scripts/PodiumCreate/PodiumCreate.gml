@@ -15,6 +15,7 @@
 ///         categoryID: 0,
 ///     },
 ///     playStation: [0, 1, 2, 3, 4, 5, 6],
+///     xbox: ["0", "1", "2", "3", "4", "5", "6"],
 ///     playFab: {
 ///         statisticName: "testDailyStat",
 ///         leaderboardName: "testDaily",
@@ -70,7 +71,7 @@ function PodiumCreate(_serviceData)
     
     if (not _funcValidateStruct(_serviceData, ["leaderboardName", "descending", "overwrite",
                                                "daily", "hasWeeklyHistory",
-                                               "steam", "switch",
+                                               "steam", "switch", "xbox",
                                                "playStation", "playFab",
                                                "playServices", "gameCenter"]))
     {
@@ -86,8 +87,15 @@ function PodiumCreate(_serviceData)
     _serviceData[$ "decimalPlaces"   ] ??= 0;
     _serviceData.__formattedRef          = undefined;
     
-    var _leaderboardName = _serviceData.leaderboardName;
-    var _hasWeeklyHistory = _serviceData[$ "hasWeeklyHistory"];
+    var _leaderboardName  = _serviceData.leaderboardName;
+    var _isDaily          = _serviceData.daily;
+    var _hasWeeklyHistory = _serviceData.hasWeeklyHistory;
+    
+    if ((not _isDaily) && _hasWeeklyHistory)
+    {
+        __PodiumSoftError("Must enable daily scores if weekly history is enabled");
+        return false;
+    }
     
     if (PodiumGetOfflineOnly())
     {
@@ -197,11 +205,15 @@ function PodiumCreate(_serviceData)
             return false;
         }
         
-        //TODO
-        
         var _platformData = _serviceData.xbox;
         if (_platformData != undefined)
         {
+            if (_serviceData.daily)
+            {
+                __PodiumSoftError("Daily scores not implemented on native Xbox leaderboards\nPlease get in touch if you need this feature");
+                return false;
+            }
+            
             _serviceData.__ref = _platformData;
         }
     }

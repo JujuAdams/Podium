@@ -8,6 +8,7 @@ function __PodiumConfigLeaderboards()
             displayType: lb_disp_numeric,
         },
         
+        xbox: "testDescending",
         playFab: "testDescending",
         playServices: "CgkIjtmczOYOEAIQAQ",
     });
@@ -21,6 +22,7 @@ function __PodiumConfigLeaderboards()
             displayType: lb_disp_time_sec,
         },
         
+        xbox: undefined,
         playFab: "testAscending",
         playServices: undefined,
     });
@@ -34,6 +36,7 @@ function __PodiumConfigLeaderboards()
             displayType: lb_disp_numeric,
         },
         
+        xbox: undefined,
         playFab: "testDaily",
         playServices: undefined,
     });

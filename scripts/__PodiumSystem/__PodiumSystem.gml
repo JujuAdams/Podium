@@ -75,6 +75,7 @@ function __PodiumSystem()
         __psLeaderboardScoreRangeMap = ds_map_create();
         __psLeaderboardFriendsMap    = ds_map_create();
         __psLeaderboardUserMap       = ds_map_create();
+        __xboxLeaderboardCallback    = undefined;
         
         time_source_start(time_source_create(time_source_global, 1, time_source_units_frames, function()
         {
@@ -112,6 +113,11 @@ function __PodiumSystem()
                         __signInState = PODIUM_USER_SIGNED_OUT;
                         __PodiumGlobalClearRemoteCaches();
                     }
+                }
+                
+                if (xboxone_is_suspending() && xboxone_user_is_signed_in(__xboxUser))
+                {
+                    xboxone_stats_flush_user(__xboxUser, true);
                 }
             }
             

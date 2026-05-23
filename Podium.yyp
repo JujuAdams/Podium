@@ -110,6 +110,7 @@
     {"id":{"name":"__PodiumRegisterPSLeaderboardScoreRange","path":"scripts/__PodiumRegisterPSLeaderboardScoreRange/__PodiumRegisterPSLeaderboardScoreRange.yy",},},
     {"id":{"name":"__PodiumRegisterPSLeaderboardSubmit","path":"scripts/__PodiumRegisterPSLeaderboardSubmit/__PodiumRegisterPSLeaderboardSubmit.yy",},},
     {"id":{"name":"__PodiumRegisterPSLeaderboardUser","path":"scripts/__PodiumRegisterPSLeaderboardUser/__PodiumRegisterPSLeaderboardUser.yy",},},
+    {"id":{"name":"__PodiumRegisterXboxLeaderboard","path":"scripts/__PodiumRegisterXboxLeaderboard/__PodiumRegisterXboxLeaderboard.yy",},},
     {"id":{"name":"__PodiumScoreCacheFind","path":"scripts/__PodiumScoreCacheFind/__PodiumScoreCacheFind.yy",},},
     {"id":{"name":"__PodiumSoftError","path":"scripts/__PodiumSoftError/__PodiumSoftError.yy",},},
     {"id":{"name":"__PodiumStoreOfflineRecord","path":"scripts/__PodiumStoreOfflineRecord/__PodiumStoreOfflineRecord.yy",},},

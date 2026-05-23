@@ -48,11 +48,6 @@ function PodiumSignInXbox(_xboxUser = 0)
             if (PODIUM_USING_XBOX_LEADERBOARDS)
             {
                 xboxone_stats_add_user(_xboxUser);
-                
-                call_later(1, time_source_units_frames, function()
-                {
-                    __PodiumUserSignedIn();
-                });
             }
             else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
             {

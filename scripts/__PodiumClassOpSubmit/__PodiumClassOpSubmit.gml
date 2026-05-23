@@ -2,8 +2,9 @@
 /// @param value
 /// @param metadataString
 /// @param clearCache
+/// @param immediate
 
-function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _clearCache) : __PodiumClassOpCommon() constructor
+function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _clearCache, _immediate) : __PodiumClassOpCommon() constructor
 {
     __opType = __PODIUM_OP_SUBMIT;
     
@@ -11,6 +12,7 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
     __value                = _value;
     __metadataString       = _metadataString;
     __clearCache           = _clearCache;
+    __immediate            = _immediate;
     
     
     
@@ -56,6 +58,35 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
                 __asyncID = steam_upload_score_buffer_ext(__formattedServiceData.__formattedRef, _submitScore, _buffer, __formattedServiceData.overwrite);
             }
         }
+        else if (PODIUM_ON_PS5)
+        {
+            __asyncID = 999_999;
+            psn_post_leaderboard_score_comment(_system.__psGamepad, __formattedServiceData.__formattedRef, _submitScore, __metadataString);
+            __PodiumRegisterPSLeaderboardSubmit(__formattedServiceData.__formattedRef, function(_cancelled)
+            {
+                __Complete(((not _cancelled) && async_load[? "succeeded"])? PODIUM_LEADERBOARD_SUCCESS : PODIUM_LEADERBOARD_ERROR, undefined);
+            });
+        }
+        else if (PODIUM_USING_XBOX_LEADERBOARDS)
+        {
+            var _result = xboxone_stats_set_stat_int(_system.__xboxUser, __formattedServiceData.xbox, _submitScore);
+            xboxone_stats_flush_user(_system.__xboxUser, false);
+            __Complete((_result == 0)? PODIUM_LEADERBOARD_SUCCESS : PODIUM_LEADERBOARD_ERROR, undefined);
+            return;
+        }
+        else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
+        {
+            __asyncID = __PodiumPlayFabLeaderboardUpdate(__formattedServiceData.playFab, _submitScore, __metadataString, function(_resultJSON)
+            {
+                __Complete((_resultJSON == undefined)? PODIUM_LEADERBOARD_ERROR : PODIUM_LEADERBOARD_SUCCESS, _resultJSON);
+            });
+        }
+        else if (PODIUM_ON_SWITCH)
+        {
+            __asyncID = switch_npln_leaderboard_set_score(_system.__switchNPLNUserHandle,
+                                                          __formattedServiceData.switch.__formattedCategoryTypeName, __formattedServiceData.switch.categoryID,
+                                                          _submitScore, { _: __metadataString });
+        }
         else if (PODIUM_USING_GAMECENTER)
         {
             var _metadataValue = 0;
@@ -93,32 +124,6 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
             {
                 GooglePlayServices_Leaderboard_SubmitScore(__formattedServiceData.playServices, _submitScore, _scoreTag);
             }
-        }
-        else if (PODIUM_ON_PS5)
-        {
-            __asyncID = 999_999;
-            psn_post_leaderboard_score_comment(_system.__psGamepad, __formattedServiceData.__formattedRef, _submitScore, __metadataString);
-            __PodiumRegisterPSLeaderboardSubmit(__formattedServiceData.__formattedRef, function(_cancelled)
-            {
-                __Complete(((not _cancelled) && async_load[? "succeeded"])? PODIUM_LEADERBOARD_SUCCESS : PODIUM_LEADERBOARD_ERROR, undefined);
-            });
-        }
-        else if (PODIUM_USING_XBOX_LEADERBOARDS)
-        {
-            xboxone_stats_set_stat_int(_system.__xboxUser, __formattedServiceData.xbox, _submitScore);
-        }
-        else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
-        {
-            __asyncID = __PodiumPlayFabLeaderboardUpdate(__formattedServiceData.playFab, _submitScore, __metadataString, function(_resultJSON)
-            {
-                __Complete((_resultJSON == undefined)? PODIUM_LEADERBOARD_ERROR : PODIUM_LEADERBOARD_SUCCESS, _resultJSON);
-            });
-        }
-        else if (PODIUM_ON_SWITCH)
-        {
-            __asyncID = switch_npln_leaderboard_set_score(_system.__switchNPLNUserHandle,
-                                                          __formattedServiceData.switch.__formattedCategoryTypeName, __formattedServiceData.switch.categoryID,
-                                                          _submitScore, { _: __metadataString });
         }
         else
         {
@@ -173,6 +178,11 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
         }
         
         __PodiumOfflineRecordSetPending(__formattedServiceData.leaderboardName, (__status != PODIUM_LEADERBOARD_SUCCESS));
+        
+        if (PODIUM_USING_XBOX_LEADERBOARDS && __immediate && (__status == PODIUM_LEADERBOARD_SUCCESS))
+        {
+            xboxone_stats_flush_user(_system.__xboxUser, true);
+        }
         
         if (is_callable(__callback))
         {

@@ -119,20 +119,32 @@ with(__PodiumSystem())
         {
             __PodiumWarning("Unexpected user sign-in received");
         }
-        else if (async_load[? "success"] && async_load[? "isAuthenticated"])
+        
+        if (__signInState != PODIUM_USER_SIGNED_IN)
         {
-            if (PODIUM_VERBOSE)
+            if (async_load[? "success"] && async_load[? "isAuthenticated"])
             {
-                __PodiumTrace($"Google Play signed in");
+                if (PODIUM_VERBOSE)
+                {
+                    __PodiumTrace($"Google Play signed in");
+                }
+                
+                if (__signInState == PODIUM_USER_SIGNED_OUT)
+                {
+                    __signInState = PODIUM_USER_SIGNING_IN;
+                }
+                
+                GooglePlayServices_Player_Current();
             }
-            
-            GooglePlayServices_Player_Current();
-        }
-        else
-        {
-            __signInState = PODIUM_USER_SIGN_IN_FAILED;
-            
-            __PodiumWarning("Google Play failed sign in");
+            else
+            {
+                if (__signInState != PODIUM_USER_SIGNED_OUT)
+                {
+                    __signInState = PODIUM_USER_SIGN_IN_FAILED;
+                }
+                
+                __PodiumWarning("Google Play failed sign in");
+            }
         }
     }
     else if (PODIUM_USING_PLAY_SERVICES && (async_load[? "type"] == "GooglePlayServices_Player_Current"))
@@ -176,7 +188,6 @@ with(__PodiumSystem())
         else
         {
             __signInState = PODIUM_USER_SIGN_IN_FAILED;
-            
             __PodiumWarning("Failed to obtain Google Play player info");
         }
     }
@@ -186,48 +197,52 @@ with(__PodiumSystem())
         {
             __PodiumWarning("Unexpected GameCenter authenticate received");
         }
-        else if (async_load[? "success"])
+        
+        if (__signInState != PODIUM_USER_SIGNED_IN)
         {
-            if (PODIUM_VERBOSE)
+            if (async_load[? "success"])
             {
-                __PodiumTrace($"GameCenter authenticate received");
-            }
-            
-            var _infoJSON = GameCenter_LocalPlayer_GetInfo();
-            
-            var _info        = undefined;
-            var _displayName = undefined;
-            var _playerID    = undefined;
-            try
-            {
-                _info        = json_parse(_infoJSON);
-                _displayName = _info.displayName;
-                _playerID    = _info.playerID;
-            }
-            catch(_error)
-            {
-                show_debug_message(_error);
-            }
-            
-            if ((_displayName != undefined) && (_playerID != undefined))
-            {
-                __username           = _displayName;
-                __gameCenterPlayerID = _playerID;
+                if (PODIUM_VERBOSE)
+                {
+                    __PodiumTrace($"GameCenter authenticate received");
+                }
                 
-                __PodiumUserSignedIn();
+                var _infoJSON = GameCenter_LocalPlayer_GetInfo();
+                
+                var _info        = undefined;
+                var _displayName = undefined;
+                var _playerID    = undefined;
+                try
+                {
+                    _info        = json_parse(_infoJSON);
+                    _displayName = _info.displayName;
+                    _playerID    = _info.playerID;
+                }
+                catch(_error)
+                {
+                    show_debug_message(_error);
+                }
+                
+                if ((_displayName != undefined) && (_playerID != undefined))
+                {
+                    __username           = _displayName;
+                    __gameCenterPlayerID = _playerID;
+                    
+                    __PodiumUserSignedIn();
+                }
+                else
+                {
+                    __signInState = PODIUM_USER_SIGN_IN_FAILED;
+                    
+                    __PodiumWarning("Failed to parse GameCenter player info");
+                }
             }
             else
             {
                 __signInState = PODIUM_USER_SIGN_IN_FAILED;
                 
-                __PodiumWarning("Failed to parse GameCenter player info");
+                __PodiumWarning("Failed to authenticate GameCenter");
             }
-        }
-        else
-        {
-            __signInState = PODIUM_USER_SIGN_IN_FAILED;
-            
-            __PodiumWarning("Failed to authenticate GameCenter");
         }
     }
     else

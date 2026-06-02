@@ -70,7 +70,7 @@ function PodiumCreate(_serviceData)
     }
     
     if (not _funcValidateStruct(_serviceData, ["leaderboardName", "descending", "overwrite",
-                                               "daily", "hasWeeklyHistory",
+                                               "daily", "hasWeeklyHistory", "decimalPlaces",
                                                "steam", "switch", "xbox",
                                                "playStation", "playFab",
                                                "playServices", "gameCenter"]))

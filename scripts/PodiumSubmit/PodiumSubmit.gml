@@ -35,7 +35,7 @@ function PodiumSubmit(_leaderboardName, _value, _metadataString = "", _priority 
         }
         else
         {
-            var _struct = new __PodiumClassOpSubmit(variable_clone(_leaderboardStruct.__GetFormattedServiceData(0)), _value, _metadataString, _clearCache);
+            var _struct = new __PodiumClassOpSubmit(variable_clone(_leaderboardStruct.__GetFormattedServiceData(0)), _value, _metadataString, _clearCache, (_priority == PODIUM_PRIORITY_IMMEDIATE));
             if (__PodiumGetUniqueOperation(_struct))
             {
                 if (PODIUM_VERBOSE)

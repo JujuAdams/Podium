@@ -72,7 +72,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                     __asyncID = steam_download_scores_around_user(__formattedServiceData.__formattedRef, 0, 0);
                 }
             }
-            else if (PODIUM_ON_SWITCH)
+            else if (PODIUM_ON_SWITCH_X)
             {
                 ///////
                 // Switch
@@ -366,7 +366,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                     __status = PODIUM_LEADERBOARD_ERROR;
                 }
             }
-            else if (PODIUM_ON_SWITCH)
+            else if (PODIUM_ON_SWITCH_X)
             {
                 ///////
                 // Switch

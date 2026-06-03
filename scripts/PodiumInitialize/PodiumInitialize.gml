@@ -191,7 +191,7 @@ function PodiumInitialize()
             _fallback = false;
             __offlineOnly = false;
         }
-        else if (PODIUM_ON_SWITCH)
+        else if (PODIUM_ON_SWITCH_X)
         {
             ///////
             // Switch

@@ -10,7 +10,7 @@ function PodiumGetUserID()
     {
         return steam_get_user_steam_id();
     }
-    else if (PODIUM_ON_SWITCH)
+    else if (PODIUM_ON_SWITCH_X)
     {
         return _system.__switchUserID;
     }

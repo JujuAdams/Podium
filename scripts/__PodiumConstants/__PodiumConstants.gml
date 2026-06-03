@@ -12,7 +12,7 @@
 #macro PODIUM_ON_MOBILE       (PODIUM_ON_IOS || PODIUM_ON_ANDROID)
 #macro PODIUM_ON_XBOX_SERIES  (os_type == os_xboxseriesxs)
 #macro PODIUM_ON_PS5          (os_type == os_ps5)
-#macro PODIUM_ON_SWITCH       (os_type == os_switch)
+#macro PODIUM_ON_SWITCH_X     ((os_type == os_switch) || (os_type == os_switch2))
 
 #macro PODIUM_USING_STEAMWORKS            (PODIUM_ON_DESKTOP && extension_exists("Steamworks"))
 #macro PODIUM_STEAM_AVAILABLE             (__PodiumSystem().__steamAvailable)

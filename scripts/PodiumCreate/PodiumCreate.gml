@@ -130,7 +130,7 @@ function PodiumCreate(_serviceData)
             _serviceData.__ref = _platformData.serviceName;
         }
     }
-    else if (PODIUM_ON_SWITCH)
+    else if (PODIUM_ON_SWITCH_X)
     {
         if (not _funcCheckPresence(_serviceData, "switch"))
         {

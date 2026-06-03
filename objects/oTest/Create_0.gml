@@ -3,7 +3,7 @@ PodiumInitialize();
 gamepad = -1;
 signedIn = false;
 
-if (PODIUM_ON_SWITCH)
+if (PODIUM_ON_SWITCH_X)
 {
     PodiumSignInSwitch(switch_accounts_open_preselected_user());
 }

@@ -22,7 +22,7 @@ function PodiumGetLeaderboardDisabled(_leaderboardName)
         {
             return (_serviceData[$ "steam"] == undefined);
         }
-        else if (PODIUM_ON_SWITCH)
+        else if (PODIUM_ON_SWITCH_X)
         {
             return (_serviceData[$ "switch"] == undefined);
         }

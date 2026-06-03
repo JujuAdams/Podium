@@ -68,7 +68,7 @@ function __PodiumClassLeaderboard(_serviceData) constructor
                 var _date = date_inc_day(PodiumGetTime(), _seasonOffset);
                 _serviceRefFormatted += $"_y{date_get_year(_date)}_d{date_get_day_of_year(_date)}";
             }
-            else if (PODIUM_ON_SWITCH)
+            else if (PODIUM_ON_SWITCH_X)
             {
                 _serviceRefFormatted = string_replace(_serviceRefFormatted, "#", PodiumGetWeekday(_seasonOffset));
                 __serviceData.switch.__formattedCategoryTypeName = string_replace(__serviceData.switch.categoryTypeName, "#", PodiumGetWeekday(_seasonOffset));
@@ -88,7 +88,7 @@ function __PodiumClassLeaderboard(_serviceData) constructor
         }
         else
         {
-            if (PODIUM_ON_SWITCH)
+            if (PODIUM_ON_SWITCH_X)
             {
                 __serviceData.switch.__formattedCategoryTypeName = __serviceData.switch.categoryTypeName;
             }

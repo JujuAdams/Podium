@@ -5,7 +5,7 @@ if (PODIUM_VERBOSE_ASYNC)
 
 with(__PodiumSystem())
 {
-    if (PODIUM_ON_SWITCH && (async_load[? "event_type"] == "switch_npln_login_prearranged_user"))
+    if (PODIUM_ON_SWITCH_X && (async_load[? "event_type"] == "switch_npln_login_prearranged_user"))
     {
         if (__signInState != PODIUM_USER_SIGNING_IN)
         {
@@ -251,7 +251,7 @@ with(__PodiumSystem())
         {
             var _opStruct = __pendingArray[_i];
             
-            if (PODIUM_ON_SWITCH)
+            if (PODIUM_ON_SWITCH_X)
             {
                 if (async_load[? "id"] == _opStruct.__asyncID)
                 {

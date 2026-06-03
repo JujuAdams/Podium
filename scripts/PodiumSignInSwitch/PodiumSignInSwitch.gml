@@ -7,7 +7,7 @@ function PodiumSignInSwitch(_accountIndex)
 {
     static _system = __PodiumSystem();
     
-    if (PODIUM_ON_SWITCH)
+    if (PODIUM_ON_SWITCH_X)
     {
         with(_system)
         {

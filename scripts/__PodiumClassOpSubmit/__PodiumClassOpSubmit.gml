@@ -81,7 +81,7 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
                 __Complete((_resultJSON == undefined)? PODIUM_LEADERBOARD_ERROR : PODIUM_LEADERBOARD_SUCCESS, _resultJSON);
             });
         }
-        else if (PODIUM_ON_SWITCH)
+        else if (PODIUM_ON_SWITCH_X)
         {
             __asyncID = switch_npln_leaderboard_set_score(_system.__switchNPLNUserHandle,
                                                           __formattedServiceData.switch.__formattedCategoryTypeName, __formattedServiceData.switch.categoryID,

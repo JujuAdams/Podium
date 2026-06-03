@@ -420,18 +420,34 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                                 __PodiumTrace($"Using PlayStation 5 user parser");
                             }
                             
-                            var _rank     = async_load[? $"rank"      ];
-                            var _playerID = async_load[? $"playerid"  ]; //Called "player ID" but actually seems to be a name?
-                            var _score    = async_load[? $"scorevalue"];
-                            var _comment  = async_load[? $"comment"   ] ?? "";
-                            
-                            if ((_rank != undefined) && (_playerID != undefined) && (_score != undefined))
+                            var _map = async_load;
+                            var _entryCount = async_load[? $"numentries"];
+                            if (_entryCount == undefined)
                             {
-                                array_push(_data, new __PodiumClassRecord(_playerID, __PodiumConvertFromSubmitScore(_score, __formattedServiceData), _rank, _playerID, _comment, false));
+                                throw "Incomplete user record";
+                            }
+                            else if (_entryCount == 0)
+                            {
+                                if (PODIUM_VERBOSE)
+                                {
+                                    __PodiumTrace($"Player has no score");
+                                }
                             }
                             else
                             {
-                                throw "Incomplete user record";
+                                var _rank     = async_load[? $"rank"    ];
+                                var _playerID = async_load[? $"playerid"]; //Called "player ID" but actually seems to be a name?
+                                var _score    = async_load[? $"score"   ];
+                                var _comment  = async_load[? $"comment" ] ?? "";
+                                
+                                if ((_rank != undefined) && (_playerID != undefined) && (_score != undefined))
+                                {
+                                    array_push(_data, new __PodiumClassRecord(_playerID, __PodiumConvertFromSubmitScore(_score, __formattedServiceData), _rank, _playerID, _comment, false));
+                                }
+                                else
+                                {
+                                    throw "Incomplete user record";
+                                }
                             }
                         }
                         else

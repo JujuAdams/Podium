@@ -13,6 +13,8 @@
 /// 
 #macro PODIUM_XBOX_USER_CIPHER  undefined
 
+#macro PODIUM_OFFLINE_SCORE_VERSION  "1"
+
 /// Whether to report lots of information messages to the console. This can be helpful to diagnose
 /// problems. You will likely want to set this macro to `false` for production builds.
 #macro PODIUM_VERBOSE  false

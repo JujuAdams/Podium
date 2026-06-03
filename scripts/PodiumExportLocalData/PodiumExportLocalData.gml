@@ -19,7 +19,8 @@ function PodiumExportLocalData()
     var _buffer = buffer_create(1024, buffer_grow, 1);
     buffer_write(_buffer, buffer_string, "POD");
     
-    buffer_write(_buffer, buffer_u64, __PODIUM_OFFLINE_DATA_VERSION); //Version number
+    buffer_write(_buffer, buffer_u64, __PODIUM_OFFLINE_DATA_VERSION);
+    buffer_write(_buffer, buffer_string, PODIUM_OFFLINE_SCORE_VERSION);
     
     var _namesArray = struct_get_names(_offlineRecordDict);
     buffer_write(_buffer, buffer_u64, array_length(_namesArray));

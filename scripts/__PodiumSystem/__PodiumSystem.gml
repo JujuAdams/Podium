@@ -9,7 +9,7 @@
 #macro __PODIUM_OP_SUBMIT      0
 #macro __PODIUM_OP_GET_SCORES  1
 
-#macro __PODIUM_OFFLINE_DATA_VERSION  3
+#macro __PODIUM_OFFLINE_DATA_VERSION  4
 
 __PodiumSystem();
 
@@ -149,7 +149,7 @@ function __PodiumSystem()
                 }
             }
             
-            //Dispatch queued operations
+            //Dispatch queued submit operations at a higher priority than fetches
             if (array_length(__queuedSubmitArray) > 0)
             {
                 while(array_length(__queuedSubmitArray) > 0)

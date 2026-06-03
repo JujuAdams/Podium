@@ -76,9 +76,18 @@ function PodiumImportLocalData(_string, _submitPendingScores = true)
             }
             
             var _version = buffer_read(_buffer, buffer_u64);
-            if (_version != __PODIUM_OFFLINE_DATA_VERSION)
+            if (_version == __PODIUM_OFFLINE_DATA_VERSION)
+            {
+                var _scoreVersion = buffer_read(_buffer, buffer_string);
+            }
+            else
             {
                 throw "$Failed to import data, version not `{__PODIUM_OFFLINE_DATA_VERSION}`";
+            }
+            
+            if (_scoreVersion != PODIUM_OFFLINE_SCORE_VERSION)
+            {
+                throw $"Score version mismatch (`{PODIUM_OFFLINE_SCORE_VERSION}` versus expected `{_scoreVersion}`)";
             }
             
             var _count = buffer_read(_buffer, buffer_u64);

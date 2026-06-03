@@ -526,12 +526,30 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                         repeat(array_length(_rankingsArray))
                         {
                             var _ranking = _rankingsArray[_i];
-                            var _unpackedData = __PodiumPlayFabMetadataUnpack(_ranking[$ "Metadata"] ?? "");
-                            array_push(_data, new __PodiumClassRecord(_ranking.DisplayName,
-                                                                      __PodiumConvertFromSubmitScore(_ranking.Scores[0], __formattedServiceData),
-                                                                      _ranking.Rank,
-                                                                      _unpackedData.__xboxUser,
-                                                                      _unpackedData.__metadataString, false));
+                            
+                            var _score = undefined;
+                            try
+                            {
+                                _score = real(_ranking.Scores[0]);
+                            }
+                            catch(_error)
+                            {
+                                if (PODIUM_VERBOSE)
+                                {
+                                    __PodiumTrace("Failed to convert score to number");
+                                }
+                            }
+                            
+                            if (_score != undefined)
+                            {
+                                var _unpackedData = __PodiumPlayFabMetadataUnpack(_ranking[$ "Metadata"] ?? "");
+                                array_push(_data, new __PodiumClassRecord(_ranking.DisplayName,
+                                                                          __PodiumConvertFromSubmitScore(_score, __formattedServiceData),
+                                                                          _ranking.Rank,
+                                                                          _unpackedData.__xboxUser,
+                                                                          _unpackedData.__metadataString, false));
+                            }
+                            
                             ++_i;
                         }
                     }

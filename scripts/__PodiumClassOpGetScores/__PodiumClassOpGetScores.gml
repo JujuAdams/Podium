@@ -11,7 +11,6 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
     __seasonOffset = _seasonOffset;
     
     __formattedServiceData = variable_clone(_leaderboard.__GetFormattedServiceData(__seasonOffset));
-    __ps5UserScoreReceived = false;
     
     
     
@@ -121,13 +120,13 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                 if (__range == PODIUM_RANGE_TOP)
                 {
                     __asyncID = 999_999;
-                    psn_get_leaderboard_score_range(_system.__psGamepad, __formattedServiceData.__formattedRef, 0, 99); //zero-indexed
+                    psn_get_leaderboard_score_range(_system.__psGamepad, __formattedServiceData.__formattedRef, 0, 100); //zero-indexed
                     __PodiumRegisterPSLeaderboardScoreRange(__formattedServiceData.__formattedRef, _funcCommon);
                 }
                 else if (__range == PODIUM_RANGE_FRIENDS)
                 {
                     __asyncID = 999_999;
-                    psn_get_friends_scores(_system.__psGamepad, __formattedServiceData.__formattedRef, 0, 99); //zero-indexed
+                    psn_get_friends_scores(_system.__psGamepad, __formattedServiceData.__formattedRef, 0, 100); //zero-indexed
                     __PodiumRegisterPSLeaderboardFriends(__formattedServiceData.__formattedRef, _funcCommon);
                 }
                 else if (__range == PODIUM_RANGE_AROUND)
@@ -144,44 +143,35 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                         if (_cancelled || (not async_load[? "succeeded"]))
                         {
                             __Complete(PODIUM_LEADERBOARD_ERROR, undefined);
+                            return;
+                        }
+                        
+                        var _serialRank = async_load[? $"serialrank"];
+                        if (_serialRank == undefined)
+                        {
+                            if (PODIUM_VERBOSE)
+                            {
+                                __PodiumWarning($"Could not find player serial rank in returned user score data ({string(ptr(self))})");
+                            }
+                            
+                            __Complete(PODIUM_LEADERBOARD_ERROR, undefined);
                         }
                         else
                         {
-                            __Collect(PODIUM_LEADERBOARD_SUCCESS, undefined);
+                            var _count = 3;
+                            var _start = max(0, _serialRank-1 - floor(_count/2)); //zero-indexed
+                            var _end   = _start + _count;
                             
-                            if (__status != PODIUM_LEADERBOARD_SUCCESS)
+                            if (PODIUM_VERBOSE)
                             {
-                                __status = PODIUM_LEADERBOARD_ERROR;
-                                __Finalize();
+                                __PodiumTrace($"Player serial rank is {_serialRank-1} (zero-indexed). Requesting {_start} to {_end}");
                             }
-                            else if (PodiumGetScoreState(__leaderboard.__serviceData.leaderboardName, PODIUM_RANGE_USER, __seasonOffset) != PODIUM_LEADERBOARD_SUCCESS)
+                            
+                            psn_get_leaderboard_score_range(_system.__psGamepad, __formattedServiceData.__formattedRef, _start, _end); //zero-indexed
+                            __PodiumRegisterPSLeaderboardScoreRange(__formattedServiceData.__formattedRef, function(_cancelled)
                             {
-                                __status = PODIUM_LEADERBOARD_ERROR;
-                                __Finalize();
-                            }
-                            else
-                            {
-                                var _playerScore = PodiumGetScores(__leaderboard.__serviceData.leaderboardName, PODIUM_RANGE_USER, __seasonOffset); 
-                                if (array_length(_playerScore) <= 0)
-                                {
-                                    __status = PODIUM_LEADERBOARD_ERROR;
-                                    __Finalize();
-                                }
-                                else
-                                {
-                                    //Reset to the "waiting" state so we don't confuse code outside Podium
-                                    __status = PODIUM_LEADERBOARD_WAITING;
-                                    
-                                    var _start = max(0, _playerScore[0].rank - 50);
-                                    var _end   = _start + 99;
-                                    
-                                    psn_get_leaderboard_score_range(_system.__psGamepad, __formattedServiceData.__formattedRef, _start, _end); //zero-indexed
-                                    __PodiumRegisterPSLeaderboardScoreRange(__formattedServiceData.__formattedRef, function(_cancelled)
-                                    {
-                                        __Complete(((not _cancelled) && async_load[? "succeeded"])? PODIUM_LEADERBOARD_SUCCESS : PODIUM_LEADERBOARD_ERROR, undefined);
-                                    });
-                                }
-                            }
+                                __Complete(((not _cancelled) && async_load[? "succeeded"])? PODIUM_LEADERBOARD_SUCCESS : PODIUM_LEADERBOARD_ERROR, undefined);
+                            });
                         }
                     });
                 }
@@ -347,310 +337,169 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
         
         var _leaderboardName = __formattedServiceData.leaderboardName;
         
-        var _scoresStruct = __leaderboard.__EnsureScoresStruct(__range, __seasonOffset);
-        if (_scoresStruct == undefined)
+        var _data = [];
+        
+        if (PODIUM_STEAM_AVAILABLE)
         {
-            __PodiumSoftError($"Scores struct not found for leaderboard \"{_leaderboardName}\"");
-        }
-        else
-        {
-            var _data = [];
+            ///////
+            // Steam
+            ///////
             
-            if (PODIUM_STEAM_AVAILABLE)
+            if (PODIUM_VERBOSE)
             {
-                ///////
-                // Steam
-                ///////
+                __PodiumTrace($"Using Steamworks parser");
+            }
+            
+            var _json = undefined;
+            try
+            {
+                _json = json_parse(async_load[? "entries"]);
                 
-                if (PODIUM_VERBOSE)
+                var _scoresArray = _json.entries;
+                var _i = 0;
+                repeat(array_length(_scoresArray))
                 {
-                    __PodiumTrace($"Using Steamworks parser");
+                    var _scoreStruct = _scoresArray[_i];
+                    
+                    var _metadataString = "";
+                    var _dataBase64 = _scoreStruct[$ "data"];
+                    if (_dataBase64 != undefined)
+                    {
+                        try
+                        {
+                            var _buffer = buffer_base64_decode(_dataBase64);
+                            var _string = buffer_read(_buffer, buffer_text);
+                            buffer_delete(_buffer);
+                            _metadataString = _string;
+                        }
+                        catch(_error)
+                        {
+                            show_debug_message(_error);
+                            __PodiumWarning("Failed to decode metadata string");
+                        }
+                    }
+                    
+                    array_push(_data, new __PodiumClassRecord(_scoreStruct.name,
+                                                                __PodiumConvertFromSubmitScore(_scoreStruct.score, __formattedServiceData),
+                                                                _scoreStruct.rank,
+                                                                _scoreStruct.userID,
+                                                                _metadataString, false));
+                    ++_i;
                 }
-                
-                var _json = undefined;
+            }
+            catch(_error)
+            {
+                __PodiumWarning($"Failed to parse returned leaderboard data for \"{__formattedServiceData}\"");
+                __status = PODIUM_LEADERBOARD_ERROR;
+            }
+        }
+        else if (PODIUM_ON_SWITCH_X)
+        {
+            ///////
+            // Switch
+            ///////
+            
+            if (PODIUM_VERBOSE)
+            {
+                __PodiumTrace($"Using Switch parser");
+            }
+            
+            try
+            {
+                var _scoresArray = async_load[? "scores"];
+                var _i = 0;
+                repeat(array_length(_scoresArray))
+                {
+                    var _scoreStruct = _scoresArray[_i];
+                    var _metadataString = _scoreStruct.data[$ "_"] ?? "";
+                    array_push(_data, new __PodiumClassRecord(_scoreStruct.user_name,
+                                                                __PodiumConvertFromSubmitScore(_scoreStruct.score, __formattedServiceData),
+                                                                _scoreStruct.rank,
+                                                                _scoreStruct.user_id,
+                                                                _metadataString, false));
+                    ++_i;
+                }
+            }
+            catch(_error)
+            {
+                __PodiumWarning($"Failed to parse returned leaderboard data for \"{__formattedServiceData}\"");
+                __status = PODIUM_LEADERBOARD_ERROR;
+            }
+        }
+        else if (PODIUM_ON_PS5)
+        {
+            ///////
+            // PlayStation 5
+            ///////
+            
+            if (async_load < 0)
+            {
+                __status = PODIUM_LEADERBOARD_ERROR;
+            }
+            else
+            {
                 try
                 {
-                    _json = json_parse(async_load[? "entries"]);
-                    
-                    var _scoresArray = _json.entries;
-                    var _i = 0;
-                    repeat(array_length(_scoresArray))
+                    if (__range == PODIUM_RANGE_USER)
                     {
-                        var _scoreStruct = _scoresArray[_i];
-                        
-                        var _metadataString = "";
-                        var _dataBase64 = _scoreStruct[$ "data"];
-                        if (_dataBase64 != undefined)
+                        if (PODIUM_VERBOSE)
                         {
-                            try
-                            {
-                                var _buffer = buffer_base64_decode(_dataBase64);
-                                var _string = buffer_read(_buffer, buffer_text);
-                                buffer_delete(_buffer);
-                                _metadataString = _string;
-                            }
-                            catch(_error)
-                            {
-                                show_debug_message(_error);
-                                __PodiumWarning("Failed to decode metadata string");
-                            }
+                            __PodiumTrace($"Using PlayStation 5 user score parser");
                         }
                         
-                        array_push(_data, new __PodiumClassRecord(_scoreStruct.name,
-                                                                  __PodiumConvertFromSubmitScore(_scoreStruct.score, __formattedServiceData),
-                                                                  _scoreStruct.rank,
-                                                                  _scoreStruct.userID,
-                                                                  _metadataString, false));
-                        ++_i;
-                    }
-                }
-                catch(_error)
-                {
-                    __PodiumWarning($"Failed to parse returned leaderboard data for \"{__formattedServiceData}\"");
-                    __status = PODIUM_LEADERBOARD_ERROR;
-                }
-            }
-            else if (PODIUM_ON_SWITCH_X)
-            {
-                ///////
-                // Switch
-                ///////
-                
-                if (PODIUM_VERBOSE)
-                {
-                    __PodiumTrace($"Using Switch parser");
-                }
-                
-                try
-                {
-                    var _scoresArray = async_load[? "scores"];
-                    var _i = 0;
-                    repeat(array_length(_scoresArray))
-                    {
-                        var _scoreStruct = _scoresArray[_i];
-                        var _metadataString = _scoreStruct.data[$ "_"] ?? "";
-                        array_push(_data, new __PodiumClassRecord(_scoreStruct.user_name,
-                                                                  __PodiumConvertFromSubmitScore(_scoreStruct.score, __formattedServiceData),
-                                                                  _scoreStruct.rank,
-                                                                  _scoreStruct.user_id,
-                                                                  _metadataString, false));
-                        ++_i;
-                    }
-                }
-                catch(_error)
-                {
-                    __PodiumWarning($"Failed to parse returned leaderboard data for \"{__formattedServiceData}\"");
-                    __status = PODIUM_LEADERBOARD_ERROR;
-                }
-            }
-            else if (PODIUM_ON_PS5)
-            {
-                ///////
-                // PlayStation 5
-                ///////
-                
-                if (async_load < 0)
-                {
-                    __status = PODIUM_LEADERBOARD_ERROR;
-                }
-                else
-                {
-                    try
-                    {
-                        if ((__range == PODIUM_RANGE_USER) || ((__range == PODIUM_RANGE_AROUND) && (not __ps5UserScoreReceived)))
+                        var _map = async_load;
+                        var _entryCount = async_load[? $"numentries"];
+                        if (_entryCount == undefined)
+                        {
+                            throw "Incomplete user record";
+                        }
+                        else if (_entryCount == 0)
                         {
                             if (PODIUM_VERBOSE)
                             {
-                                __PodiumTrace($"Using PlayStation 5 user score parser");
-                            }
-                            
-                            var _map = async_load;
-                            var _entryCount = async_load[? $"numentries"];
-                            if (_entryCount == undefined)
-                            {
-                                throw "Incomplete user record";
-                            }
-                            else if (_entryCount == 0)
-                            {
-                                if (PODIUM_VERBOSE)
-                                {
-                                    __PodiumTrace($"Player has no score");
-                                }
-                            }
-                            else
-                            {
-                                var _rank     = async_load[? $"rank"    ];
-                                var _playerID = async_load[? $"playerid"]; //Called "player ID" but actually seems to be a name?
-                                var _score    = async_load[? $"score"   ];
-                                var _comment  = async_load[? $"comment" ] ?? "";
-                                
-                                if ((_rank != undefined) && (_playerID != undefined) && (_score != undefined))
-                                {
-                                    array_push(_data, new __PodiumClassRecord(_playerID, __PodiumConvertFromSubmitScore(_score, __formattedServiceData), _rank, _playerID, _comment, false));
-                                }
-                                else
-                                {
-                                    throw "Incomplete user record";
-                                }
+                                __PodiumTrace($"Player has no score");
                             }
                         }
                         else
                         {
-                            if (PODIUM_VERBOSE)
-                            {
-                                __PodiumTrace($"Using PlayStation 5 general parser");
-                            }
+                            var _rank     = async_load[? $"rank"    ];
+                            var _playerID = async_load[? $"playerid"]; //Called "player ID" but actually seems to be a name?
+                            var _score    = async_load[? $"score"   ];
+                            var _comment  = async_load[? $"comment" ] ?? "";
                             
-                            var _entryNumber = async_load[? "numentries"];
-                            var _i = 0;
-                            repeat(_entryNumber)
+                            if ((_rank != undefined) && (_playerID != undefined) && (_score != undefined))
                             {
-                                var _rank     = async_load[? $"rank{_i}"      ];
-                                var _playerID = async_load[? $"playerid{_i}"  ]; //Called "player ID" but actually seems to be a name?
-                                var _score    = async_load[? $"scorevalue{_i}"];
-                                var _comment  = async_load[? $"comment{_i}"   ] ?? "";
-                                
-                                if ((_rank != undefined) && (_playerID != undefined) && (_score != undefined))
-                                {
-                                    array_push(_data, new __PodiumClassRecord(_playerID, __PodiumConvertFromSubmitScore(_score, __formattedServiceData), _rank, _playerID, _comment, false));
-                                }
-                                
-                                ++_i;
+                                array_push(_data, new __PodiumClassRecord(_playerID, __PodiumConvertFromSubmitScore(_score, __formattedServiceData), _rank, _playerID, _comment, false));
+                            }
+                            else
+                            {
+                                throw "Incomplete user record";
                             }
                         }
                     }
-                    catch(_error)
-                    {
-                        show_debug_message(_error);
-                        __PodiumWarning($"Failed to parse returned leaderboard data for \"{__formattedServiceData}\"");
-                        __status = PODIUM_LEADERBOARD_ERROR;
-                    }
-                }
-            }
-            else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
-            {
-                ///////
-                // PlayFab
-                ///////
-                
-                if (PODIUM_VERBOSE)
-                {
-                    __PodiumTrace($"Using PlayFab parser");
-                }
-                
-                if (_playFabData == undefined)
-                {
-                    __PodiumWarning("Returned PlayFab data is invalid");
-                    __status = PODIUM_LEADERBOARD_ERROR;
-                }
-                else
-                {
-                    try
-                    {
-                        var _rankingsArray = _playFabData.data.Rankings;
-                    }
-                    catch(_error)
+                    else
                     {
                         if (PODIUM_VERBOSE)
                         {
-                            show_debug_message(json_stringify(_playFabData, true));
-                            show_debug_message(_error);
+                            __PodiumTrace($"Using PlayStation 5 general parser");
                         }
                         
-                        __PodiumWarning($"Failed to find expected data in returned leaderboard data \"{_leaderboardName}\"");
-                        __status = PODIUM_LEADERBOARD_ERROR;
-                    }
-                }
-                
-                if (__status == PODIUM_LEADERBOARD_SUCCESS)
-                {
-                    try
-                    {
+                        var _entryNumber = async_load[? "numentries"];
                         var _i = 0;
-                        repeat(array_length(_rankingsArray))
+                        repeat(_entryNumber)
                         {
-                            var _ranking = _rankingsArray[_i];
+                            var _rank     = async_load[? $"rank{_i}"      ];
+                            var _playerID = async_load[? $"playerid{_i}"  ]; //Called "player ID" but actually seems to be a name?
+                            var _score    = async_load[? $"scorevalue{_i}"];
+                            var _comment  = async_load[? $"comment{_i}"   ] ?? "";
                             
-                            var _score = undefined;
-                            try
+                            if ((_rank != undefined) && (_playerID != undefined) && (_score != undefined))
                             {
-                                _score = real(_ranking.Scores[0]);
-                            }
-                            catch(_error)
-                            {
-                                if (PODIUM_VERBOSE)
-                                {
-                                    __PodiumTrace("Failed to convert score to number");
-                                }
-                            }
-                            
-                            if (_score != undefined)
-                            {
-                                var _unpackedData = __PodiumPlayFabMetadataUnpack(_ranking[$ "Metadata"] ?? "");
-                                array_push(_data, new __PodiumClassRecord(_ranking.DisplayName,
-                                                                          __PodiumConvertFromSubmitScore(_score, __formattedServiceData),
-                                                                          _ranking.Rank,
-                                                                          _unpackedData.__xboxUser,
-                                                                          _unpackedData.__metadataString, false));
+                                array_push(_data, new __PodiumClassRecord(_playerID, __PodiumConvertFromSubmitScore(_score, __formattedServiceData), _rank, _playerID, _comment, false));
                             }
                             
                             ++_i;
                         }
-                    }
-                    catch(_error)
-                    {
-                        if (PODIUM_VERBOSE)
-                        {
-                            show_debug_message(_error);
-                        }
-                        
-                        __PodiumWarning($"Leaderboard data \"{_leaderboardName}\" failed to parse");
-                        __status = PODIUM_LEADERBOARD_ERROR;
-                    }
-                    
-                    if (PODIUM_VERBOSE)
-                    {
-                        show_debug_message(json_stringify(_data, true));
-                    }
-                }
-            }
-            else if (PODIUM_USING_XBOX_LEADERBOARDS)
-            {
-                ///////
-                // Xbox native
-                ///////
-                
-                try
-                {
-                    if (PODIUM_VERBOSE)
-                    {
-                        __PodiumTrace($"Using Xbox native parser");
-                    }
-                    
-                    var _entryNumber = async_load[? "numentries"];
-                    var _i = 0;
-                    repeat(_entryNumber)
-                    {
-                        var _rank     = async_load[? $"Rank{_i}"    ];
-                        var _name     = async_load[? $"Player{_i}"  ];
-                        var _playerID = async_load[? $"Playerid{_i}"];
-                        var _score    = async_load[? $"Score{_i}"   ];
-                        
-                        try
-                        {
-                            _score = real(_score);
-                        }
-                        catch(_error)
-                        {
-                            _score = undefined;
-                        }
-                        
-                        if ((_name != undefined) && (_rank != undefined) && (_playerID != undefined) && (_score != undefined))
-                        {
-                            array_push(_data, new __PodiumClassRecord(_name, __PodiumConvertFromSubmitScore(_score, __formattedServiceData), _rank, _playerID, "", false));
-                        }
-                        
-                        ++_i;
                     }
                 }
                 catch(_error)
@@ -660,103 +509,244 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                     __status = PODIUM_LEADERBOARD_ERROR;
                 }
             }
-            else if (PODIUM_PLAY_SERVICES_AVAILABLE)
-            {
-                ///////
-                // Google Play Services
-                ///////
-                
-                if (PODIUM_VERBOSE)
-                {
-                    __PodiumTrace($"Using Google Play Services parser");
-                }
-                
-                var _scoresArray = undefined;
-                try
-                {
-                    var _scoresArray = json_parse(async_load[? "data"]);
-                    var _i = 0;
-                    repeat(array_length(_scoresArray))
-                    {
-                        var _scoreStruct = _scoresArray[_i];
-                        
-                        var _metadataString = __PodiumPlayServicesDecode(_scoreStruct[$ "scoreTag"] ?? "");
-                        array_push(_data, new __PodiumClassRecord(_scoreStruct.scoreHolderDisplayName,
-                                                                  __PodiumConvertFromSubmitScore(_scoreStruct.rawScore, __formattedServiceData),
-                                                                  _scoreStruct.rank,
-                                                                  _scoreStruct.scoreHolder.playerId,
-                                                                  _metadataString,
-                                                                  false));
-                        
-                        ++_i;
-                    }
-                }
-                catch(_error)
-                {
-                    __PodiumWarning($"Failed to parse returned leaderboard data for \"{__formattedServiceData}\"");
-                    __status = PODIUM_LEADERBOARD_ERROR;
-                }
-            }
-            else if (PODIUM_USING_GAMECENTER)
-            {
-                ///////
-                // GameCenter
-                ///////
-                
-                if (PODIUM_VERBOSE)
-                {
-                    __PodiumTrace($"Using GameCenter parser");
-                }
-                
-                try
-                {
-                    var _scoreCount = async_load[? "entries"];
-                    var _i = 0;
-                    repeat(_scoreCount)
-                    {
-                        var _infoJSON = async_load[? $"entry_info_{_i}"   ];
-                        var _score    = async_load[? $"entry_score_{_i}"  ];
-                        var _rank     = async_load[? $"entry_rank_{_i}"   ];
-                        var _metadata = async_load[? $"entry_context_{_i}"];
-                        
-                        var _info        = undefined;
-                        var _displayName = undefined;
-                        var _playerID    = undefined;
-                        try
-                        {
-                            _info        = json_parse(_infoJSON);
-                            _displayName = _info.displayName;
-                            _playerID    = _info.playerID;
-                        }
-                        catch(_error)
-                        {
-                            show_debug_message(_error);
-                        }
-                        
-                        if ((_displayName != undefined) && (_score != undefined) && (_rank != undefined) && (_playerID != undefined) && (_metadata != undefined))
-                        {
-                            array_push(_data, new __PodiumClassRecord(_displayName, __PodiumConvertFromSubmitScore(_score, __formattedServiceData), _rank, _playerID, _metadata, false));
-                        }
-                        else
-                        {
-                            __PodiumWarning($"Could not parse entry {_i}");
-                        }
-                        
-                        ++_i;
-                    }
-                }
-                catch(_error)
-                {
-                    __PodiumWarning($"Failed to parse returned leaderboard data for \"{__formattedServiceData}\"");
-                    __status = PODIUM_LEADERBOARD_ERROR;
-                }
-            }
+        }
+        else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
+        {
+            ///////
+            // PlayFab
+            ///////
             
             if (PODIUM_VERBOSE)
             {
-                __PodiumTrace($"Completing GET_SCORES operation {string(ptr(self))}: final status = {__status}, found {array_length(_data)} entries");
+                __PodiumTrace($"Using PlayFab parser");
             }
             
+            if (_playFabData == undefined)
+            {
+                __PodiumWarning("Returned PlayFab data is invalid");
+                __status = PODIUM_LEADERBOARD_ERROR;
+            }
+            else
+            {
+                try
+                {
+                    var _rankingsArray = _playFabData.data.Rankings;
+                }
+                catch(_error)
+                {
+                    if (PODIUM_VERBOSE)
+                    {
+                        show_debug_message(json_stringify(_playFabData, true));
+                        show_debug_message(_error);
+                    }
+                    
+                    __PodiumWarning($"Failed to find expected data in returned leaderboard data \"{_leaderboardName}\"");
+                    __status = PODIUM_LEADERBOARD_ERROR;
+                }
+            }
+                
+            if (__status == PODIUM_LEADERBOARD_SUCCESS)
+            {
+                try
+                {
+                    var _i = 0;
+                    repeat(array_length(_rankingsArray))
+                    {
+                        var _ranking = _rankingsArray[_i];
+                        
+                        var _score = undefined;
+                        try
+                        {
+                            _score = real(_ranking.Scores[0]);
+                        }
+                        catch(_error)
+                        {
+                            if (PODIUM_VERBOSE)
+                            {
+                                __PodiumTrace("Failed to convert score to number");
+                            }
+                        }
+                        
+                        if (_score != undefined)
+                        {
+                            var _unpackedData = __PodiumPlayFabMetadataUnpack(_ranking[$ "Metadata"] ?? "");
+                            array_push(_data, new __PodiumClassRecord(_ranking.DisplayName,
+                                                                        __PodiumConvertFromSubmitScore(_score, __formattedServiceData),
+                                                                        _ranking.Rank,
+                                                                        _unpackedData.__xboxUser,
+                                                                        _unpackedData.__metadataString, false));
+                        }
+                        
+                        ++_i;
+                    }
+                }
+                catch(_error)
+                {
+                    if (PODIUM_VERBOSE)
+                    {
+                        show_debug_message(_error);
+                    }
+                    
+                    __PodiumWarning($"Leaderboard data \"{_leaderboardName}\" failed to parse");
+                    __status = PODIUM_LEADERBOARD_ERROR;
+                }
+                
+                if (PODIUM_VERBOSE)
+                {
+                    show_debug_message(json_stringify(_data, true));
+                }
+            }
+        }
+        else if (PODIUM_USING_XBOX_LEADERBOARDS)
+        {
+            ///////
+            // Xbox native
+            ///////
+            
+            try
+            {
+                if (PODIUM_VERBOSE)
+                {
+                    __PodiumTrace($"Using Xbox native parser");
+                }
+                
+                var _entryNumber = async_load[? "numentries"];
+                var _i = 0;
+                repeat(_entryNumber)
+                {
+                    var _rank     = async_load[? $"Rank{_i}"    ];
+                    var _name     = async_load[? $"Player{_i}"  ];
+                    var _playerID = async_load[? $"Playerid{_i}"];
+                    var _score    = async_load[? $"Score{_i}"   ];
+                    
+                    try
+                    {
+                        _score = real(_score);
+                    }
+                    catch(_error)
+                    {
+                        _score = undefined;
+                    }
+                    
+                    if ((_name != undefined) && (_rank != undefined) && (_playerID != undefined) && (_score != undefined))
+                    {
+                        array_push(_data, new __PodiumClassRecord(_name, __PodiumConvertFromSubmitScore(_score, __formattedServiceData), _rank, _playerID, "", false));
+                    }
+                    
+                    ++_i;
+                }
+            }
+            catch(_error)
+            {
+                show_debug_message(_error);
+                __PodiumWarning($"Failed to parse returned leaderboard data for \"{__formattedServiceData}\"");
+                __status = PODIUM_LEADERBOARD_ERROR;
+            }
+        }
+        else if (PODIUM_PLAY_SERVICES_AVAILABLE)
+        {
+            ///////
+            // Google Play Services
+            ///////
+            
+            if (PODIUM_VERBOSE)
+            {
+                __PodiumTrace($"Using Google Play Services parser");
+            }
+            
+            var _scoresArray = undefined;
+            try
+            {
+                var _scoresArray = json_parse(async_load[? "data"]);
+                var _i = 0;
+                repeat(array_length(_scoresArray))
+                {
+                    var _scoreStruct = _scoresArray[_i];
+                    
+                    var _metadataString = __PodiumPlayServicesDecode(_scoreStruct[$ "scoreTag"] ?? "");
+                    array_push(_data, new __PodiumClassRecord(_scoreStruct.scoreHolderDisplayName,
+                                                                __PodiumConvertFromSubmitScore(_scoreStruct.rawScore, __formattedServiceData),
+                                                                _scoreStruct.rank,
+                                                                _scoreStruct.scoreHolder.playerId,
+                                                                _metadataString,
+                                                                false));
+                    
+                    ++_i;
+                }
+            }
+            catch(_error)
+            {
+                __PodiumWarning($"Failed to parse returned leaderboard data for \"{__formattedServiceData}\"");
+                __status = PODIUM_LEADERBOARD_ERROR;
+            }
+        }
+        else if (PODIUM_USING_GAMECENTER)
+        {
+            ///////
+            // GameCenter
+            ///////
+            
+            if (PODIUM_VERBOSE)
+            {
+                __PodiumTrace($"Using GameCenter parser");
+            }
+            
+            try
+            {
+                var _scoreCount = async_load[? "entries"];
+                var _i = 0;
+                repeat(_scoreCount)
+                {
+                    var _infoJSON = async_load[? $"entry_info_{_i}"   ];
+                    var _score    = async_load[? $"entry_score_{_i}"  ];
+                    var _rank     = async_load[? $"entry_rank_{_i}"   ];
+                    var _metadata = async_load[? $"entry_context_{_i}"];
+                    
+                    var _info        = undefined;
+                    var _displayName = undefined;
+                    var _playerID    = undefined;
+                    try
+                    {
+                        _info        = json_parse(_infoJSON);
+                        _displayName = _info.displayName;
+                        _playerID    = _info.playerID;
+                    }
+                    catch(_error)
+                    {
+                        show_debug_message(_error);
+                    }
+                    
+                    if ((_displayName != undefined) && (_score != undefined) && (_rank != undefined) && (_playerID != undefined) && (_metadata != undefined))
+                    {
+                        array_push(_data, new __PodiumClassRecord(_displayName, __PodiumConvertFromSubmitScore(_score, __formattedServiceData), _rank, _playerID, _metadata, false));
+                    }
+                    else
+                    {
+                        __PodiumWarning($"Could not parse entry {_i}");
+                    }
+                    
+                    ++_i;
+                }
+            }
+            catch(_error)
+            {
+                __PodiumWarning($"Failed to parse returned leaderboard data for \"{__formattedServiceData}\"");
+                __status = PODIUM_LEADERBOARD_ERROR;
+            }
+        }
+        
+        if (PODIUM_VERBOSE)
+        {
+            __PodiumTrace($"Collecting GET_SCORES operation {string(ptr(self))}: final status = {__status}, found {array_length(_data)} entries");
+        }
+        
+        var _scoresStruct = __leaderboard.__EnsureScoresStruct(__range, __seasonOffset);
+        if (_scoresStruct == undefined)
+        {
+            __PodiumSoftError($"Scores struct not found for leaderboard \"{_leaderboardName}\"");
+        }
+        else
+        {
             _scoresStruct.__ReceiveData(_data, __status);
             
             //Find player scores and update our local cache provided that this is not a historic score
@@ -819,6 +809,6 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
         if (__completed) return;
         
         __Collect(_status, _playFabData);
-        __Finalize(_status);
+        __Finalize();
     }
 }

@@ -11,6 +11,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
     __seasonOffset = _seasonOffset;
     
     __formattedServiceData = variable_clone(_leaderboard.__GetFormattedServiceData(__seasonOffset));
+    __ps5UserScoreReceived = false;
     
     
     
@@ -112,7 +113,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                 // PlayStation 5
                 ///////
                 
-                var _func = function(_cancelled)
+                var _funcCommon = function(_cancelled)
                 {
                     __Complete(((not _cancelled) && async_load[? "succeeded"])? PODIUM_LEADERBOARD_SUCCESS : PODIUM_LEADERBOARD_ERROR, undefined);
                 }
@@ -121,24 +122,74 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                 {
                     __asyncID = 999_999;
                     psn_get_leaderboard_score_range(_system.__psGamepad, __formattedServiceData.__formattedRef, 0, 99); //zero-indexed
-                    __PodiumRegisterPSLeaderboardScoreRange(__formattedServiceData.__formattedRef, _func);
+                    __PodiumRegisterPSLeaderboardScoreRange(__formattedServiceData.__formattedRef, _funcCommon);
                 }
                 else if (__range == PODIUM_RANGE_FRIENDS)
                 {
                     __asyncID = 999_999;
                     psn_get_friends_scores(_system.__psGamepad, __formattedServiceData.__formattedRef, 0, 99); //zero-indexed
-                    __PodiumRegisterPSLeaderboardFriends(__formattedServiceData.__formattedRef, _func);
+                    __PodiumRegisterPSLeaderboardFriends(__formattedServiceData.__formattedRef, _funcCommon);
                 }
                 else if (__range == PODIUM_RANGE_AROUND)
                 {
-                    //FIXME - This doesn't seem to be supported. Can maybe make a request against the user's leaderboard ranking and then request a range around it?
-                    __PodiumWarning("`PODIUM_RANGE_AROUND` not supported on PS5 (yet)");
+                    //PlayStation 5 API doesn't offer us a way to get scores around the current user for
+                    //some reason. Instead, we get the player's current rank and then make a request to
+                    //the standard "top scores" endpoint using the player's current rank as a starting
+                    //point.
+                    
+                    __asyncID = 999_999;
+                    psn_get_leaderboard_score(_system.__psGamepad, __formattedServiceData.__formattedRef);
+                    __PodiumRegisterPSLeaderboardUser(__formattedServiceData.__formattedRef, function(_cancelled)
+                    {
+                        if (_cancelled || (not async_load[? "succeeded"]))
+                        {
+                            __Complete(PODIUM_LEADERBOARD_ERROR, undefined);
+                        }
+                        else
+                        {
+                            __Collect(PODIUM_LEADERBOARD_SUCCESS, undefined);
+                            
+                            if (__status != PODIUM_LEADERBOARD_SUCCESS)
+                            {
+                                __status = PODIUM_LEADERBOARD_ERROR;
+                                __Finalize();
+                            }
+                            else if (PodiumGetScoreState(__leaderboard.__serviceData.leaderboardName, PODIUM_RANGE_USER, __seasonOffset) != PODIUM_LEADERBOARD_SUCCESS)
+                            {
+                                __status = PODIUM_LEADERBOARD_ERROR;
+                                __Finalize();
+                            }
+                            else
+                            {
+                                var _playerScore = PodiumGetScores(__leaderboard.__serviceData.leaderboardName, PODIUM_RANGE_USER, __seasonOffset); 
+                                if (array_length(_playerScore) <= 0)
+                                {
+                                    __status = PODIUM_LEADERBOARD_ERROR;
+                                    __Finalize();
+                                }
+                                else
+                                {
+                                    //Reset to the "waiting" state so we don't confuse code outside Podium
+                                    __status = PODIUM_LEADERBOARD_WAITING;
+                                    
+                                    var _start = max(0, _playerScore[0].rank - 50);
+                                    var _end   = _start + 99;
+                                    
+                                    psn_get_leaderboard_score_range(_system.__psGamepad, __formattedServiceData.__formattedRef, _start, _end); //zero-indexed
+                                    __PodiumRegisterPSLeaderboardScoreRange(__formattedServiceData.__formattedRef, function(_cancelled)
+                                    {
+                                        __Complete(((not _cancelled) && async_load[? "succeeded"])? PODIUM_LEADERBOARD_SUCCESS : PODIUM_LEADERBOARD_ERROR, undefined);
+                                    });
+                                }
+                            }
+                        }
+                    });
                 }
                 else if (__range == PODIUM_RANGE_USER)
                 {
                     __asyncID = 999_999;
                     psn_get_leaderboard_score(_system.__psGamepad, __formattedServiceData.__formattedRef);
-                    __PodiumRegisterPSLeaderboardUser(__formattedServiceData.__formattedRef, _func);
+                    __PodiumRegisterPSLeaderboardUser(__formattedServiceData.__formattedRef, _funcCommon);
                 }
             }
             else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
@@ -280,28 +331,21 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
     
     
     
-    static __Complete = function(_status, _playFabData)
+    static __Collect = function(_status, _playFabData)
     {
         if (__completed) return;
         
-        var _leaderboardName = __formattedServiceData.leaderboardName;
-        
-        __completed = true;
-        __activityTime = PodiumGetOfflineOnly()? -infinity : current_time;
-        
         if (PODIUM_VERBOSE)
         {
-            __PodiumTrace($"Completing GET_SCORES operation {string(ptr(self))}: provisional status = {_status}");
+            __PodiumTrace($"Collecting GET_SCORES operation {string(ptr(self))}: provisional status = {_status}");
         }
         
         __status = _status;
+        
+        __activityTime = PodiumGetOfflineOnly()? -infinity : current_time;
         __asyncID = undefined;
         
-        var _index = array_get_index(_queuedFetchArray, self);
-        if (_index >= 0) array_delete(_queuedFetchArray, _index, 1);
-        
-        var _index = array_get_index(_pendingArray, self);
-        if (_index >= 0) array_delete(_pendingArray, _index, 1);
+        var _leaderboardName = __formattedServiceData.leaderboardName;
         
         var _scoresStruct = __leaderboard.__EnsureScoresStruct(__range, __seasonOffset);
         if (_scoresStruct == undefined)
@@ -413,11 +457,11 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                 {
                     try
                     {
-                        if (__range == PODIUM_RANGE_USER)
+                        if ((__range == PODIUM_RANGE_USER) || ((__range == PODIUM_RANGE_AROUND) && (not __ps5UserScoreReceived)))
                         {
                             if (PODIUM_VERBOSE)
                             {
-                                __PodiumTrace($"Using PlayStation 5 user parser");
+                                __PodiumTrace($"Using PlayStation 5 user score parser");
                             }
                             
                             var _map = async_load;
@@ -749,10 +793,32 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                 }
             }
         }
+    }
+    
+    static __Finalize = function()
+    {
+        if (__completed) return;
+        __completed = true;
+        
+        var _index = array_get_index(_queuedFetchArray, self);
+        if (_index >= 0) array_delete(_queuedFetchArray, _index, 1);
+        
+        var _index = array_get_index(_pendingArray, self);
+        if (_index >= 0) array_delete(_pendingArray, _index, 1);
         
         if (is_callable(__callback))
         {
-            __callback(_status, __callbackMetadata);
+            __callback(__status, __callbackMetadata);
         }
+    }
+    
+    
+    
+    static __Complete = function(_status, _playFabData)
+    {
+        if (__completed) return;
+        
+        __Collect(_status, _playFabData);
+        __Finalize(_status);
     }
 }

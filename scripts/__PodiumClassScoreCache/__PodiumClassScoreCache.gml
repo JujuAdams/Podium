@@ -1,9 +1,10 @@
 function __PodiumClassScoreCache() constructor
 {
-    __state = PODIUM_LEADERBOARD_NOT_FETCHED;
-    __data  = [];
-    __lastReceivedTime = -infinity;
-    __lastGetTime = -infinity;
+    __state             = PODIUM_LEADERBOARD_NOT_FETCHED;
+    __data              = [];
+    __lastReceivedTime  = -infinity;
+    __lastGetTime       = -infinity;
+    __queueErrorRefresh = false;
     
     
     
@@ -51,10 +52,23 @@ function __PodiumClassScoreCache() constructor
     static __SetState = function(_state)
     {
         __state = _state;
+        
+        if (_state != PODIUM_LEADERBOARD_WAITING)
+        {
+            __queueErrorRefresh = false;
+        }
     }
     
     static __GetState = function()
     {
         return __state;
+    }
+    
+    static __QueueErrorRefresh = function()
+    {
+        if (__state == PODIUM_LEADERBOARD_ERROR)
+        {
+            __queueErrorRefresh = true;
+        }
     }
 }

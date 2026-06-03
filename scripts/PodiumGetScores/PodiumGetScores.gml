@@ -111,46 +111,53 @@ function PodiumGetScores(_leaderboardName, _range, _seasonOffset = 0, _priority 
             _lastTrigger = current_time;
         }
     }
-    else if (_leaderboardStruct.__GetUsingCache(_range, _seasonOffset)) //Use the cache if we've sent a request recently
+    else
     {
-        if ((_range == PODIUM_RANGE_USER) && (_seasonOffset == 0) && (_leaderboardStruct.__GetScoresState(_range, _seasonOffset) <= 0))
-        {
-            //Use the offline score if we're getting the user's score and we ran into an error
-            var _offlineRecord = PodiumGetOfflineScore(_leaderboardName);
-            return (_offlineRecord == undefined)? _emptyArray : [_offlineRecord];
-        }
-        else
-        {
-            //Otherwise, return whatever scores we have available (if any)
-            return _leaderboardStruct.__GetScoresData(_range, _seasonOffset);
-        }
-    }
-    else if (_priority != PODIUM_PRIORITY_NO_REQUEST)
-    {
-        //Make a new request and queue it depending on the priority
+        var _scoresStruct = _leaderboardStruct.__EnsureScoresStruct(_range, _seasonOffset);
         
-        var _struct = new __PodiumClassOpGetScores(_leaderboardStruct, _range, _seasonOffset);
-        if (__PodiumGetUniqueOperation(_struct))
+        //Use the cache if we've sent a request recently or if the last attempt failed. We don't want to
+        //keep sending requests if the endpoint failed as this breaches compliance guidelines
+        if (_scoresStruct.__GetUsingCache() || ((_scoresStruct.__GetState() == PODIUM_LEADERBOARD_ERROR) && (not _scoresStruct.__queueErrorRefresh))) 
         {
-            if (PODIUM_VERBOSE)
+            if ((_range == PODIUM_RANGE_USER) && (_seasonOffset == 0) && (_leaderboardStruct.__GetScoresState(_range, _seasonOffset) <= 0))
             {
-                __PodiumTrace($"Created GET_SCORES operation {string(ptr(_struct))}: \"{_leaderboardStruct.__serviceData.__ref}\", range = {_range}, seasonOffset = {_seasonOffset}");
-            }
-            
-            // N.B. We also set "pending" state when dispatching a request!
-            _leaderboardStruct.__EnsureScoresStruct(_range, _seasonOffset).__SetState(PODIUM_LEADERBOARD_WAITING);
-            
-            if (_priority == PODIUM_PRIORITY_HIGH)
-            {
-                array_insert(_queuedFetchArray, 0, _struct);
-            }
-            else if (_priority == PODIUM_PRIORITY_IMMEDIATE)
-            {
-                _struct.__Dispatch();
+                //Use the offline score if we're getting the user's score and we ran into an error
+                var _offlineRecord = PodiumGetOfflineScore(_leaderboardName);
+                return (_offlineRecord == undefined)? _emptyArray : [_offlineRecord];
             }
             else
             {
-                array_push(_queuedFetchArray, _struct);
+                //Otherwise, return whatever scores we have available (if any)
+                return _leaderboardStruct.__GetScoresData(_range, _seasonOffset);
+            }
+        }
+        else if (_priority != PODIUM_PRIORITY_NO_REQUEST)
+        {
+            //Make a new request and queue it depending on the priority
+            
+            var _struct = new __PodiumClassOpGetScores(_leaderboardStruct, _range, _seasonOffset);
+            if (__PodiumGetUniqueOperation(_struct))
+            {
+                if (PODIUM_VERBOSE)
+                {
+                    __PodiumTrace($"Created GET_SCORES operation {string(ptr(_struct))}: \"{_leaderboardStruct.__serviceData.__ref}\", range = {_range}, seasonOffset = {_seasonOffset}");
+                }
+                
+                // N.B. We also set "pending" state when dispatching a request!
+                _leaderboardStruct.__EnsureScoresStruct(_range, _seasonOffset).__SetState(PODIUM_LEADERBOARD_WAITING);
+                
+                if (_priority == PODIUM_PRIORITY_HIGH)
+                {
+                    array_insert(_queuedFetchArray, 0, _struct);
+                }
+                else if (_priority == PODIUM_PRIORITY_IMMEDIATE)
+                {
+                    _struct.__Dispatch();
+                }
+                else
+                {
+                    array_push(_queuedFetchArray, _struct);
+                }
             }
         }
     }

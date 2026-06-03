@@ -153,6 +153,7 @@
     {"id":{"name":"PodiumGetXboxUser","path":"scripts/PodiumGetXboxUser/PodiumGetXboxUser.yy",},},
     {"id":{"name":"PodiumImportLocalData","path":"scripts/PodiumImportLocalData/PodiumImportLocalData.yy",},},
     {"id":{"name":"PodiumInitialize","path":"scripts/PodiumInitialize/PodiumInitialize.yy",},},
+    {"id":{"name":"PodiumQueueErrorRefresh","path":"scripts/PodiumQueueErrorRefresh/PodiumQueueErrorRefresh.yy",},},
     {"id":{"name":"PodiumSetUsernameHint","path":"scripts/PodiumSetUsernameHint/PodiumSetUsernameHint.yy",},},
     {"id":{"name":"PodiumShowNativeLeaderboards","path":"scripts/PodiumShowNativeLeaderboards/PodiumShowNativeLeaderboards.yy",},},
     {"id":{"name":"PodiumSignInGameCenter","path":"scripts/PodiumSignInGameCenter/PodiumSignInGameCenter.yy",},},

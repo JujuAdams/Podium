@@ -166,6 +166,13 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
         var _index = array_get_index(_queuedSubmitArray, self);
         if (_index >= 0) array_delete(_queuedSubmitArray, _index, 1);
         
+        //If this was the last submit operation, add some extra time before fetching a leaderboard. Hopefully
+        //this gives the leaderboard service enough time to update before we start pulling scores
+        if (array_length(_queuedSubmitArray) <= 0)
+        {
+            _system.__lastActivityTime += 5_000;
+        }
+        
         var _index = array_get_index(_pendingArray, self);
         if (_index >= 0) array_delete(_pendingArray, _index, 1);
         

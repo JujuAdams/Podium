@@ -15,15 +15,7 @@
 
 #macro PODIUM_OFFLINE_SCORE_VERSION  "1"
 
-/// Whether to report lots of information messages to the console. This can be helpful to diagnose
-/// problems. You will likely want to set this macro to `false` for production builds.
-#macro PODIUM_VERBOSE  false
-
-#macro PODIUM_VERBOSE_ASYNC  false
-
-#macro PODIUM_WARNINGS_HAVE_CALLSTACKS  (PODIUM_RUNNING_FROM_IDE)
-
-#macro PODIUM_REFERENCE_DATE  date_create_datetime(2026, 1, 1, 0, 0, 0)
+#macro PODIUM_DAILY_ROLLOVER_HOUR  0
 
 /// The maximum length of time that a leaderboard cache is valid for before forcing a refresh. This
 /// macro only applies on desktop and mobile platforms. Console platforms will never automatically
@@ -31,10 +23,6 @@
 #macro PODIUM_GREEDY_CACHE_TIMEOUT  600 //seconds
 
 #macro PODIUM_UNKNOWN_RANK  "??"
-
-#macro PODIUM_DEBUG_DAY_OFFSET  0
-
-#macro PODIUM_DEBUG_IGNORE_LOCAL_IMPORT  false
 
 ///////
 // Platforms Controls
@@ -63,3 +51,17 @@
 
 //Found on PlayFab backend in the product / Settings / Secret Keys
 #macro PODIUM_PLAYFAB_TITLE_SECRET  ""
+
+///////
+// Debug
+///////
+
+/// Whether to report lots of information messages to the console. This can be helpful to diagnose
+/// problems. You will likely want to set this macro to `false` for production builds.
+#macro PODIUM_VERBOSE  false
+
+#macro PODIUM_VERBOSE_ASYNC  false
+
+#macro PODIUM_WARNINGS_HAVE_CALLSTACKS  (PODIUM_RUNNING_FROM_IDE)
+
+#macro PODIUM_DEBUG_IGNORE_LOCAL_IMPORT  false

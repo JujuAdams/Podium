@@ -4,6 +4,9 @@
 #macro PODIUM_MIN_FETCH_DELAY   500 //ms between requests
 #macro PODIUM_MAX_FREQUENCY      25 //per minute
 
+#macro __PODIUM_PUSH_UTC  var _oldTimezone = date_get_timezone(); date_set_timezone(timezone_utc);
+#macro __PODIUM_POP_UTC   date_set_timezone(_oldTimezone);
+
 #macro __PODIUM_MAX_SIMULTANEOUS_OPERATIONS  1
 
 #macro __PODIUM_OP_SUBMIT      0
@@ -32,6 +35,11 @@ function __PodiumSystem()
         __initialized = false;
         __signedInWhilstUninitialized = false;
         __runningDefinitions = false;
+        
+        var _oldTimezone = date_get_timezone();
+        date_set_timezone(timezone_utc);
+        __referenceDate = date_create_datetime(2026, 1, 1, PODIUM_DAILY_ROLLOVER_HOUR, 0, 0);
+        date_set_timezone(_oldTimezone);
         
         __signInState = PODIUM_USER_SIGNED_OUT;
         __usernameHint = "";

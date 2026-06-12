@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"PodiumGetTime",
+  "%Name":"PodiumGetSecondsRemaining",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"PodiumGetTime",
+  "name":"PodiumGetSecondsRemaining",
   "parent":{
     "name":"Dailies",
     "path":"folders/Podium/Dailies.yy",

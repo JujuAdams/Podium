@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"PodiumGetWeekday",
   "parent":{
-    "name":"Global Getters",
-    "path":"folders/Podium/Global Getters.yy",
+    "name":"Dailies",
+    "path":"folders/Podium/Dailies.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

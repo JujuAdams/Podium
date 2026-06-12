@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"PodiumGetTime",
+  "%Name":"PodiumGetDailyDate",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"PodiumGetTime",
+  "name":"PodiumGetDailyDate",
   "parent":{
     "name":"Dailies",
     "path":"folders/Podium/Dailies.yy",

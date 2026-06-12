@@ -10,20 +10,21 @@
 /// 
 /// @param [modulo]
 /// @param [dayOffset=0]
-/// @param [hourOffset=0]
 
-function PodiumGetDays(_modulo = undefined, _dayOffset = 0, _hourOffset = 0)
+function PodiumGetDays(_modulo = undefined, _dayOffset = 0)
 {
+    __PODIUM_PUSH_UTC
+    
     var _time = PodiumGetTime();
     
-    if (PODIUM_REFERENCE_DATE > _time)
+    var _referenceDate = PODIUM_REFERENCE_DATE;
+    if (_referenceDate > _time)
     {
         var _days = 0;
     }
     else
     {
         _time = date_inc_day(_time, _dayOffset);
-        _time = date_inc_hour(_time, _hourOffset);
         var _days = floor(date_day_span(PODIUM_REFERENCE_DATE, _time));
     }
     
@@ -37,5 +38,6 @@ function PodiumGetDays(_modulo = undefined, _dayOffset = 0, _hourOffset = 0)
         }
     }
     
+    __PODIUM_POP_UTC
     return _days;
 }

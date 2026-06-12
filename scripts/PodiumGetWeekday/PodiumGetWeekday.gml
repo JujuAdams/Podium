@@ -10,13 +10,18 @@
 /// | Friday    |  `5`  |
 /// | Saturday  |  `6`  |
 /// 
-/// @param [offset=0]
+/// @param [dayOffset=0]
 
 PodiumGetWeekday();
 
 function PodiumGetWeekday(_offset = 0)
 {
+    __PODIUM_PUSH_UTC
+    
     var _time = PodiumGetTime();
     _time = date_inc_day(_time, floor(_offset));
-    return date_get_weekday(_time);
+    var _return = date_get_weekday(_time);
+    
+    __PODIUM_POP_UTC
+    return _return;
 }

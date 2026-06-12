@@ -1,7 +1,8 @@
-#macro PODIUM_VERSION  "0.11.0-alpha"
-#macro PODIUM_DATE     "2026-06-03"
+#macro PODIUM_VERSION  "0.12.0-alpha"
+#macro PODIUM_DATE     "2026-06-12"
 
 #macro PODIUM_RUNNING_FROM_IDE  (GM_build_type == "run")
+#macro PODIUM_REFERENCE_DATE  (__PodiumSystem().__referenceDate)
 
 #macro PODIUM_ON_WINDOWS      (os_type == os_windows)
 #macro PODIUM_ON_MACOS        (os_type == os_macosx)

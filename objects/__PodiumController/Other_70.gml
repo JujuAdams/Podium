@@ -5,6 +5,11 @@ if (PODIUM_VERBOSE_ASYNC)
 
 with(__PodiumSystem())
 {
+    if (PODIUM_ON_SWITCH_X && PODIUM_SWITCH_SHOW_ERROR_VIEWER && (async_load[? "error"] > 0))
+    {
+        switch_error_show_os_code("2321-4993");
+    }
+    
     if (PODIUM_ON_SWITCH_X && (async_load[? "event_type"] == "switch_npln_login_prearranged_user"))
     {
         if (__signInState != PODIUM_USER_SIGNING_IN)
@@ -255,14 +260,6 @@ with(__PodiumSystem())
             {
                 if (async_load[? "id"] == _opStruct.__asyncID)
                 {
-                    if (PODIUM_SWITCH_SHOW_ERROR_VIEWER)
-                    {
-                        if (async_load[? "error"] > 0)
-                        {
-                            switch_error_show_os_code("2321-4993");
-                        }
-                    }
-                    
                     _opStruct.__Complete(async_load[? "success"]? PODIUM_LEADERBOARD_SUCCESS : PODIUM_LEADERBOARD_ERROR);
                 }
             }

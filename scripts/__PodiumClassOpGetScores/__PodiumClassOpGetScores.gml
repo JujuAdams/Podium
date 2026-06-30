@@ -65,7 +65,7 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                 }
                 else if (__range == PODIUM_RANGE_AROUND)
                 {
-                    __asyncID = steam_download_scores_around_user(__formattedServiceData.__formattedRef, -50, 50);
+                    __asyncID = steam_download_scores_around_user(__formattedServiceData.__formattedRef, -49, 50);
                 }
                 else if (__range == PODIUM_RANGE_USER)
                 {

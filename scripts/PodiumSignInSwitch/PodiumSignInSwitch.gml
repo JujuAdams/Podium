@@ -50,13 +50,15 @@ function PodiumSignInSwitch(_accountIndex)
                 {
                     __PodiumTrace($"Logged in user");
                 }
+                
+                var _userHandle = switch_npln_login_prearranged_user(_accountIndex, 0, PODIUM_SWITCH_NPLN_TENANT);
             }
             else
             {
                 __PodiumWarning($"Failed to login user");
+                var _userHandle = undefined;
             }
             
-            var _userHandle = switch_npln_login_prearranged_user(_accountIndex, 0, PODIUM_SWITCH_NPLN_TENANT);
             if (is_struct(_userHandle))
             {
                 if (PODIUM_VERBOSE)

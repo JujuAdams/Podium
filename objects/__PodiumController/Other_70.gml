@@ -5,9 +5,16 @@ if (PODIUM_VERBOSE_ASYNC)
 
 with(__PodiumSystem())
 {
-    if (PODIUM_ON_SWITCH_X && PODIUM_SWITCH_SHOW_ERROR_VIEWER && (async_load[? "error"] > 0))
+    if (PODIUM_ON_SWITCH_X)
     {
-        switch_error_show_os_code("2321-4993");
+        var _error = async_load[? "error"];
+        if ((_error != undefined) && (_error > 0)
+        &&  ((_error == 0x0027_0341)  //"Unavailable - Maintenance" error
+          || (_error == 0x002D_0341)) //"Unauthenicated - Must update" error
+        &&  (_error != 0x000C_0141))  //This is a generic "no scores found" error code
+        {
+            switch_error_show_os_code(_error);
+        }
     }
     
     if (PODIUM_ON_SWITCH_X && (async_load[? "event_type"] == "switch_npln_login_prearranged_user"))
@@ -29,6 +36,29 @@ with(__PodiumSystem())
             
             if (PODIUM_VERBOSE)
             {
+                __PodiumTrace($"Calling `switch_npln_leaderboard_set_user_data()`");
+            }
+        }
+        else
+        {
+            __signInState = PODIUM_USER_SIGN_IN_FAILED;
+            
+            __switchNPLNUserHandle = undefined;
+            __switchUserID = undefined;
+            
+            __PodiumWarning("Prearranged user failed to log in");
+        }
+    }
+    else if (PODIUM_ON_SWITCH_X && (async_load[? "event_type"] == "switch_npln_leaderboard_set_user_data"))
+    {
+        if (__signInState != PODIUM_USER_SIGNING_IN)
+        {
+            __PodiumWarning("Unexpected `switch_npln_leaderboard_set_user_data()` return received");
+        }
+        else if (async_load[? "success"])
+        {
+            if (PODIUM_VERBOSE)
+            {
                 __PodiumTrace($"Set NPLN username to \"{__username}\"");
             }
             
@@ -41,7 +71,7 @@ with(__PodiumSystem())
             __switchNPLNUserHandle = undefined;
             __switchUserID = undefined;
             
-            __PodiumWarning("Prearranged user failed to log in");
+            __PodiumWarning("`switch_npln_leaderboard_set_user_data()` failed");
         }
     }
     else if (PODIUM_ON_PS5 && (async_load[? "id"] == PSN_LEADERBOARD_SCORE_POSTED_MSG))

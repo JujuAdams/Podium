@@ -43,6 +43,7 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
         
         array_push(_activityArray, self);
         
+        var _metadataString = __PodiumMetadataPack(__metadataString);
         var _submitScore = __PodiumConvertToSubmitScore(__value, __formattedServiceData);
         
         if (PODIUM_STEAM_AVAILABLE)
@@ -53,15 +54,15 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
             }
             else
             {
-                buffer_resize(_buffer, string_byte_length(__metadataString));
-                buffer_poke(_buffer, 0, buffer_text, __metadataString);
+                buffer_resize(_buffer, string_byte_length(_metadataString));
+                buffer_poke(_buffer, 0, buffer_text, _metadataString);
                 __asyncID = steam_upload_score_buffer_ext(__formattedServiceData.__formattedRef, _submitScore, _buffer, __formattedServiceData.overwrite);
             }
         }
         else if (PODIUM_ON_PS5)
         {
             __asyncID = 999_999;
-            psn_post_leaderboard_score_comment(_system.__psGamepad, __formattedServiceData.__formattedRef, _submitScore, __metadataString);
+            psn_post_leaderboard_score_comment(_system.__psGamepad, __formattedServiceData.__formattedRef, _submitScore, _metadataString);
             __PodiumRegisterPSLeaderboardSubmit(__formattedServiceData.__formattedRef, function(_cancelled)
             {
                 __Complete(((not _cancelled) && async_load[? "succeeded"])? PODIUM_LEADERBOARD_SUCCESS : PODIUM_LEADERBOARD_ERROR, undefined);
@@ -76,7 +77,7 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
         }
         else if (PODIUM_USING_PLAYFAB_LEADERBOARDS)
         {
-            __asyncID = __PodiumPlayFabLeaderboardUpdate(__formattedServiceData.playFab, _submitScore, __metadataString, function(_resultJSON)
+            __asyncID = __PodiumPlayFabLeaderboardUpdate(__formattedServiceData.playFab, _submitScore, _metadataString, function(_resultJSON)
             {
                 __Complete((_resultJSON == undefined)? PODIUM_LEADERBOARD_ERROR : PODIUM_LEADERBOARD_SUCCESS, _resultJSON);
             });
@@ -85,7 +86,7 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
         {
             __asyncID = switch_npln_leaderboard_set_score(_system.__switchNPLNUserHandle,
                                                           __formattedServiceData.switch.__formattedCategoryTypeName, __formattedServiceData.switch.categoryID,
-                                                          _submitScore, { _: __metadataString });
+                                                          _submitScore, { _: _metadataString });
         }
         else if (PODIUM_USING_GAMECENTER)
         {
@@ -110,12 +111,12 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
         }
         else if (PODIUM_PLAY_SERVICES_AVAILABLE)
         {
-            var _scoreTag = __PodiumPlayServicesEncode(__metadataString);
+            var _scoreTag = __PodiumPlayServicesEncode(_metadataString);
             if (string_length(_scoreTag) > 64)
             {
                 if (PODIUM_VERBOSE || PODIUM_RUNNING_FROM_IDE)
                 {
-                    __PodiumTrace($"Metadata string = \"{__metadataString}\", encoded = \"{_scoreTag}\" (length = {string_length(_scoreTag)})");
+                    __PodiumTrace($"Metadata string = \"{_metadataString}\", encoded = \"{_scoreTag}\" (length = {string_length(_scoreTag)})");
                 }
                 
                 __PodiumSoftError("Encoded metadata string is longer than 64 characters");

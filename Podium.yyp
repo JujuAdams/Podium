@@ -91,6 +91,8 @@
     {"id":{"name":"__PodiumGetUniqueOperation","path":"scripts/__PodiumGetUniqueOperation/__PodiumGetUniqueOperation.yy",},},
     {"id":{"name":"__PodiumGlobalClearRemoteCaches","path":"scripts/__PodiumGlobalClearRemoteCaches/__PodiumGlobalClearRemoteCaches.yy",},},
     {"id":{"name":"__PodiumLeaderboardFind","path":"scripts/__PodiumLeaderboardFind/__PodiumLeaderboardFind.yy",},},
+    {"id":{"name":"__PodiumMetadataPack","path":"scripts/__PodiumMetadataPack/__PodiumMetadataPack.yy",},},
+    {"id":{"name":"__PodiumMetadataUnpack","path":"scripts/__PodiumMetadataUnpack/__PodiumMetadataUnpack.yy",},},
     {"id":{"name":"__PodiumOfflineRecordSetPending","path":"scripts/__PodiumOfflineRecordSetPending/__PodiumOfflineRecordSetPending.yy",},},
     {"id":{"name":"__PodiumPlayFabGetLeaderboardAround","path":"scripts/__PodiumPlayFabGetLeaderboardAround/__PodiumPlayFabGetLeaderboardAround.yy",},},
     {"id":{"name":"__PodiumPlayFabGetLeaderboardFriends","path":"scripts/__PodiumPlayFabGetLeaderboardFriends/__PodiumPlayFabGetLeaderboardFriends.yy",},},

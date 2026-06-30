@@ -82,12 +82,12 @@ function PodiumImportLocalData(_string, _submitPendingScores = true)
             }
             else
             {
-                throw "$Failed to import data, version not `{__PODIUM_OFFLINE_DATA_VERSION}`";
+                throw $"Failed to import data, version not `{__PODIUM_OFFLINE_DATA_VERSION}`";
             }
             
-            if (_scoreVersion != PODIUM_OFFLINE_SCORE_VERSION)
+            if (_scoreVersion != string(PODIUM_OFFLINE_SCORE_VERSION))
             {
-                throw $"Score version mismatch (`{PODIUM_OFFLINE_SCORE_VERSION}` versus expected `{_scoreVersion}`)";
+                throw $"Score version mismatch, found (`{_scoreVersion}` versus expected macro value `{PODIUM_OFFLINE_SCORE_VERSION}`)";
             }
             
             var _count = buffer_read(_buffer, buffer_u64);

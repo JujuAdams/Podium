@@ -756,27 +756,29 @@ function __PodiumClassOpGetScores(_leaderboard, _range, _seasonOffset) : __Podiu
                 if (_playerIndex >= 0)
                 {
                     var _playerRecord = _data[_playerIndex];
-                    
-                    //Try to store the new incoming score. This will return `true` if the incoming remote score is better than what we have locally
-                    var _remoteIsBetter = __PodiumStoreOfflineRecord(_leaderboardName, _playerRecord.value, _playerRecord.metadataString, false);
-                    
-                    //Figure out if the Xbox leaderboards are out of sync with our offline scores
-                    if (PODIUM_USING_XBOX_LEADERBOARDS && (not _remoteIsBetter))
+                    if (_playerRecord.scoreVersion == string(PODIUM_OFFLINE_SCORE_VERSION)) //Check the incoming score is for this version
                     {
-                        var _offlineRecord = _system.__offlineRecordDict[$ _leaderboardName];
-                        if (is_struct(_offlineRecord) && (_playerRecord.value != _offlineRecord.__value)) //Verify the offline score is actually different to the remote score
+                        //Try to store the new incoming score. This will return `true` if the incoming remote score is better than what we have locally
+                        var _remoteIsBetter = __PodiumStoreOfflineRecord(_leaderboardName, _playerRecord.value, _playerRecord.metadataString, false);
+                        
+                        //Figure out if the Xbox leaderboards are out of sync with our offline scores
+                        if (PODIUM_USING_XBOX_LEADERBOARDS && (not _remoteIsBetter))
                         {
-                            var _leaderboardStruct = __PodiumLeaderboardFind(_leaderboardName);
-                            if (is_struct(_leaderboardStruct) && _leaderboardStruct.__GetOfflineRecordValid(_offlineRecord)) //Verify the offline score is valid (important for dailies)
+                            var _offlineRecord = _system.__offlineRecordDict[$ _leaderboardName];
+                            if (is_struct(_offlineRecord) && (_playerRecord.value != _offlineRecord.__value)) //Verify the offline score is actually different to the remote score
                             {
-                                //Mark the record as pending
-                                _offlineRecord.__pending = true;
-                                _system.__localChanged = true;
-                                
-                                //Resubmit our local score
-                                _system.__skipXboxBetterCheck = true;
-                                PodiumSubmit(_name, _offlineRecord.__value, _offlineRecord.__metadata);
-                                _system.__skipXboxBetterCheck = false;
+                                var _leaderboardStruct = __PodiumLeaderboardFind(_leaderboardName);
+                                if (is_struct(_leaderboardStruct) && _leaderboardStruct.__GetOfflineRecordValid(_offlineRecord)) //Verify the offline score is valid (important for dailies)
+                                {
+                                    //Mark the record as pending
+                                    _offlineRecord.__pending = true;
+                                    _system.__localChanged = true;
+                                    
+                                    //Resubmit our local score
+                                    _system.__skipXboxBetterCheck = true;
+                                    PodiumSubmit(_name, _offlineRecord.__value, _offlineRecord.__metadata);
+                                    _system.__skipXboxBetterCheck = false;
+                                }
                             }
                         }
                     }

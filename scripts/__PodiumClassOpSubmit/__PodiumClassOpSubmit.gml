@@ -46,9 +46,13 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
         var _metadataString = __PodiumMetadataPack(__metadataString);
         var _submitScore = __PodiumConvertToSubmitScore(__value, __formattedServiceData);
         
-        if (PODIUM_STEAM_AVAILABLE)
+        if (PODIUM_DEBUG_IGNORE_SUBMIT)
         {
-            if (__metadataString == "")
+            __asyncID = undefined;
+        }
+        else if (PODIUM_STEAM_AVAILABLE)
+        {
+            if (_metadataString == "")
             {
                 __asyncID = steam_upload_score_ext(__formattedServiceData.__formattedRef, _submitScore, __formattedServiceData.overwrite);
             }

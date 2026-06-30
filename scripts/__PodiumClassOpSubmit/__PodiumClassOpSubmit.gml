@@ -175,7 +175,7 @@ function __PodiumClassOpSubmit(_formattedServiceData, _value, _metadataString, _
         //this gives the leaderboard service enough time to update before we start pulling scores
         if (array_length(_queuedSubmitArray) <= 0)
         {
-            _system.__lastActivityTime += 5_000;
+            _system.__lastActivityTime += 8_000;
         }
         
         var _index = array_get_index(_pendingArray, self);

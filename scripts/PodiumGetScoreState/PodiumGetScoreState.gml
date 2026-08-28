@@ -2,7 +2,7 @@
 /// @param range
 /// @param [seasonOffset=0]
 
-function PodiumGetScoreState(_leaderboardName, _range, _seasonOffset)
+function PodiumGetScoreState(_leaderboardName, _range, _seasonOffset = 0)
 {
     if (PodiumGetLeaderboardDisabled(_leaderboardName))
     {

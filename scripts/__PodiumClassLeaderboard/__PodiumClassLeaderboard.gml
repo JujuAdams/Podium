@@ -13,9 +13,13 @@ function __PodiumClassLeaderboard(_serviceData) constructor
         var _i = 0;
         repeat(__serviceData.hasWeeklyHistory? 7 : 1)
         {
-            steam_create_leaderboard(__GetFormattedServiceData(_i).__formattedRef,
-                                     __serviceData.descending? lb_sort_descending : lb_sort_ascending,
-                                     __serviceData.steam.displayType);
+            if (__serviceData.steam != undefined)
+            {
+                steam_create_leaderboard(__GetFormattedServiceData(_i).__formattedRef,
+                                         __serviceData.descending? lb_sort_descending : lb_sort_ascending,
+                                         __serviceData.steam.displayType);
+            }
+            
             --_i;
         }
     }

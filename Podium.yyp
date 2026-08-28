@@ -38,6 +38,7 @@
           "CopyToMask":"64",
         },
       },"CopyToMask":0,"filePath":"datafiles","name":"MicrosoftGame.config","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"podium_license.txt","CopyToMask":-1,"filePath":"datafiles","name":"podium_license.txt","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"SplashScreenImage.png","ConfigValues":{
         "WindowsGDK":{
           "CopyToMask":"64",
